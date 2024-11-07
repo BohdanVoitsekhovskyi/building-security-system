@@ -1,4 +1,4 @@
-package com.building_security_system.models.Detectors;
+package com.building_security_system.models.detectors;
 
 import com.building_security_system.db_access.entities.DetectorEntity;
 import com.building_security_system.models.Position;

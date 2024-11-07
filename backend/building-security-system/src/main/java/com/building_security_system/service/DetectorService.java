@@ -1,6 +1,6 @@
 package com.building_security_system.service;
 
-import com.building_security_system.models.Detectors.Detector;
+import com.building_security_system.models.detectors.Detector;
 import org.bson.types.ObjectId;
 
 import java.util.List;
