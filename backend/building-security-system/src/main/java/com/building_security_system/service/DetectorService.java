@@ -9,5 +9,6 @@ public interface DetectorService {
     List<Detector> getDetectors();
     Detector getDetectorById(ObjectId id);
     Detector saveDetector(Detector detector);
+    List<Detector> saveDetectors(List<Detector> detectors);
     void deleteDetectorById(ObjectId id);
 }

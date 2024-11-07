@@ -34,6 +34,18 @@ public class DetectorServiceImpl implements DetectorService {
     }
 
     @Override
+    public List<Detector> saveDetectors(List<Detector> detectors) {
+        return detectorRepository
+                .saveAll(detectors
+                        .stream()
+                        .map(Detector::toEntity)
+                        .toList()
+                ).stream()
+                .map(Detector::toModel)
+                .toList();
+    }
+
+    @Override
     public void deleteDetectorById(ObjectId id) {
         detectorRepository.deleteById(id);
     }
