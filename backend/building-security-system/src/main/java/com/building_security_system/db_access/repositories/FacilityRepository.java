@@ -1,4 +1,4 @@
-package com.building_security_system.db_access.Repositories;
+package com.building_security_system.db_access.repositories;
 
 import com.building_security_system.db_access.entities.FacilityEntity;
 import org.bson.types.ObjectId;

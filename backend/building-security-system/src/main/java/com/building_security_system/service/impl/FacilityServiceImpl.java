@@ -1,6 +1,6 @@
 package com.building_security_system.service.impl;
 
-import com.building_security_system.db_access.Repositories.FacilityRepository;
+import com.building_security_system.db_access.repositories.FacilityRepository;
 import com.building_security_system.models.Facility;
 import com.building_security_system.service.FacilityService;
 import org.bson.types.ObjectId;

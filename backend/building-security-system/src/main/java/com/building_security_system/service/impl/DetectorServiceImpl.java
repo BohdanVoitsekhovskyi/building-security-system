@@ -1,6 +1,6 @@
 package com.building_security_system.service.impl;
 
-import com.building_security_system.db_access.Repositories.DetectorRepository;
+import com.building_security_system.db_access.repositories.DetectorRepository;
 import com.building_security_system.models.Detectors.Detector;
 import com.building_security_system.service.DetectorService;
 import org.bson.types.ObjectId;
