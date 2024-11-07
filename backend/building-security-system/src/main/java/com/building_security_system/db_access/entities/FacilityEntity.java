@@ -1,15 +1,14 @@
-package com.building_security_system.DataBaseAccess.Entities;
+package com.building_security_system.db_access.entities;
 
 
-
-
-import com.building_security_system.Models.Floor;
-import com.building_security_system.Models.User;
+import com.building_security_system.models.Floor;
+import com.building_security_system.models.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 import java.util.List;
 

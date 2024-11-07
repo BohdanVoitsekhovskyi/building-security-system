@@ -1,6 +1,6 @@
-package com.building_security_system.DataBaseAccess.Repositories;
+package com.building_security_system.db_access.Repositories;
 
-import com.building_security_system.DataBaseAccess.Entities.FacilityEntity;
+import com.building_security_system.db_access.entities.FacilityEntity;
 import org.bson.types.ObjectId;
 
 import org.springframework.data.mongodb.repository.MongoRepository;

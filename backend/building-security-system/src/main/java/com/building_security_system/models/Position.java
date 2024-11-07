@@ -1,4 +1,4 @@
-package com.building_security_system.Models;
+package com.building_security_system.models;
 
 
 

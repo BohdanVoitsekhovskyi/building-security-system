@@ -1,7 +1,7 @@
 package com.building_security_system.service.impl;
 
-import com.building_security_system.DataBaseAccess.Repositories.FacilityRepository;
-import com.building_security_system.Models.Facility;
+import com.building_security_system.db_access.Repositories.FacilityRepository;
+import com.building_security_system.models.Facility;
 import com.building_security_system.service.FacilityService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

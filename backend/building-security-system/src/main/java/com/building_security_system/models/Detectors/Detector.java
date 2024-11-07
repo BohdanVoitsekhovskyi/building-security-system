@@ -1,12 +1,12 @@
-package com.building_security_system.Models.Detectors;
+package com.building_security_system.models.Detectors;
 
-import com.building_security_system.DataBaseAccess.Entities.DetectorEntity;
-import com.building_security_system.Models.Position;
+import com.building_security_system.db_access.entities.DetectorEntity;
+import com.building_security_system.models.Position;
 import lombok.Builder;
 import org.bson.types.ObjectId;
 
 @Builder
-public abstract class Detector {
+public abstract class Detector{
     private ObjectId id;
     private Position position;
     private String description;

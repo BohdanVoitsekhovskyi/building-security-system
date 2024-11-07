@@ -1,10 +1,16 @@
-package com.building_security_system.Models;
+package com.building_security_system.models;
 
-import com.building_security_system.DataBaseAccess.Entities.UserEntity;
+import com.building_security_system.db_access.entities.UserEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.bson.types.ObjectId;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class User {
     private ObjectId id;
     String name;

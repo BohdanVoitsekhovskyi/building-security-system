@@ -1,9 +1,8 @@
-package com.building_security_system.Models;
+package com.building_security_system.models;
 
-import com.building_security_system.DataBaseAccess.Entities.FacilityEntity;
+import com.building_security_system.db_access.entities.FacilityEntity;
 import lombok.Builder;
 import org.bson.types.ObjectId;
-
 import java.util.List;
 
 @Builder

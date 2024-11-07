@@ -1,6 +1,6 @@
 package com.building_security_system.service;
 
-import com.building_security_system.Models.Facility;
+import com.building_security_system.models.Facility;
 import org.bson.types.ObjectId;
 
 import java.util.List;

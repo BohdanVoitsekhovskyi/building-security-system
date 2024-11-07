@@ -1,7 +1,7 @@
 package com.building_security_system.service.impl;
 
-import com.building_security_system.DataBaseAccess.Repositories.DetectorRepository;
-import com.building_security_system.Models.Detectors.Detector;
+import com.building_security_system.db_access.Repositories.DetectorRepository;
+import com.building_security_system.models.Detectors.Detector;
 import com.building_security_system.service.DetectorService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

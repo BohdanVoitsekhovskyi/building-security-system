@@ -1,7 +1,8 @@
-package com.building_security_system.DataBaseAccess.Entities;
+package com.building_security_system.db_access.entities;
 
 
-import com.building_security_system.Models.Position;
+
+import com.building_security_system.models.Position;
 import lombok.Builder;
 import lombok.Getter;
 import org.bson.types.ObjectId;
