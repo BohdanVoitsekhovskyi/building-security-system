@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
-import { TestComponent } from './pages/test/test.component';
-import { CreateComponent } from './pages/create/create.component';
-import { LogComponent } from './pages/log/log.component';
+import { TestComponent } from './pages/main/test/test.component';
+import { CreateComponent } from './pages/main/create/create.component';
+import { LogComponent } from './pages/main/log/log.component';
+import { LoginComponent } from './pages/account/login/login.component';
+import { SigninComponent } from './pages/account/signin/signin.component';
 
 export const routes: Routes = [
   {
@@ -25,5 +27,14 @@ export const routes: Routes = [
   {
     path: 'log',
     component: LogComponent,
+  },
+
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'signin',
+    component: SigninComponent,
   },
 ];

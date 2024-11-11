@@ -1,3 +1,5 @@
+/*TODO: Styles for active link*/
+
 :host {
   position: relative;
   left: 0;
@@ -47,4 +49,3 @@ li svg {
   width: 2rem;
   height: 2rem;
 }
-

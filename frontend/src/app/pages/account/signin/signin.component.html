@@ -1,0 +1,50 @@
+<div class="modal-container">
+  <h2>Welcome!</h2>
+  <form (ngSubmit)="onSubmit()" #signinForm="ngForm">
+    <label for="name">First name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      [(ngModel)]="signInInfo.name"
+      placeholder="John"
+      required
+    />
+
+    <label for="surname">Last name</label>
+    <input
+      type="text"
+      id="surname"
+      name="surname"
+      [(ngModel)]="signInInfo.surname"
+      placeholder="Smith"
+      required
+    />
+
+    <label for="email">Email address</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      [(ngModel)]="signInInfo.email"
+      placeholder="name@email.com"
+      required
+    />
+
+    <label for="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="signInInfo.password"
+      placeholder="Password"
+      required
+    />
+
+    <button type="submit" [disabled]="!signinForm.valid">Sign in</button>
+  </form>
+
+  <div class="footer-text">
+    Already have an account? <a routerLink="/login">Login</a>
+  </div>
+</div>
