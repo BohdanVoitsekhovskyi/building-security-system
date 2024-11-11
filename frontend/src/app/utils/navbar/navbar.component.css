@@ -1,9 +1,50 @@
 :host {
-  position: fixed;
-  top: 0;
+  position: relative;
   left: 0;
   height: 100%;
   background-color: #2667ff;
   width: 20rem;
   z-index: 900;
+  transition: 0.8s;
+  padding: 2rem;
 }
+
+:host.hidden {
+  left: -20rem;
+  position: absolute;
+}
+
+.hide {
+  position: absolute;
+  top: 0rem;
+  right: -1.6rem;
+  width: 1.6rem;
+  height: 2.8rem;
+  background-color: #2667ff;
+  border-radius: 0rem 0.5rem 0.5rem 0rem;
+  padding: 0.2rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+li {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+li svg {
+  width: 2rem;
+  height: 2rem;
+}
+

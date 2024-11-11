@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from "../../utils/navbar/navbar.component";
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-log',
   standalone: true,
   imports: [NavbarComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './log.component.html',
+  styleUrl: './log.component.css'
 })
-export class HomeComponent {
-  
+export class LogComponent {
+
 }
