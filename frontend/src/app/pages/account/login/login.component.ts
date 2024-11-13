@@ -16,7 +16,7 @@ export class LoginComponent {
     password: '',
   };
 
-  //validation
-
-  onSubmit() {}
+  onSubmit() {
+    console.log(this.loginInfo);
+  }
 }

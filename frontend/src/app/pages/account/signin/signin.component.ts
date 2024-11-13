@@ -18,7 +18,7 @@ export class SigninComponent {
     password: '',
   };
 
-  //validation
-
-  onSubmit() {}
+  onSubmit() {
+    console.log(this.signInInfo);
+  }
 }
