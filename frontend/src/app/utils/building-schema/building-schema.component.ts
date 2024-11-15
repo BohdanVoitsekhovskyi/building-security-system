@@ -17,7 +17,7 @@ export class BuildingSchemaComponent {
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
-    d3.json('example/one_bedroom.json').then((data: any) => {
+    d3.json('example/testbuilding.json').then((data: any) => {
       this.renderMap(data);
     });
   }
@@ -70,14 +70,18 @@ export class BuildingSchemaComponent {
       )
     )
       return;
-
+    
     const coords: [number, number] = d3.pointer(event);
+
+    console.log(data);
+    let leftPoint = data.geometry.coordinates[0][0];
+    let rightPoint = data.geometry.coordinates[0][2];
     // Відображаємо новий датчик
     d3.select('.sensors')
       .append('circle')
       .attr('fill', '#000000')
-      .attr('cx', coords[0])
-      .attr('cy', coords[1])
+      .attr('cx', (leftPoint[0]+rightPoint[0])/2)
+      .attr('cy', (leftPoint[1]+rightPoint[1])/2)
       .attr('r', 8)
       .attr('stroke', 'black')
       .attr('stroke-width', 1)
