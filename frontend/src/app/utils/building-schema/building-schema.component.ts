@@ -18,7 +18,7 @@ export class BuildingSchemaComponent {
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
-    d3.json('example/one_bedroom.json').then((data: any) => {
+    d3.json('example/testbuilding.json').then((data: any) => {
       this.renderMap(data);
     });
   }
