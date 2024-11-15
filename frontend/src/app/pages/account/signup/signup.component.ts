@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { SignInInfo } from './signin.model';
+import { SignUpInfo } from './signup.model';
 
 @Component({
-  selector: 'app-signin',
+  selector: 'app-signup',
   standalone: true,
   imports: [FormsModule, RouterLink],
-  templateUrl: './signin.component.html',
-  styleUrl: './signin.component.css',
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.css',
 })
-export class SigninComponent {
-  signInInfo: SignInInfo = {
+export class SignupComponent {
+  signInInfo: SignUpInfo = {
     name: '',
     surname: '',
     email: '',

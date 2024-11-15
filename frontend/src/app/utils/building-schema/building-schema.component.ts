@@ -12,6 +12,7 @@ import * as topojson from 'topojson-client';
 })
 export class BuildingSchemaComponent {
   sensors: { type: string; id: string }[] = [];
+  projection: any;
   private readonly canvas = { w: 1000, h: 1000 };
 
   constructor(private el: ElementRef) {}
@@ -34,18 +35,17 @@ export class BuildingSchemaComponent {
     arrOfKeys.push('sensors');
 
     const d3Identity = d3.geoIdentity();
-    const d3Projection = d3Identity.fitSize(
+    this.projection = d3Identity.fitSize(
       [this.canvas.w, this.canvas.h],
       geoData['apartment']
     );
-    const d3Path = d3.geoPath(d3Projection);
+    const d3Path = d3.geoPath(this.projection);
 
     const svgContainer = d3
       .select(this.el.nativeElement.querySelector('#svg_container'))
       .append('svg')
       .attr('viewBox', `0 0 ${this.canvas.w} ${this.canvas.h}`)
       .classed('floormap', true);
-      
 
     const groups = svgContainer
       .selectAll('g')
@@ -71,13 +71,33 @@ export class BuildingSchemaComponent {
     )
       return;
 
-    const coords: [number, number] = d3.pointer(event);
-    // Відображаємо новий датчик
+    console.log(
+      data.geometry.coordinates[0].slice(
+        0,
+        data.geometry.coordinates[0].length - 1
+      )
+    );
+
+    console.log(
+      d3.polygonCentroid(
+        data.geometry.coordinates[0].slice(
+          0,
+          data.geometry.coordinates[0].length - 1
+        )
+      )
+    );
+
+    const coords: [number, number] = d3.polygonCentroid(
+      data.geometry.coordinates[0]
+    );
+
+    const projectedCoords = this.projection(coords);
+
     d3.select('.sensors')
       .append('circle')
       .attr('fill', '#000000')
-      .attr('cx', coords[0])
-      .attr('cy', coords[1])
+      .attr('cx', projectedCoords[0])
+      .attr('cy', projectedCoords[1])
       .attr('r', 8)
       .attr('stroke', 'black')
       .attr('stroke-width', 1)

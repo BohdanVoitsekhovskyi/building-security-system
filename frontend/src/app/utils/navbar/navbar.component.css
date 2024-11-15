@@ -68,7 +68,7 @@ li svg {
 .header {
   display: flex;
   flex-direction: row;
-  align-items: end;
+  align-items: center;
   gap: 0.6rem;
   cursor: pointer;
 }
@@ -86,6 +86,8 @@ li svg {
   font-size: 1.3rem;
   font-weight: 400;
   color: #ffffff;
+  margin-top: 0.4rem;
+
 }
 
 hr {

@@ -5,7 +5,7 @@ import { TestComponent } from './pages/main/test/test.component';
 import { CreateComponent } from './pages/main/create/create.component';
 import { LogComponent } from './pages/main/log/log.component';
 import { LoginComponent } from './pages/account/login/login.component';
-import { SigninComponent } from './pages/account/signin/signin.component';
+import { SignupComponent } from './pages/account/signup/signup.component';
 
 export const routes: Routes = [
   {
@@ -34,7 +34,7 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'signin',
-    component: SigninComponent,
+    path: 'signup',
+    component: SignupComponent,
   },
 ];
