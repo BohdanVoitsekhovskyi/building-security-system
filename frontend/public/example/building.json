@@ -1,0 +1,43 @@
+{
+  "type": "Topology",
+  "objects": {
+    "building": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Polygon",
+          "properties": {
+            "name": "Room 1",
+            "type": "office"
+          },
+          "arcs": [[0, 1, 2, 3, 0]]
+        },
+        {
+          "type": "Polygon",
+          "properties": {
+            "name": "Room 2",
+            "type": "conference"
+          },
+          "arcs": [[4, 5, 6, 7, 4]]
+        },
+        {
+          "type": "LineString",
+          "properties": {
+            "name": "Hallway",
+            "type": "corridor"
+          },
+          "arcs": [8, 9]
+        }
+      ]
+    }
+  },
+  "arcs": [
+    [[0, 0], [10, 0], [10, 10], [0, 10]],   
+    [[12, 0], [22, 0], [22, 10], [12, 10]],
+    [[0, 12], [22, 12]]                   
+  ],
+  "transform": {
+    "scale": [0.1, 0.1],
+    "translate": [0, 0]
+  }
+}
