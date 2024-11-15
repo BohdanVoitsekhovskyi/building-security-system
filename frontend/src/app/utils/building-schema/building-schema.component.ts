@@ -11,6 +11,7 @@ import * as topojson from 'topojson-client';
   styleUrl: './building-schema.component.css',
 })
 export class BuildingSchemaComponent {
+  sensors: { type: string; id: string }[] = [];
   private readonly canvas = { w: 1000, h: 1000 };
 
   constructor(private el: ElementRef) {}
@@ -30,6 +31,8 @@ export class BuildingSchemaComponent {
       geoData[key] = topojson.feature(topoData, topoData.objects[key]);
     });
 
+    arrOfKeys.push('sensors');
+
     const d3Identity = d3.geoIdentity();
     const d3Projection = d3Identity.fitSize(
       [this.canvas.w, this.canvas.h],
@@ -42,6 +45,7 @@ export class BuildingSchemaComponent {
       .append('svg')
       .attr('viewBox', `0 0 ${this.canvas.w} ${this.canvas.h}`)
       .classed('floormap', true);
+      
 
     const groups = svgContainer
       .selectAll('g')
@@ -56,6 +60,29 @@ export class BuildingSchemaComponent {
       .enter()
       .append('path')
       .attr('d', (feature) => d3Path(feature as d3.GeoPermissibleObjects) || '')
-      .on('click', (event, data: any) => alert(data.properties.type));
+      .on('click', (e, d) => this.addSensor(e, d));
+  }
+
+  addSensor(event: any, data: any) {
+    if (
+      this.sensors.find(
+        (s) => s.id === data.properties.id && s.type === data.properties.type
+      )
+    )
+      return;
+
+    const coords: [number, number] = d3.pointer(event);
+    // Відображаємо новий датчик
+    d3.select('.sensors')
+      .append('circle')
+      .attr('fill', '#000000')
+      .attr('cx', coords[0])
+      .attr('cy', coords[1])
+      .attr('r', 8)
+      .attr('stroke', 'black')
+      .attr('stroke-width', 1)
+      .on('click', () => alert(`Sensor clicked!`));
+
+    this.sensors.push({ id: data.properties.id, type: data.properties.type });
   }
 }
