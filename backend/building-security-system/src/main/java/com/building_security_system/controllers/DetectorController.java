@@ -19,6 +19,11 @@ public class DetectorController {
         this.detectorService = detectorService;
     }
 
+    @GetMapping("detectors")
+    public ResponseEntity<List<Detector>> getDetectors() {
+        return ResponseEntity.ok(detectorService.getDetectors());
+    }
+
     @GetMapping("detector/{id}")
     public ResponseEntity<Detector> getDetector(@PathVariable("id") long id) {
         return ResponseEntity.ok(detectorService.getDetectorById(id));
