@@ -12,7 +12,7 @@ import java.util.List;
 
 @Builder
 @Getter
-@Document(collation = "facilities")
+@Document(collection = "facilities")
 public class FacilityEntity {
     @Id
     private long id;

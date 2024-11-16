@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Getter
 @ToString
-@Document(collation = "users")
+@Document(collection = "users")
 public class UserEntity  {
     @Id
     private long id;

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
 @Getter
-@Document(collation = "detectors")
+@Document(collection = "detectors")
 public class DetectorEntity {
     @Id
     private long id;
