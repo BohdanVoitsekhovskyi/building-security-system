@@ -24,6 +24,7 @@ public class FacilityController {
 
     @PostMapping("facility/create")
     public ResponseEntity<Facility> addFacility(@RequestBody Facility facility) {
+        facility.setId(System.currentTimeMillis());
         return new ResponseEntity<>(facilityService.saveFacility(facility), HttpStatus.CREATED);
     }
 

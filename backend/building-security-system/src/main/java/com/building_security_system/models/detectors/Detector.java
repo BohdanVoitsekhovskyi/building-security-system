@@ -4,7 +4,6 @@ import com.building_security_system.db_access.entities.DetectorEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
-import org.bson.types.ObjectId;
 
 @Builder
 @ToString
