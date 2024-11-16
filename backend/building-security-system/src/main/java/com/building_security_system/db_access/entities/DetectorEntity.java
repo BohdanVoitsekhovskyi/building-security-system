@@ -1,13 +1,16 @@
 package com.building_security_system.db_access.entities;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Builder
-@Getter
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "detectors")
+@Builder
 public class DetectorEntity {
     @Id
     private long id;
