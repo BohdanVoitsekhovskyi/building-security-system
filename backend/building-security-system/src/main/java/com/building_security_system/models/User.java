@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 @ToString
 public class User {
-    private ObjectId id;
+    private long id;
     String name;
     String email;
     String password;

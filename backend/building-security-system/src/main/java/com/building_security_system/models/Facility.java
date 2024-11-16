@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 public class Facility {
-    private ObjectId id;
+    private long id;
     private User user;
     List<Floor> floors;
 
