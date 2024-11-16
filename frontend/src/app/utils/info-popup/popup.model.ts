@@ -1,0 +1,1 @@
+export type PopupInfo = {name: string, description: string, type: 'success' | 'warning' | 'error'};

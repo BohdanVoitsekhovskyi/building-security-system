@@ -45,7 +45,7 @@
 .modal-container button {
   width: 100%;
   padding: 0.8rem;
-  background-color: #2667ff;
+  background-color: #2864f6;
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -65,7 +65,7 @@
 }
 
 .modal-container button:disabled:hover {
-  background-color: #2667ff;
+  background-color: #2864f6;
 }
 
 .modal-container .footer-text {
@@ -75,7 +75,7 @@
 }
 
 .modal-container .footer-text a {
-  color: #2667ff;
+  color: #2864f6;
   text-decoration: none;
 }
 

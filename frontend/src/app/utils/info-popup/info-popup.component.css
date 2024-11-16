@@ -1,0 +1,42 @@
+:host {
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 12rem;
+  min-height: 5rem;
+  transition: 0.5s ease;
+}
+
+:host.success {
+  background-color: #82d48230;
+  border: 1px solid #579d5721;
+  color: #56d856;
+}
+
+:host.warning {
+  background-color: #d4d18230;
+  border: 1px solid #9a9d5721;
+  color: #d8c956;
+}
+
+:host.error {
+  background-color: #d4828230;
+  border: 1px solid #9d575721;
+  color: #d85656;
+}
+
+:host.hidden {
+  right: -14rem;
+}
+
+.name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-left: 0.6rem;
+}
+
+.description {
+  font-size: 0.7rem;
+}

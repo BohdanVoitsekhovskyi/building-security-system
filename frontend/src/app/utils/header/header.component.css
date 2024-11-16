@@ -16,7 +16,7 @@
 }
 
 h1 {
-  color: #2667ff;
+  color: #2864f6;
   font-size: 2rem;
   font-weight: 700;
   cursor: pointer;
@@ -54,11 +54,11 @@ button {
 }
 
 button:hover {
-  color: #2667ff;
+  color: #2864f6;
 }
 
 .login {
-  background-color: #2667ff;
+  background-color: #2864f6;
   color: #ffffff;
 }
 
