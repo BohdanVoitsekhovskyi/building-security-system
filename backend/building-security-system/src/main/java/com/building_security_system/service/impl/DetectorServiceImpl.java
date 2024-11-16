@@ -3,7 +3,6 @@ package com.building_security_system.service.impl;
 import com.building_security_system.db_access.repositories.DetectorRepository;
 import com.building_security_system.models.detectors.Detector;
 import com.building_security_system.service.DetectorService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class DetectorServiceImpl implements DetectorService {
     }
 
     @Override
-    public Detector getDetectorById(ObjectId id) {
+    public Detector getDetectorById(long id) {
         return Detector.toModel(detectorRepository.findOneById(id));
     }
 
@@ -46,7 +45,7 @@ public class DetectorServiceImpl implements DetectorService {
     }
 
     @Override
-    public void deleteDetectorById(ObjectId id) {
+    public void deleteDetectorById(long id) {
         detectorRepository.deleteById(id);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FacilityService {
     List<Facility> getFacilities();
-    Facility getFacilityById(ObjectId id);
+    Facility getFacilityById(long id);
     Facility saveFacility(Facility facility);
-    void deleteFacilityById(ObjectId id);
+    void deleteFacilityById(long id);
 }

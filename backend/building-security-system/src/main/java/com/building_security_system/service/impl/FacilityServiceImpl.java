@@ -3,7 +3,6 @@ package com.building_security_system.service.impl;
 import com.building_security_system.db_access.repositories.FacilityRepository;
 import com.building_security_system.models.Facility;
 import com.building_security_system.service.FacilityService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public Facility getFacilityById(ObjectId id) {
+    public Facility getFacilityById(long id) {
         return Facility.toModel(facilityRepository.findOneById(id));
     }
 
@@ -34,7 +33,7 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public void deleteFacilityById(ObjectId id) {
+    public void deleteFacilityById(long id) {
         facilityRepository.deleteById(id);
     }
 }

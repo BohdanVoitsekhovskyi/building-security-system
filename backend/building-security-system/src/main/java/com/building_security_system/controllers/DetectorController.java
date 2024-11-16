@@ -21,7 +21,7 @@ public class DetectorController {
     }
 
     @GetMapping("detector/{id}")
-    public ResponseEntity<Detector> getDetector(@PathVariable("id") ObjectId id) {
+    public ResponseEntity<Detector> getDetector(@PathVariable("id") long id) {
         return ResponseEntity.ok(detectorService.getDetectorById(id));
     }
 
@@ -36,7 +36,7 @@ public class DetectorController {
     }
 
     @DeleteMapping("detector/{id}/delete")
-    public ResponseEntity<String> deleteDetector(@PathVariable("id") ObjectId id) {
+    public ResponseEntity<String> deleteDetector(@PathVariable("id") long id) {
         detectorService.deleteDetectorById(id);
         return ResponseEntity.ok("Detector deleted");
     }

@@ -2,7 +2,6 @@ package com.building_security_system.controllers;
 
 import com.building_security_system.models.Facility;
 import com.building_security_system.service.FacilityService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ public class FacilityController {
     }
 
     @GetMapping("facility/{id}")
-    public ResponseEntity<Facility> getFacility(@PathVariable("id") ObjectId id) {
+    public ResponseEntity<Facility> getFacility(@PathVariable("id") long id) {
         return ResponseEntity.ok(facilityService.getFacilityById(id));
     }
 
@@ -29,7 +28,7 @@ public class FacilityController {
     }
 
     @DeleteMapping("facility/delete/{id}")
-    public ResponseEntity<String> deleteFacility(@PathVariable ObjectId id) {
+    public ResponseEntity<String> deleteFacility(@PathVariable long id) {
         facilityService.deleteFacilityById(id);
         return ResponseEntity.ok("Facility deleted");
     }
