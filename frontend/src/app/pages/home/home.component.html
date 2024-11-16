@@ -1,2 +1,15 @@
 <app-navbar />
-<main><app-building-schema /></main>
+<main>
+  <ul class="floors">
+    @for (floor of floors; track $index) {
+    <li
+      [ngClass]="{ selected: activeFloor === floor.id }"
+      [id]="floor.id"
+      (click)="changeFloor($event)"
+    >
+      {{ floor.id }}
+    </li>
+    }
+  </ul>
+  <app-building-schema />
+</main>

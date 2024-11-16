@@ -11,8 +11,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export class NavbarComponent {
   @HostBinding('class.hidden') isHidden = false;
 
-
-
   onHide() {
     this.isHidden = !this.isHidden;
   }

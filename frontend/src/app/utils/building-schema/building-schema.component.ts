@@ -1,19 +1,27 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
+import { sensors } from './dummy-data';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-building-schema',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './building-schema.component.html',
   styleUrl: './building-schema.component.css',
 })
 export class BuildingSchemaComponent {
-  sensors: { type: string; id: string }[] = [];
+  @Output() onAddSensor = new EventEmitter();
+  sensors: { id: number; pos: { x: number; y: number }; type: string }[] = [];
   projection: any;
   private readonly canvas = { w: 1000, h: 1000 };
+
+  sensorTypes = sensors;
+  contextMenuVisible = false;
+  contextMenuPos?: { x: number; y: number };
+  sensorData?: any;
 
   constructor(private el: ElementRef) {}
 
@@ -60,49 +68,49 @@ export class BuildingSchemaComponent {
       .enter()
       .append('path')
       .attr('d', (feature) => d3Path(feature as d3.GeoPermissibleObjects) || '')
-      .on('click', (e, d) => this.addSensor(e, d));
+      .on('click', (e: any, d: any) => {
+        if (d.properties.type === 'window' || d.properties.type === 'door' || d.properties.type === 'room')
+          return this.showContextSensor(e, d);
+      });
   }
 
-  addSensor(event: any, data: any) {
-    if (
-      this.sensors.find(
-        (s) => s.id === data.properties.id && s.type === data.properties.type
-      )
-    )
-      return;
+  showContextSensor(event: any, data: any) {
+    if (this.sensors.find((s) => s.id === data.properties.id)) return;
 
-    console.log(
-      data.geometry.coordinates[0].slice(
-        0,
-        data.geometry.coordinates[0].length - 1
-      )
-    );
+    this.contextMenuVisible = true;
+    this.contextMenuPos = { x: event.x, y: event.y };
+    this.sensorData = data;
+    console.log(this.contextMenuPos);
+  }
 
-    console.log(
-      d3.polygonCentroid(
-        data.geometry.coordinates[0].slice(
-          0,
-          data.geometry.coordinates[0].length - 1
-        )
-      )
-    );
-
+  addSensor(event: Event) {
+    const name = (event.target as HTMLDivElement).id;
     const coords: [number, number] = d3.polygonCentroid(
-      data.geometry.coordinates[0]
+      this.sensorData.geometry.coordinates[0]
     );
 
     const projectedCoords = this.projection(coords);
 
+    const size = 50;
     d3.select('.sensors')
-      .append('circle')
-      .attr('fill', '#000000')
-      .attr('cx', projectedCoords[0])
-      .attr('cy', projectedCoords[1])
-      .attr('r', 8)
-      .attr('stroke', 'black')
-      .attr('stroke-width', 1)
+      .append('image')
+      .attr('x', projectedCoords[0] - size / 2)
+      .attr('y', projectedCoords[1] - size / 2)
+      .attr('width', size)
+      .attr('height', size)
+      .attr('xlink:href', `icons/${name}.svg`)
       .on('click', () => alert(`Sensor clicked!`));
 
-    this.sensors.push({ id: data.properties.id, type: data.properties.type });
+    this.sensors.push({
+      id: this.sensorData.properties.id,
+      pos: { x: projectedCoords[0], y: projectedCoords[1] },
+      type: name,
+    });
+
+    this.contextMenuVisible = false;
+  }
+
+  onCloseContext() {
+    this.contextMenuVisible = false;
   }
 }

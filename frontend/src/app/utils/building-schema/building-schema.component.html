@@ -1,1 +1,45 @@
 <div id="svg_container"></div>
+@if (contextMenuVisible){
+<div
+  class="context-menu"
+  [ngStyle]="{
+    'left.px': (contextMenuPos?.x ?? 0) + 20,
+    'top.px':
+      (contextMenuPos?.y ?? 0) > 500
+        ? (contextMenuPos?.y ?? 0) - 100
+        : (contextMenuPos?.y ?? 0) + 20
+  }"
+>
+  <div>
+    <p>Place sensor</p>
+    <button class="close" (click)="onCloseContext()">
+      <svg
+        fill="#000000"
+        height="800px"
+        width="800px"
+        version="1.1"
+        id="Layer_1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 0 512 512"
+        xml:space="preserve"
+      >
+        <g>
+          <g>
+            <polygon
+              points="512,59.076 452.922,0 256,196.922 59.076,0 0,59.076 196.922,256 0,452.922 59.076,512 256,315.076 452.922,512 
+			512,452.922 315.076,256 		"
+            />
+          </g>
+        </g>
+      </svg>
+    </button>
+  </div>
+  <ul class="sensor-list">
+    @for (item of sensorTypes; track $index) { @if (item.type ===
+    sensorData.properties.type) {
+    <li [id]="item.name" (click)="addSensor($event)">{{ item.name }}</li>
+    } }
+  </ul>
+</div>
+}
