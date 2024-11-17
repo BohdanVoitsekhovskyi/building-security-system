@@ -7,7 +7,8 @@ import { BuildingSchemaComponent } from "../../../utils/building-schema/building
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [NavbarComponent, CommonModule, BuildingSchemaComponent],
+  imports: [NavbarComponent, CommonModule, ],
+  
   templateUrl: './create.component.html',
   styleUrl: './create.component.css',
 })
