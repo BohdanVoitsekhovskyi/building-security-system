@@ -1,17 +1,17 @@
 <app-navbar />
 <main>
   <ul class="floors">
-    @for (floor of floors; track $index) {
+    @for (floor of floors(); track $index) {
     <li
-      [ngClass]="{ selected: activeFloor === floor.id }"
-      [id]="floor.id"
+      [ngClass]="{ selected: activeFloor === floor.floorNumber }"
+      [id]="floor.floorNumber"
       (click)="changeFloor($event)"
     >
-      {{ floor.id }}
+      {{ floor.floorNumber }}
     </li>
     }
   </ul>
-  @for (item of floors; track $index) { @if (activeFloor === item.id) {
+  @for (item of floors(); track $index) { @if (activeFloor === item.floorNumber) {
   <app-building-schema [floor]="item" />
   } }
 </main>

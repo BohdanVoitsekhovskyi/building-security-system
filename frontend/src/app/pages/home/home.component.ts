@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { NavbarComponent } from "../../utils/navbar/navbar.component";
 import { BuildingSchemaComponent } from "../../utils/building-schema/building-schema.component";
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { FacilityService } from '../../services/facility.service';
 export class HomeComponent {
   private facilityService = inject(FacilityService);
 
-  floors = this.facilityService.facility.floors;
+  floors = computed(() => this.facilityService.facility()?.floors); 
   activeFloor: number = 1;
 
   changeFloor(event: Event) {
