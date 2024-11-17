@@ -1,9 +1,17 @@
-import { Component, ElementRef, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
-import { sensors } from './dummy-data';
 import { CommonModule } from '@angular/common';
+import { FacilityService } from '../../services/facility.service';
+import { Floor } from '../../models/floor.model';
 
 @Component({
   selector: 'app-building-schema',
@@ -13,29 +21,28 @@ import { CommonModule } from '@angular/common';
   styleUrl: './building-schema.component.css',
 })
 export class BuildingSchemaComponent {
+  private el = inject(ElementRef);
+  private facilityService = inject(FacilityService);
+
+  @Input({ required: true }) floor!: Floor;
   @Output() onAddSensor = new EventEmitter();
   sensors: { id: number; pos: { x: number; y: number }; type: string }[] = [];
   projection: any;
   private readonly canvas = { w: 1000, h: 1000 };
 
-  sensorTypes = sensors;
+  sensorTypes = this.facilityService.sensorsTypes;
   contextMenuVisible = false;
   contextMenuPos?: { x: number; y: number };
   sensorData?: any;
 
-  constructor(private el: ElementRef) {}
-
   ngOnInit(): void {
-    d3.json('example/testbuilding.json').then((data: any) => {
-      this.renderMap(data);
-    });
+    this.renderMap(this.floor.data);
   }
 
   private renderMap(topoData: any): void {
     const geoData: Record<string, any> = {};
     const arrOfKeys = Object.keys(topoData.objects);
 
-    // Конвертуємо TopoJSON в GeoJSON
     arrOfKeys.forEach((key) => {
       geoData[key] = topojson.feature(topoData, topoData.objects[key]);
     });
@@ -69,18 +76,25 @@ export class BuildingSchemaComponent {
       .append('path')
       .attr('d', (feature) => d3Path(feature as d3.GeoPermissibleObjects) || '')
       .on('click', (e: any, d: any) => {
-        if (d.properties.type === 'window' || d.properties.type === 'door' || d.properties.type === 'room')
+        if (
+          d.properties.type === 'window' ||
+          d.properties.type === 'door' ||
+          d.properties.type === 'room'
+        )
           return this.showContextSensor(e, d);
       });
   }
 
   showContextSensor(event: any, data: any) {
-    if (this.sensors.find((s) => s.id === data.properties.id)) return;
+    if (
+      this.sensors.find((s) => s.id === data.properties.id) &&
+      data.properties.type !== 'room'
+    )
+      return;
 
     this.contextMenuVisible = true;
     this.contextMenuPos = { x: event.x, y: event.y };
     this.sensorData = data;
-    console.log(this.contextMenuPos);
   }
 
   addSensor(event: Event) {
@@ -92,6 +106,7 @@ export class BuildingSchemaComponent {
     const projectedCoords = this.projection(coords);
 
     const size = 50;
+
     d3.select('.sensors')
       .append('image')
       .attr('x', projectedCoords[0] - size / 2)
@@ -99,7 +114,60 @@ export class BuildingSchemaComponent {
       .attr('width', size)
       .attr('height', size)
       .attr('xlink:href', `icons/${name}.svg`)
+      .attr('class', this.sensorData.properties.type)
+      .attr('id', this.sensorData.properties.id)
       .on('click', () => alert(`Sensor clicked!`));
+
+    if (this.sensorData.properties.type === 'room') {
+      let centered = false;
+      const id = this.sensorData.properties.id;
+
+      const count = d3
+        .select('.sensors')
+        .selectAll('.room')
+        .filter(function () {
+          const image: any = d3.select(this);
+          return image.attr('id') == id;
+        })
+        .size();
+      console.log(this.sensorData);
+      d3.select('.sensors')
+        .selectAll('.room')
+        .each(function () {
+          const image: any = d3.select(this);
+          const currentX = parseFloat(image.attr('x')) || 0;
+          const currentY = parseFloat(image.attr('y')) || 0;
+
+          if (count == 0) {
+            return;
+          }
+          
+          if (image.attr('id') != id) return;
+
+          let newX = 0;
+          if (
+            currentX === projectedCoords[0] - size / 2 &&
+            count > 1 &&
+            count % 2 === 0
+          ) {
+            if (centered === false) {
+              newX = currentX - size / 2 - 10;
+              centered = true;
+            } else {
+              newX = currentX + size / 2 + 10;
+              centered = false;
+            }
+          } else if (currentX > projectedCoords[0] - size / 2) {
+            newX = currentX + size / 2 + 10;
+          } else if (currentX < projectedCoords[0] - size / 2) {
+            newX = currentX - size / 2 - 10;
+          } else {
+            return;
+          }
+
+          image.transition().duration(500).attr('x', newX).attr('y', currentY);
+        });
+    }
 
     this.sensors.push({
       id: this.sensorData.properties.id,

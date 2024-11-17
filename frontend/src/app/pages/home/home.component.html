@@ -11,5 +11,7 @@
     </li>
     }
   </ul>
-  <app-building-schema />
+  @for (item of floors; track $index) { @if (activeFloor === item.id) {
+  <app-building-schema [floor]="item" />
+  } }
 </main>

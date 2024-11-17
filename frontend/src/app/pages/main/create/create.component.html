@@ -51,7 +51,7 @@
     </div>
   </div>
   } @else if (state === 'modifying') {
-  <app-building-schema />
+  <!-- <app-building-schema [floorId]="activeFloor || 0" /> -->
   }
   <button class="save" [disabled]="state !== 'modifying'" (click)="saveFloor()">
     Save floor

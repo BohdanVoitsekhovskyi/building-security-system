@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavbarComponent } from "../../utils/navbar/navbar.component";
 import { BuildingSchemaComponent } from "../../utils/building-schema/building-schema.component";
 import { CommonModule } from '@angular/common';
-import { floors } from './dummy-data';
+import { FacilityService } from '../../services/facility.service';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,9 @@ import { floors } from './dummy-data';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  floors = floors;
+  private facilityService = inject(FacilityService);
+
+  floors = this.facilityService.facility.floors;
   activeFloor: number = 1;
 
   changeFloor(event: Event) {
