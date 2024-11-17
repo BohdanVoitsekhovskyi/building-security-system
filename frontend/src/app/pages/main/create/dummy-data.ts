@@ -1,0 +1,1 @@
+export const floors: { id: number; data: null }[] = [];

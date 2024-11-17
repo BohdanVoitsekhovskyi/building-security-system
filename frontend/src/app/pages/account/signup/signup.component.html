@@ -1,0 +1,88 @@
+<div class="modal-container">
+  <h2>Welcome!</h2>
+  <form (ngSubmit)="onSubmit()" #signinForm="ngForm">
+    <label for="name"
+      >First name @if (name.invalid && (name.touched || name.dirty)) {
+      <div class="alert name">
+        @if (name.errors?.['required']) { Name is required } @else if
+        (name.errors?.['pattern']) { Wrong name }
+      </div>
+      }</label
+    >
+    <input
+      type="text"
+      id="name"
+      name="name"
+      [(ngModel)]="signInInfo.name"
+      placeholder="John"
+      pattern="^[A-Z][a-z]+$"
+      required
+      #name="ngModel"
+    />
+
+    <label for="surname"
+      >Last name @if (surname.invalid && (surname.touched || surname.dirty)) {
+      <div class="alert surname">
+        @if (surname.errors?.['required']) { Surname is required } @else if
+        (surname.errors?.['pattern']) { Wrong surname }
+      </div>
+      }
+    </label>
+    <input
+      type="text"
+      id="surname"
+      name="surname"
+      [(ngModel)]="signInInfo.surname"
+      placeholder="Smith"
+      pattern="^[A-Z][a-z]+$"
+      required
+      #surname="ngModel"
+    />
+
+    <label for="email"
+      >Email address @if (email.invalid && (email.touched || email.dirty)) {
+      <div class="alert email">
+        @if (email.errors?.['required']) { Email is required } @else if
+        (email.errors?.['email']) { Wrong email }
+      </div>
+      }
+    </label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      [(ngModel)]="signInInfo.email"
+      placeholder="name@email.com"
+      email
+      required
+      #email="ngModel"
+    />
+
+    <label for="password"
+      >Password @if (password.invalid && (password.touched || password.dirty)) {
+      <div class="alert password">
+        @if (password.errors?.['required']) { Password is required }@else if
+        (password.errors?.['minlength']) { Password must be at least 8 symbols }
+        @else if (password.errors?.['pattern']) { Wrong password }
+      </div>
+      }
+    </label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="signInInfo.password"
+      placeholder="Password"
+      required
+      minlength="8"
+      pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9!?#$.,=+\-_]+$"
+      #password="ngModel"
+    />
+
+    <button type="submit" [disabled]="!signinForm.valid">Sign in</button>
+  </form>
+
+  <div class="footer-text">
+    Already have an account? <a routerLink="/login">Login</a>
+  </div>
+</div>
