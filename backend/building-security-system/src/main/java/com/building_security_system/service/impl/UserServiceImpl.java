@@ -1,7 +1,6 @@
 package com.building_security_system.service.impl;
 
 import com.building_security_system.db_access.repositories.UserRepository;
-import com.building_security_system.dto.LoginDto;
 
 
 import com.building_security_system.models.Role;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -33,10 +30,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-      User user = User.toModel(userRepository.findOneByEmail(email));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+      User user = User.toModel(userRepository.findOneByUsername(username));
         if (user == null) {
-            throw new UsernameNotFoundException("User with email - " + email + " not found");
+            throw new UsernameNotFoundException("User with username - " + username + " not found");
         }
         user.setRoles(new ArrayList<>());
         user.getRoles().add(Role.USER);
@@ -46,12 +43,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
 
         return new org.springframework.security.core.userdetails.User
-                (user.getEmail(), user.getPassword(), authorities);
+                (user.getUsername(), user.getPassword(), authorities);
 
     }
     @Override
-    public User findByEmail(String email) {
-        return User.toModel(userRepository.findOneByEmail(email)) ;
+    public User findByUsername(String username) {
+        return User.toModel(userRepository.findOneByUsername(username)) ;
 
     }
     @Override

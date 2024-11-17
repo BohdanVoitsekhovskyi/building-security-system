@@ -23,7 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RestController
-@RequestMapping("/api/")
+//@RequestMapping("/api/")
 @CrossOrigin
 public class UserController {
     private final UserService userService;
@@ -35,12 +35,12 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("login/{email}")
-    public ResponseEntity<Object> loginUser(@PathVariable String email) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findByEmail(email));
+    @PostMapping("/api/login/{username}")
+    public ResponseEntity<Object> loginUser(@PathVariable String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findByUsername(username));
     }
 
-    @GetMapping("token/refresh")
+    @GetMapping("/api/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
         try {
             String authorizationToken = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -49,10 +49,10 @@ public class UserController {
                 Algorithm algorithm = Algorithm.HMAC256("catSecret".getBytes());
                 JWTVerifier jwtVerifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = jwtVerifier.verify(token);
-                String email = decodedJWT.getSubject();
-                User user = userService.findByEmail(email);
+                String username = decodedJWT.getSubject();
+                User user = userService.findByUsername(username);
 
-                String access_token = jwtService.createAccessToken(email,
+                String access_token = jwtService.createAccessToken(username,
                         request.getRequestURL().toString(),
                         user.getRoles().stream().map(Role::toString).toList());
 
@@ -69,23 +69,22 @@ public class UserController {
         }
     }
 
-    @PostMapping("register")
+    @PostMapping("/api/register")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDTO user) {
-        if(userService.findByEmail(user.getEmail()) != null) {
-            return ResponseEntity.status(400).body("User " + user.getEmail() + " has account");
+        System.out.println(user);
+        if(userService.findByUsername(user.getUsername()) != null) {
+            return ResponseEntity.status(400).body("User " + user.getUsername() + " has account");
         }
         String fullName = user.getFirstName() + ' ' + user.getLastName();
         User newUser = User.builder()
                 .name(fullName)
                 .id(System.currentTimeMillis())
                 .roles(List.of(Role.USER))
-                .email(user.getEmail())
+                .username(user.getUsername())
                 .password(user.getPassword())
                 .build();
 
+        System.out.println(newUser);
         return new  ResponseEntity<>(userService.saveUser(newUser) , HttpStatus.CREATED);
     }
-
-
-
 }

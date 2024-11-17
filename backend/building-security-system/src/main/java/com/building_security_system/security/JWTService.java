@@ -24,6 +24,7 @@ public class JWTService {
     }
 
     public String createAccessToken(String username, String requestURL, List<String> roles) {
+        System.out.println("In create access token");
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         return JWT.create()
                 .withSubject(username)
@@ -35,6 +36,7 @@ public class JWTService {
     }
 
     public String createRefreshToken(String username, String requestURL, List<String> roles) {
+        System.out.println("In create refresh token");
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         return JWT.create()
                 .withSubject(username)

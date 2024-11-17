@@ -13,7 +13,7 @@ import java.util.List;
 public class User {
     private long id;
     String name;
-    String email;
+    String username;
     String password;
     List<Role> roles;
 
@@ -21,7 +21,7 @@ public class User {
         return UserEntity.builder()
                 .id(user.id)
                 .name(user.name)
-                .email(user.email)
+                .username(user.username)
                 .password(user.password)
                 .build();
     }
@@ -30,7 +30,7 @@ public class User {
         return User.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .email(entity.getEmail())
+                .username(entity.getUsername())
                 .password(entity.getPassword())
                 .build();
     }

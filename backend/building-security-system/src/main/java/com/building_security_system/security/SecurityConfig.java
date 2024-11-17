@@ -24,7 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -44,14 +43,16 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        System.out.println("in configure");
         return http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers("login").permitAll();
+                    request.requestMatchers("/api/login/**").permitAll();
                     request.requestMatchers(HttpMethod.OPTIONS).permitAll();
-                    request.requestMatchers("register").permitAll();
-                    request.requestMatchers("token/refresh").permitAll();
+                    request.requestMatchers(HttpMethod.POST).permitAll();
+                    request.requestMatchers("/api/register").permitAll();
+                    request.requestMatchers("/api/token/refresh").permitAll();
                     request.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())

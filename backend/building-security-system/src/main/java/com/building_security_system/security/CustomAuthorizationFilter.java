@@ -29,9 +29,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     {
+        System.out.println("In do filter internal");
+        System.out.println(request);
         try {
-            if (request.getServletPath().equals("login/{email}") || request.getServletPath().equals("register") ||
-                    request.getServletPath().equals("token/refresh")) {
+            System.out.println(request.getServletPath());
+            if (request.getServletPath().equals("/api/login/**")
+                    || request.getServletPath().equals("/api/register") ||
+                    request.getServletPath().equals("/api/token/refresh")) {
                 filterChain.doFilter(request, response);
             } else {
                 String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -55,9 +59,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 }
             }
         } catch(Exception exception) {
+            System.out.println("In catch block");
+
             response.setHeader("Error", exception.getMessage());
             response.setStatus(403);
-
         }
     }
 }
