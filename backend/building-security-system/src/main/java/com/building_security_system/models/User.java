@@ -18,6 +18,10 @@ public class User {
     List<Role> roles;
 
     public static UserEntity toEntity(User user) {
+        if (user == null) {
+            return null;
+        }
+
         return UserEntity.builder()
                 .id(user.id)
                 .name(user.name)
@@ -27,6 +31,10 @@ public class User {
     }
 
     public static User toModel(UserEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
         return User.builder()
                 .id(entity.getId())
                 .name(entity.getName())

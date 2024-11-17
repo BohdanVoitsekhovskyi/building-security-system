@@ -21,9 +21,8 @@ import java.util.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-
 @RestController
-//@RequestMapping("/api/")
+@RequestMapping("/api/")
 @CrossOrigin
 public class UserController {
     private final UserService userService;
@@ -35,12 +34,13 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/api/login/{username}")
-    public ResponseEntity<Object> loginUser(@PathVariable String username) {
+    @PostMapping("login/{username}")
+    public ResponseEntity<?> loginUser(@PathVariable String username) {
+        System.out.println(username);
         return ResponseEntity.status(HttpStatus.OK).body(userService.findByUsername(username));
     }
 
-    @GetMapping("/api/token/refresh")
+    @GetMapping("token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
         try {
             String authorizationToken = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -58,18 +58,21 @@ public class UserController {
 
                 HashMap<String, String> tokenMap = new HashMap<>();
                 tokenMap.put("access_token", access_token);
+                System.out.println(access_token);
                 tokenMap.put("refresh_token", token);
+                System.out.println(token);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokenMap);
             }
+            System.out.println(authorizationToken);
         }
-        catch(Exception exception) {
+        catch (Exception exception) {
             response.setHeader("Error", exception.getMessage());
             response.setStatus(403);
         }
     }
 
-    @PostMapping("/api/register")
+    @PostMapping("register")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDTO user) {
         System.out.println(user);
         if(userService.findByUsername(user.getUsername()) != null) {
@@ -85,6 +88,6 @@ public class UserController {
                 .build();
 
         System.out.println(newUser);
-        return new  ResponseEntity<>(userService.saveUser(newUser) , HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.saveUser(newUser) , HttpStatus.CREATED);
     }
 }
