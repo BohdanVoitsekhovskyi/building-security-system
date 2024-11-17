@@ -10,5 +10,5 @@ public interface FacilityService {
     Facility getFacilityById(long id);
     Facility saveFacility(Facility facility);
     void deleteFacilityById(long id);
-    SvgToJsonParser.JsonContent updateFacility(long id, String fileContent);
+    Facility updateFacility(long id, int floorNumber, String fileContent);
 }

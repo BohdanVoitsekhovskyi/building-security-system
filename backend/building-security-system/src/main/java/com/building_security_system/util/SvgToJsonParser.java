@@ -61,19 +61,6 @@ public class SvgToJsonParser {
         }
     }
 
-//    public static void main(String[] args) {
-//        Gson gson = new Gson();
-//
-//        String result = gson.toJson(parseToJson(readSvgFile("D:\\University\\5sem\\kpp\\kpp_labs\\src\\main\\resources\\floorSaved.svg")));
-//        JsonParser jsonParser = new JsonParser();
-//        JsonElement jsonElement = jsonParser.parse(result);
-//        Gson prettyGson = new GsonBuilder().setPrettyPrinting().create();
-//        String prettyJson = prettyGson.toJson(jsonElement);
-//
-//        System.out.println(prettyJson);
-//
-//    }
-
     public static JsonContent parseToJson(String fileContent) {
         JsonContent jsonContent = new JsonContent("Topology", new HashMap<>(), new ArrayList<>());
         List<String> pathTags = extractPathTags(fileContent);

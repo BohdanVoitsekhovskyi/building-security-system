@@ -1,9 +1,8 @@
 package com.building_security_system.service.impl;
 
-import com.building_security_system.db_access.entities.FacilityEntity;
-import com.building_security_system.db_access.entities.FloorEntity;
 import com.building_security_system.db_access.repositories.FacilityRepository;
 import com.building_security_system.models.Facility;
+import com.building_security_system.models.Floor;
 import com.building_security_system.service.FacilityService;
 import com.building_security_system.util.SvgToJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +41,15 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public SvgToJsonParser.JsonContent updateFacility(long id, String fileContent) {
-//        FacilityEntity entity = facilityRepository.findOneById(id);
-//        entity.getFloors().add(new FloorEntity(id, SvgToJsonParser.parseToJson(fileContent), new ArrayList<>()));
-//        return facilityRepository.updateById(id, entity);
-        return null;
+    public Facility updateFacility(long id, int floorNumber, String fileContent) {
+        SvgToJsonParser.JsonContent jsonContent = SvgToJsonParser.parseToJson(fileContent);
+        Floor floor = new Floor(System.currentTimeMillis(),
+                floorNumber,
+                jsonContent,
+                new ArrayList<>());
+
+        Facility facility = Facility.toModel(facilityRepository.findOneById(id));
+        facility.getFloors().add(floor);
+        return Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
     }
 }

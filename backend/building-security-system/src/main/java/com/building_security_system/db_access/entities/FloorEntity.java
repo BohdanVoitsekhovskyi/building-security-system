@@ -16,6 +16,7 @@ import java.util.List;
 public class FloorEntity {
     @Id
     private long id;
+    private int floorNumber;
     private SvgToJsonParser.JsonContent placement;
     private List<DetectorEntity> detectorEntities;
 }
