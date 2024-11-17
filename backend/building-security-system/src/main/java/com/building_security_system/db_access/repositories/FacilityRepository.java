@@ -7,4 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface FacilityRepository extends MongoRepository<FacilityEntity, Long> {
     FacilityEntity findOneById(long id);
     void deleteById(long id);
+
 }

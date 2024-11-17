@@ -18,5 +18,5 @@ public class FacilityEntity {
     @Id
     private long id;
     private User user;
-    List<Floor> floors;
+    List<FloorEntity> floors;
 }

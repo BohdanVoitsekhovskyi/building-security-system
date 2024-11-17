@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @ToString
@@ -18,7 +19,7 @@ public class Facility {
         return FacilityEntity.builder()
                 .id(facility.id)
                 .user(facility.user)
-                .floors(facility.floors)
+                .floors(facility.floors.stream().map(Floor::toEntity).collect(Collectors.toList()))
                 .build();
     }
 
@@ -26,7 +27,7 @@ public class Facility {
         return Facility.builder()
                 .id(entity.getId())
                 .user(entity.getUser())
-                .floors(entity.getFloors())
+                .floors(entity.getFloors().stream().map(Floor::toModel).collect(Collectors.toList()))
                 .build();
     }
 
