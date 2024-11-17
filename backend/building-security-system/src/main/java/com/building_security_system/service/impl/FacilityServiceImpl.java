@@ -49,6 +49,10 @@ public class FacilityServiceImpl implements FacilityService {
                 new ArrayList<>());
 
         Facility facility = Facility.toModel(facilityRepository.findOneById(id));
+        if (facility.getFloors() == null) {
+            facility.setFloors(new ArrayList<>());
+        }
+
         facility.getFloors().add(floor);
         return Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
     }
