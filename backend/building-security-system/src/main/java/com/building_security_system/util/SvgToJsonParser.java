@@ -17,7 +17,7 @@ public class SvgToJsonParser {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class JsonContent {
-        private static int counter = 0;
+        public static int counter = 0;
         private String type;
         private Map<String, GeometryCollection> objects;
         private List<List<List<Integer>>> arcs;
@@ -25,9 +25,15 @@ public class SvgToJsonParser {
         @Data
         @NoArgsConstructor
         @AllArgsConstructor
-        public static class GeometryCollection {
+        public static class GeometryCollection implements Comparable<GeometryCollection> {
             private String type = "GeometryCollection";
             private List<Geometry> geometries;
+
+            @Override
+            public int compareTo(GeometryCollection o) {
+                return Integer.compare(this.geometries.getFirst().properties.id,
+                        o.getGeometries().getFirst().properties.id);
+            }
 
             @Data
             public static class Geometry implements Comparable<Geometry> {
