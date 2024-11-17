@@ -1,6 +1,6 @@
 <div class="modal-container">
   <h2>Welcome!</h2>
-  <form (ngSubmit)="onSubmit()" #signinForm="ngForm">
+  <form (ngSubmit)="onSubmit(signinForm)" #signinForm="ngForm">
     <label for="name"
       >First name @if (name.invalid && (name.touched || name.dirty)) {
       <div class="alert name">

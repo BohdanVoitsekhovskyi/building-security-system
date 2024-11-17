@@ -1,0 +1,67 @@
+:host {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  height: 100%;
+  padding: 0.6rem 0.8rem;
+}
+
+:host:hover .dropdown {
+  display: flex;
+}
+
+img {
+  height: 2.4rem;
+  width: 2.4rem;
+  border-radius: 50%;
+  padding: 0.3rem;
+}
+
+p {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.dropdown {
+  position: absolute;
+  top: 3.2rem;
+  right: 2rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.8rem;
+  background-color: #ffffff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  padding-top: 0.4rem;
+  padding-bottom: 1rem;
+  border-radius: 0.2rem;
+  list-style: none;
+}
+
+.dropdown li {
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.2rem 1rem;
+}
+
+.dropdown li a {
+  font-size: 0.9rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 1rem !important;
+}
+
+.user-info div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.user-info .email {
+  font-size: 0.8rem;
+}
