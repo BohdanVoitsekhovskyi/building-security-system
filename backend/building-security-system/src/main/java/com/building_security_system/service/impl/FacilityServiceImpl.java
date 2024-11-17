@@ -1,11 +1,15 @@
 package com.building_security_system.service.impl;
 
+import com.building_security_system.db_access.entities.FacilityEntity;
+import com.building_security_system.db_access.entities.FloorEntity;
 import com.building_security_system.db_access.repositories.FacilityRepository;
 import com.building_security_system.models.Facility;
 import com.building_security_system.service.FacilityService;
+import com.building_security_system.util.SvgToJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,5 +39,13 @@ public class FacilityServiceImpl implements FacilityService {
     @Override
     public void deleteFacilityById(long id) {
         facilityRepository.deleteById(id);
+    }
+
+    @Override
+    public SvgToJsonParser.JsonContent updateFacility(long id, String fileContent) {
+//        FacilityEntity entity = facilityRepository.findOneById(id);
+//        entity.getFloors().add(new FloorEntity(id, SvgToJsonParser.parseToJson(fileContent), new ArrayList<>()));
+//        return facilityRepository.updateById(id, entity);
+        return null;
     }
 }

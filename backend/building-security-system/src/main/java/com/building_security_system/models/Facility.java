@@ -18,7 +18,7 @@ public class Facility {
         return FacilityEntity.builder()
                 .id(facility.id)
                 .user(facility.user)
-                .floors(facility.floors)
+                .floors(facility.floors.stream().map(Floor::toEntity).toList())
                 .build();
     }
 
@@ -26,7 +26,7 @@ public class Facility {
         return Facility.builder()
                 .id(entity.getId())
                 .user(entity.getUser())
-                .floors(entity.getFloors())
+                .floors(entity.getFloors().stream().map(Floor::toModel).toList())
                 .build();
     }
 
