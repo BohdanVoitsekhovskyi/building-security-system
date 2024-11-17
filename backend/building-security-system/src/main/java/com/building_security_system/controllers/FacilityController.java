@@ -2,7 +2,6 @@ package com.building_security_system.controllers;
 
 import com.building_security_system.models.Facility;
 import com.building_security_system.service.FacilityService;
-import com.building_security_system.util.SvgToJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,6 @@ public class FacilityController {
     @PostMapping("facility/{facilityId}/floor/{floorNumber}/create")
     public ResponseEntity<Facility> createFloor(@RequestBody String fileContent,
                                         @PathVariable long facilityId, @PathVariable int floorNumber){
-        SvgToJsonParser.JsonContent.counter = 0;
         return new ResponseEntity<>(facilityService.updateFacility(facilityId,floorNumber,fileContent), HttpStatus.CREATED);
     }
 }
