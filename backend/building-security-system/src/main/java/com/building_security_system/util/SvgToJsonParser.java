@@ -3,11 +3,8 @@ package com.building_security_system.util;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,14 +30,10 @@ public class SvgToJsonParser {
             private List<Geometry> geometries;
 
             @Data
-            public static class Geometry {
+            public static class Geometry implements Comparable<Geometry> {
                 private String type = "Polygon";
                 private int[][] arcs = new int[1][1];
                 private Properties properties;
-
-                public Geometry() {
-                    ++counter;
-                }
 
                 public Geometry(String type, int[][] arcs, Properties properties) {
                     this.type = type;
@@ -48,6 +41,11 @@ public class SvgToJsonParser {
                     this.properties = properties;
 
                     ++counter;
+                }
+
+                @Override
+                public int compareTo(@NonNull Geometry o) {
+                    return Integer.compare(this.properties.id, o.properties.id);
                 }
 
                 @Data
@@ -66,9 +64,7 @@ public class SvgToJsonParser {
         List<String> pathTags = extractPathTags(fileContent);
 
         for (String pathTag : pathTags) {
-
             processIdAttribute(jsonContent, pathTag);
-
             processCoordinates(jsonContent, pathTag);
         }
 
@@ -142,30 +138,7 @@ public class SvgToJsonParser {
         return symbols;
     }
 
-
-
-    public static String readSvgFile(String path) {
-        FileReader reader = null;
-        StringBuilder builder = new StringBuilder();
-        try {
-            reader = new FileReader(path);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        while(true) {
-            try {
-                if (!bufferedReader.ready()) break;
-                builder.append(bufferedReader.readLine()).append('\n');
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return builder.toString();
-    }
     public static List<List<Integer>> getArc(List<Character> symbols, List<Integer> numbers) {
-
         List<List<Integer>> result = new ArrayList<>();
         int x = numbers.get(0);
         int y = numbers.get(1);

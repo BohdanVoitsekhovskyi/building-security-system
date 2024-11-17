@@ -35,11 +35,10 @@ public class FacilityController {
         facilityService.deleteFacilityById(id);
         return ResponseEntity.ok("Facility deleted");
     }
+
     @PostMapping("facility/{facilityId}/floor/{floorNumber}/create")
     public ResponseEntity<Facility> createFloor(@RequestBody String fileContent,
                                         @PathVariable long facilityId, @PathVariable int floorNumber){
         return new ResponseEntity<>(facilityService.updateFacility(facilityId,floorNumber,fileContent), HttpStatus.CREATED);
     }
-
-
 }

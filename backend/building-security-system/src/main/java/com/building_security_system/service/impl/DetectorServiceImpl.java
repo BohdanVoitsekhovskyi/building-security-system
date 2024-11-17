@@ -1,7 +1,7 @@
 package com.building_security_system.service.impl;
 
 import com.building_security_system.db_access.repositories.DetectorRepository;
-import com.building_security_system.models.detectors.Detector;
+import com.building_security_system.models.detectors.*;
 import com.building_security_system.service.DetectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +29,20 @@ public class DetectorServiceImpl implements DetectorService {
 
     @Override
     public Detector saveDetector(Detector detector) {
+        if (detector.getDescription().equals(DoorDetector.class.getName())) {
+            detector = new DoorDetector(detector.getId());
+        } else if (detector.getDescription().equals(FloodDetector.class.getName())) {
+            detector = new FloodDetector(detector.getId());
+        } else if (detector.getDescription().equals(MotionDetector.class.getName())) {
+            detector = new MotionDetector(detector.getId());
+        } else if (detector.getDescription().equals(SmokeDetector.class.getName())) {
+            detector = new SmokeDetector(detector.getId());
+        } else if (detector.getDescription().equals(TemperatureDetector.class.getName())) {
+            detector = new TemperatureDetector(detector.getId());
+        } else if (detector.getDescription().equals(WindowDetector.class.getName())) {
+            detector = new WindowDetector(detector.getId());
+        }
+
         return Detector.toModel(detectorRepository.save(Detector.toEntity(detector)));
     }
 
