@@ -37,7 +37,8 @@
   </div>
   <ul class="sensor-list">
     @for (item of sensorTypes; track $index) { @if (item.type ===
-    sensorData.properties.type) {
+    sensorData.properties.type && !roomContainsType(sensorData.properties.id,
+    item.name)) {
     <li [id]="item.name" (click)="addSensor($event)">{{ item.name }}</li>
     } }
   </ul>

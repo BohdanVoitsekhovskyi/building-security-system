@@ -3,6 +3,7 @@ import { Floor } from '../models/floor.model';
 import { Facility } from '../models/facility.model';
 import { HttpClient } from '@angular/common/http';
 import { apiUrl } from '../environment';
+import { Detector } from '../models/detector.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class FacilityService {
   userHasFacility?: false;
   facility = signal<Facility | null>(null);
   environment = apiUrl;
-  facilityId = 1731850163126;
+  facilityId = 1731850200654;
 
   constructor() {
     this.getFacility();
@@ -32,6 +33,9 @@ export class FacilityService {
         console.log(data);
         this.facility.set(data);
       },
+      error: (err) => {
+        console.log(err);
+      },
     });
   }
 
@@ -40,5 +44,9 @@ export class FacilityService {
       `${apiUrl}/${this.facilityId}/floor/${floorNumber}/create`,
       file
     );
+  }
+
+  addDetectors(floorNumber: number, detectors: Detector[]) {
+    ///
   }
 }
