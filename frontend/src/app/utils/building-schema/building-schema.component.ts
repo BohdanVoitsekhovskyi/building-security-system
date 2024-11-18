@@ -84,11 +84,15 @@ export class BuildingSchemaComponent {
         if (d.properties.type === 'apartment' || this.mode === 'view') return;
         return this.showContextSensor(e, d);
       });
+
+    for (let i of this.floor().detectors) {
+      this.addSaveSensor(i.type, i.position, i.id);
+    }
   }
 
   showContextSensor(event: any, data: any) {
     if (
-      this.sensors.find((s) => s.locationId === data.properties.id) &&
+      this.sensors.find((s) => s.id === data.properties.id) &&
       data.properties.type !== 'area'
     )
       return;
@@ -108,6 +112,79 @@ export class BuildingSchemaComponent {
     this.contextMenuVisible = true;
     this.contextMenuPos = { x: event.x, y: event.y };
     this.sensorData = data;
+  }
+
+  addSaveSensor(name: string, coords: { x: number; y: number }, id: number) {
+    const size = 50;
+    const type = this.sensorTypes.find((t) => t.name === name)?.type;
+    console.log(id);
+    d3.select('.sensor')
+      .append('image')
+      .attr('x', coords.x - size / 2)
+      .attr('y', coords.y - size / 2)
+      .attr('width', size)
+      .attr('height', size)
+      .attr('xlink:href', `icons/${name}.svg`)
+      .attr('type', name)
+      .attr('class', type || 'default')
+      .attr('id', id)
+      .on('click', () => alert(`Sensor clicked!`));
+
+    if (type === 'area') {
+      let centered = false;
+
+      const count = d3
+        .select('.sensor')
+        .selectAll('.area')
+        .filter(function () {
+          const image: any = d3.select(this);
+          return image.attr('id') == id;
+        })
+        .size();
+
+      d3.select('.sensor')
+        .selectAll('.area')
+        .each(function () {
+          const image: any = d3.select(this);
+          const currentX = parseFloat(image.attr('x')) || 0;
+          const currentY = parseFloat(image.attr('y')) || 0;
+
+          if (count == 0) {
+            return;
+          }
+
+          if (image.attr('id') != id) return;
+
+          let newX = 0;
+          if (
+            currentX === coords.x - size / 2 &&
+            count > 1 &&
+            count % 2 === 0
+          ) {
+            if (centered === false) {
+              newX = currentX - size / 2 - 10;
+              centered = true;
+            } else {
+              newX = currentX + size / 2 + 10;
+              centered = false;
+            }
+          } else if (currentX > coords.x - size / 2) {
+            newX = currentX + size / 2 + 10;
+          } else if (currentX < coords.x - size / 2) {
+            newX = currentX - size / 2 - 10;
+          } else {
+            return;
+          }
+
+          image.transition().duration(200).attr('x', newX).attr('y', currentY);
+        });
+    }
+
+    this.sensors.push({
+      id: id,
+      position: { x: coords.x, y: coords.y },
+      type: name,
+    });
   }
 
   addSensor(event: Event) {
@@ -182,7 +259,7 @@ export class BuildingSchemaComponent {
     }
 
     this.sensors.push({
-      locationId: this.sensorData.properties.id,
+      id: this.sensorData.properties.id,
       position: { x: projectedCoords[0], y: projectedCoords[1] },
       type: name,
     });
@@ -197,7 +274,9 @@ export class BuildingSchemaComponent {
   }
 
   roomContainsType(id: number, type: string) {
-    return this.sensors.findIndex((s) => s.locationId === id && s.type === type) === -1
+    return this.sensors.findIndex(
+      (s) => s.id === id && s.type === type
+    ) === -1
       ? false
       : true;
   }

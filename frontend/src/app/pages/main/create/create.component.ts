@@ -92,9 +92,18 @@ export class CreateComponent {
           },
         });
       this.newFloor = undefined;
-    }
-    else if (this.detectors){
-      console.log(this.detectors)
+    } else if (this.detectors && this.activeFloor) {
+      this.facilityService
+        .addDetectors(this.activeFloor, this.detectors)
+        .subscribe({
+          next: (res) => {
+            this.facilityService.facility.set(res);
+            console.log(res);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
     }
 
     this.state = 'saved';

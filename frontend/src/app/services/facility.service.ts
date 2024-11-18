@@ -12,7 +12,6 @@ import { AuthService } from './auth/auth.service';
 export class FacilityService {
   private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
-  private authService = inject(AuthService);
 
   readonly sensorsTypes: { name: string; type: string }[] = [
     { name: 'motion', type: 'entrance' },
@@ -30,15 +29,17 @@ export class FacilityService {
   }
 
   getFacility() {
-    this.httpClient.get<Facility>(apiUrl + '/facility/' + this.facilityId()).subscribe({
-      next: (data) => {
-        console.log(data);
-        this.facility.set(data);
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+    this.httpClient
+      .get<Facility>(apiUrl + '/facility/' + this.facilityId())
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.facility.set(data);
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
   }
 
   addFloor(floorNumber: number, file: string) {
@@ -49,6 +50,9 @@ export class FacilityService {
   }
 
   addDetectors(floorNumber: number, detectors: Detector[]) {
-    ///
+    return this.httpClient.put<Facility>(
+      `${apiUrl}/facility/${this.facilityId()}/floor/${floorNumber}/edit`,
+      detectors
+    );
   }
 }

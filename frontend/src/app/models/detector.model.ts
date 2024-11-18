@@ -1,5 +1,5 @@
 export type Detector = {
-  locationId: number;
+  id: number;
   position: { x: number; y: number };
   type: string;
 };
