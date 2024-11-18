@@ -26,6 +26,7 @@ export class BuildingSchemaComponent {
   private facilityService = inject(FacilityService);
 
   floor = input.required<Floor>();
+  @Input({required: true}) mode!: 'edit' | 'view';
   @Output() onAddSensor = new EventEmitter();
   sensors: { id: number; pos: { x: number; y: number }; type: string }[] = [];
   projection: any;
@@ -79,7 +80,7 @@ export class BuildingSchemaComponent {
       .append('path')
       .attr('d', (feature) => d3Path(feature as d3.GeoPermissibleObjects) || '')
       .on('click', (e: any, d: any) => {
-        if (d.properties.type === 'apartment') return;
+        if (d.properties.type === 'apartment' || this.mode === 'view') return;
         return this.showContextSensor(e, d);
       });
   }

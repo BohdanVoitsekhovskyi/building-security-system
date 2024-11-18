@@ -12,7 +12,7 @@ export class AuthService {
   private httpClient = inject(HttpClient);
   environment = apiUrl;
 
-  isLoggedIn = signal<boolean>(false);
+  isLoggedIn = signal<boolean>(true);
 
   login(userDetails: LoginInfo): Observable<boolean> {
     return this.httpClient
