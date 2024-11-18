@@ -4,6 +4,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { apiUrl } from '../../environment';
 import { LoginInfo } from '../../pages/account/login/login.model';
 import { SignUpInfo } from '../../pages/account/signup/signup.model';
+import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root',
