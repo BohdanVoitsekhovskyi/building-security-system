@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { BuildingSchemaComponent } from '../../../utils/building-schema/building-schema.component';
 import { FacilityService } from '../../../services/facility.service';
 import { Floor } from '../../../models/floor.model';
+import { Detector } from '../../../models/detector.model';
 
 @Component({
   selector: 'app-create',
@@ -20,6 +21,8 @@ export class CreateComponent {
   activeFloor?: number;
   state: 'creating' | 'modifying' | 'saved' = 'saved';
   svgUrl?: string;
+
+  detectors: Detector[] = [];
 
   changeFloor(event: Event) {
     const element = event.target as HTMLDivElement;
