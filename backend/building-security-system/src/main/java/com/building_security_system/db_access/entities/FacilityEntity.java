@@ -16,6 +16,5 @@ import java.util.List;
 public class FacilityEntity {
     @Id
     private long id;
-    private User user;
     List<FloorEntity> floors;
 }
