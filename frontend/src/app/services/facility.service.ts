@@ -22,7 +22,7 @@ export class FacilityService {
   ];
   facility = signal<Facility | null>(null);
   environment = apiUrl;
-  facilityId = computed(() => this.authService.userInfoSignal()?.id);
+  facilityId = computed(() => this.authService.userInfo()?.id);
 
   constructor() {
     this.getFacility();

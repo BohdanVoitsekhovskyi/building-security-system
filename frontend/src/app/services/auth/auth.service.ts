@@ -15,14 +15,14 @@ export class AuthService {
   path = '/user';
 
   isLoggedIn = signal<boolean>(false);
-  userInfoSignal = signal<User | undefined>(undefined);
+  userInfo = signal<User | undefined>(undefined);
 
   login(userDetails: LoginInfo): Observable<boolean> {
     return this.httpClient
       .post<any>(this.environment + this.path + '/login', userDetails)
       .pipe(
         map((response) => {
-          this.userInfoSignal.set(response);
+          this.userInfo.set(response);
           this.isLoggedIn.set(true);
           return true;
         }),
@@ -39,7 +39,7 @@ export class AuthService {
       .post<any>(this.environment + this.path + '/signup', userDetails)
       .pipe(
         map((response) => {
-          this.userInfoSignal = response;
+          this.userInfo.set(response);
           this.isLoggedIn.set(true);
           return true;
         }),
@@ -52,7 +52,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.userInfoSignal.set(undefined);
+    this.userInfo.set(undefined);
     this.isLoggedIn.set(false);
   }
 }

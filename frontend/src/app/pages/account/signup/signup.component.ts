@@ -8,7 +8,7 @@ import { LoadSpinnerComponent } from '../../../shared/load-spinner/load-spinner.
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, LoadSpinnerComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
 })
