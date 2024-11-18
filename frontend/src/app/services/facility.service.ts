@@ -20,41 +20,25 @@ export class FacilityService {
   userHasFacility?: false;
   facility = signal<Facility | null>(null);
   environment = apiUrl;
-
-  loadFacility() {
-    //return this.httpClient.get()
-  }
+  facilityId = 1731850163126;
 
   constructor() {
-    // this.facility = {
-    //   id: 1,
-    //   floors: [],
-    // };
-
-    // this.getJsonData('example/testbuilding.json');
-    // this.getJsonData('example/one_bedroom.json');
     this.getFacility();
   }
 
   getFacility() {
-    this.httpClient.get<Facility>(apiUrl + '/1731850163126').subscribe({
+    this.httpClient.get<Facility>(apiUrl + '/' + this.facilityId).subscribe({
       next: (data) => {
         console.log(data);
         this.facility.set(data);
-        // this.getJsonData('example/testbuilding.json');
       },
     });
   }
 
-  // getJsonData(path: string) {
-  //   this.httpClient.get<any>(path).subscribe((data) => {
-  //     const floor1: Floor = {
-  //       id: this.facility.floors.length + 1,
-  //       floorNumber: this.facility.floors.length + 1,
-  //       placement: data,
-  //       detectors: [],
-  //     };
-  //     this.facility.floors.push(floor1);
-  //   });
-  // }
+  addFloor(floorNumber: number, file: string) {
+    return this.httpClient.post<Facility>(
+      `${apiUrl}/${this.facilityId}/floor/${floorNumber}/create`,
+      file
+    );
+  }
 }

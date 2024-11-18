@@ -1,6 +1,6 @@
 <div class="modal-container">
   <h2>Welcome back!</h2>
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+  <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
     <label for="email"
       >Email address @if (email.invalid && (email.touched || email.dirty)) {
       <div class="alert email">
@@ -52,4 +52,8 @@
   <div class="footer-text">
     Don't have an account? <a routerLink="/signup">Register</a>
   </div>
+  @if (isLoading) {
+    <app-load-spinner />
+  }
 </div>
+

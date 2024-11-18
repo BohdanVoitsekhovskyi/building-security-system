@@ -1,4 +1,4 @@
-<h1 routerLink="/home">BSSS</h1>
+<h1 routerLink="/">BSSS</h1>
 
 <div class="filler"></div>
 
@@ -6,7 +6,11 @@
   <button class="tools" (click)="showPopup()">Tools</button>
 </div>
 
+@if (isAuthenticated()) {
+<app-user-profile />
+} @else {
 <div class="account">
   <button class="signup" routerLink="/signup">Sign up</button>
   <button class="login" routerLink="/login">Login</button>
 </div>
+}

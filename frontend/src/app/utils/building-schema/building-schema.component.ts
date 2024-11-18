@@ -26,6 +26,7 @@ export class BuildingSchemaComponent {
   private facilityService = inject(FacilityService);
 
   floor = input.required<Floor>();
+  @Input({ required: true }) mode!: 'edit' | 'view';
   @Output() onAddSensor = new EventEmitter();
   sensors: { id: number; pos: { x: number; y: number }; type: string }[] = [];
   projection: any;
@@ -79,7 +80,7 @@ export class BuildingSchemaComponent {
       .append('path')
       .attr('d', (feature) => d3Path(feature as d3.GeoPermissibleObjects) || '')
       .on('click', (e: any, d: any) => {
-        if (d.properties.type === 'apartment') return;
+        if (d.properties.type === 'apartment' || this.mode === 'view') return;
         return this.showContextSensor(e, d);
       });
   }
@@ -98,15 +99,13 @@ export class BuildingSchemaComponent {
 
   addSensor(event: Event) {
     const name = (event.target as HTMLDivElement).id;
-    console.log(name);
     const coords: [number, number] = d3.polygonCentroid(
       this.sensorData.geometry.coordinates[0]
     );
-
+    const id = this.sensorData.properties.id;
     const projectedCoords = this.projection(coords);
 
     const size = 50;
-
     d3.select('.sensor')
       .append('image')
       .attr('x', projectedCoords[0] - size / 2)
@@ -114,13 +113,13 @@ export class BuildingSchemaComponent {
       .attr('width', size)
       .attr('height', size)
       .attr('xlink:href', `icons/${name}.svg`)
+      .attr('type', name)
       .attr('class', this.sensorData.properties.type)
       .attr('id', this.sensorData.properties.id)
       .on('click', () => alert(`Sensor clicked!`));
 
     if (this.sensorData.properties.type === 'area') {
       let centered = false;
-      const id = this.sensorData.properties.id;
 
       const count = d3
         .select('.sensor')
@@ -130,7 +129,7 @@ export class BuildingSchemaComponent {
           return image.attr('id') == id;
         })
         .size();
-      console.log(this.sensorData);
+        
       d3.select('.sensor')
         .selectAll('.area')
         .each(function () {

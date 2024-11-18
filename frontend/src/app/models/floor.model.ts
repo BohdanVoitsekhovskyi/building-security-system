@@ -4,6 +4,6 @@ import { JsonData } from "./topojson.model";
 export type Floor = {
   id: number;
   floorNumber: number;
-  placement: JsonData;
+  placement?: JsonData;
   detectors: Detector[]
 };

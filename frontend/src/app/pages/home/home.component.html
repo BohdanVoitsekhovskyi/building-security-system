@@ -12,6 +12,6 @@
     }
   </ul>
   @for (item of floors(); track $index) { @if (activeFloor === item.floorNumber) {
-  <app-building-schema [floor]="item" />
+  <app-building-schema [floor]="item" [mode]="'view'" />
   } }
 </main>

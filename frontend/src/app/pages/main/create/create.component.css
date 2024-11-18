@@ -127,3 +127,7 @@ button:hover,
   border-color: #007bff;
 }
 
+img {
+  height: 100%;
+  width: 100%;
+}
