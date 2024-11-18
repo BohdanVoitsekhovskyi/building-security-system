@@ -1,15 +1,17 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Floor } from '../models/floor.model';
 import { Facility } from '../models/facility.model';
 import { HttpClient } from '@angular/common/http';
 import { apiUrl } from '../environment';
 import { Detector } from '../models/detector.model';
+import { AuthService } from './auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FacilityService {
   private httpClient = inject(HttpClient);
+  private authService = inject(AuthService);
 
   readonly sensorsTypes: { name: string; type: string }[] = [
     { name: 'motion', type: 'entrance' },
@@ -18,17 +20,16 @@ export class FacilityService {
     { name: 'temperature', type: 'area' },
     { name: 'flood', type: 'area' },
   ];
-  userHasFacility?: false;
   facility = signal<Facility | null>(null);
   environment = apiUrl;
-  facilityId = 1731945034824;
+  facilityId = this.authService.getUserInfo()?.id;
 
   constructor() {
     this.getFacility();
   }
 
   getFacility() {
-    this.httpClient.get<Facility>(apiUrl + '/' + this.facilityId).subscribe({
+    this.httpClient.get<Facility>(apiUrl + '/facility/' + this.facilityId).subscribe({
       next: (data) => {
         console.log(data);
         this.facility.set(data);
@@ -40,8 +41,8 @@ export class FacilityService {
   }
 
   addFloor(floorNumber: number, file: string) {
-    return this.httpClient.post<Facility>(
-      `${apiUrl}/${this.facilityId}/floor/${floorNumber}/create`,
+    return this.httpClient.put<Facility>(
+      `${apiUrl}/facility/${this.facilityId}/floor/${floorNumber}/create`,
       file
     );
   }

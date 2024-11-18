@@ -4,6 +4,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { apiUrl } from '../../environment';
 import { LoginInfo } from '../../pages/account/login/login.model';
 import { SignUpInfo } from '../../pages/account/signup/signup.model';
+import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +12,21 @@ import { SignUpInfo } from '../../pages/account/signup/signup.model';
 export class AuthService {
   private httpClient = inject(HttpClient);
   environment = apiUrl;
+  path = '/user';
 
-  isLoggedIn = signal<boolean>(true);
+  isLoggedIn = signal<boolean>(false);
+  userInfo?: User;
+
+  getUserInfo() {
+    return this.userInfo;
+  }
 
   login(userDetails: LoginInfo): Observable<boolean> {
     return this.httpClient
-      .post<any>(this.environment + '/login', userDetails)
+      .post<any>(this.environment + this.path + '/login', userDetails)
       .pipe(
         map((response) => {
-          localStorage.setItem('JWT_Token', response.token);
+          this.userInfo = response;
           this.isLoggedIn.set(true);
           return true;
         }),
@@ -33,10 +40,10 @@ export class AuthService {
 
   singup(userDetails: SignUpInfo): Observable<boolean> {
     return this.httpClient
-      .post<any>(this.environment + '/signup', userDetails)
+      .post<any>(this.environment + this.path + '/signup', userDetails)
       .pipe(
         map((response) => {
-          localStorage.setItem('JWT_Token', response.token);
+          this.userInfo = response;
           this.isLoggedIn.set(false);
           return true;
         }),
@@ -49,6 +56,7 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('JWT_Token');
+    this.userInfo = undefined;
+    this.isLoggedIn.set(false);
   }
 }

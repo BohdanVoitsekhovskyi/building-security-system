@@ -1,18 +1,20 @@
 <img src="default/user.png" alt="profile picture" />
-<p class="name">User</p>
+<p class="name">{{ userInfo?.firstname }}</p>
 
 <ul class="dropdown">
   <li class="user-info">
     <img src="default/user.png" alt="profile picture" />
     <div>
-      <p class="fullname">User User</p>
-      <p class="email">example&#64;gmail.com</p>
+      <p class="fullname">
+        {{ userInfo?.firstname + ' ' + userInfo?.lastname }}
+      </p>
+      <p class="email">{{ userInfo?.email }}</p>
     </div>
   </li>
   <li>
     <a [routerLink]="['user', 'User']"> Profile </a>
   </li>
-  <li>
-    <a (click)="onLogout()">Logout</a>
+  <li (click)="onLogout()">
+    <a>Logout</a>
   </li>
 </ul>
