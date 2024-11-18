@@ -1,6 +1,5 @@
 package com.building_security_system.db_access.entities;
 
-import com.building_security_system.models.Floor;
 import com.building_security_system.models.User;
 import lombok.*;
 import org.springframework.data.annotation.Id;

@@ -8,7 +8,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Data
-public class Detector{
+public class Detector {
     private long id;
     private String description;
 
