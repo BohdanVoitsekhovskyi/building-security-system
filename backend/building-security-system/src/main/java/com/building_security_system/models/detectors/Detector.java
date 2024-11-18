@@ -17,14 +17,14 @@ public class Detector {
     public static DetectorEntity toEntity(Detector detector) {
         return DetectorEntity.builder()
                 .id(detector.id)
-                .description(detector.type)
+                .type(detector.type)
                 .position(detector.position)
                 .build();
     }
     public static Detector toModel(DetectorEntity entity) {
         return Detector.builder()
                 .id(entity.getId())
-                .type(entity.getDescription())
+                .type(entity.getType())
                 .position(entity.getPosition())
                 .build();
     }
