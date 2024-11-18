@@ -21,7 +21,7 @@ export class FacilityService {
   userHasFacility?: false;
   facility = signal<Facility | null>(null);
   environment = apiUrl;
-  facilityId = 1731850200654;
+  facilityId = 1731945034824;
 
   constructor() {
     this.getFacility();

@@ -17,8 +17,8 @@ import { Detector } from '../../../models/detector.model';
 export class CreateComponent {
   private facilityService = inject(FacilityService);
   floors = computed(() => this.facilityService.facility()?.floors);
+  activeFloor?: number = 1;
   newFloor?: { floorNumber: number; file: string };
-  activeFloor?: number;
   state: 'creating' | 'modifying' | 'placing' | 'saved' = 'saved';
   svgUrl?: string;
   detectors?: Detector[];
