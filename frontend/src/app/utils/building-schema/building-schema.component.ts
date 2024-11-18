@@ -13,6 +13,7 @@ import * as topojson from 'topojson-client';
 import { CommonModule } from '@angular/common';
 import { FacilityService } from '../../services/facility.service';
 import { Floor } from '../../models/floor.model';
+import { Detector } from '../../models/detector.model';
 
 @Component({
   selector: 'app-building-schema',
@@ -27,8 +28,8 @@ export class BuildingSchemaComponent {
 
   floor = input.required<Floor>();
   @Input({ required: true }) mode!: 'edit' | 'view';
-  @Output() onAddSensor = new EventEmitter();
-  sensors: { id: number; pos: { x: number; y: number }; type: string }[] = [];
+  @Output() onAddSensor = new EventEmitter<Detector[]>();
+  sensors: Detector[] = [];
   projection: any;
   private readonly canvas = { w: 1000, h: 1000 };
 
@@ -92,6 +93,18 @@ export class BuildingSchemaComponent {
     )
       return;
 
+    if (
+      d3
+        .select('.sensor')
+        .selectAll('.area')
+        .filter(function () {
+          const image: any = d3.select(this);
+          return image.attr('id') == data.properties.id;
+        })
+        .size() >= this.sensorTypes.filter((t) => t.type === 'area').length
+    )
+      return;
+
     this.contextMenuVisible = true;
     this.contextMenuPos = { x: event.x, y: event.y };
     this.sensorData = data;
@@ -129,7 +142,7 @@ export class BuildingSchemaComponent {
           return image.attr('id') == id;
         })
         .size();
-        
+
       d3.select('.sensor')
         .selectAll('.area')
         .each(function () {
@@ -174,10 +187,18 @@ export class BuildingSchemaComponent {
       type: name,
     });
 
+    this.onAddSensor.emit(this.sensors);
+
     this.contextMenuVisible = false;
   }
 
   onCloseContext() {
     this.contextMenuVisible = false;
+  }
+
+  roomContainsType(id: number, type: string) {
+    return this.sensors.findIndex((s) => s.id === id && s.type === type) === -1
+      ? false
+      : true;
   }
 }

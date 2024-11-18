@@ -1,2 +1,8 @@
 <app-navbar />
-<main>Test something</main>
+<main>
+  @for (item of floors(); track $index) { @if (activeFloor === item.floorNumber)
+  {
+  <app-building-schema [floor]="item" [mode]="'view'" />
+  } }
+  <app-logger />
+</main>

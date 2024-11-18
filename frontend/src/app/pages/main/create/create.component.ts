@@ -17,17 +17,16 @@ import { Detector } from '../../../models/detector.model';
 export class CreateComponent {
   private facilityService = inject(FacilityService);
   floors = computed(() => this.facilityService.facility()?.floors);
+  activeFloor?: number = 1;
   newFloor?: { floorNumber: number; file: string };
-  activeFloor?: number;
-  state: 'creating' | 'modifying' | 'saved' = 'saved';
+  state: 'creating' | 'modifying' | 'placing' | 'saved' = 'saved';
   svgUrl?: string;
-
-  detectors: Detector[] = [];
+  detectors?: Detector[];
 
   changeFloor(event: Event) {
     const element = event.target as HTMLDivElement;
     this.activeFloor = +element.id;
-    if (this.state === 'creating' || this.state === 'modifying') {
+    if (this.state !== 'saved') {
       this.newFloor = undefined;
       this.state = 'saved';
     }
@@ -92,10 +91,18 @@ export class CreateComponent {
             console.log(err);
           },
         });
+      this.newFloor = undefined;
+    }
+    else if (this.detectors){
+      console.log(this.detectors)
     }
 
-    this.newFloor = undefined;
     this.state = 'saved';
+  }
+
+  onAddSensor(detectors: Detector[]) {
+    this.detectors = detectors;
+    this.state = 'placing';
   }
 
   ngOnDestroy(): void {

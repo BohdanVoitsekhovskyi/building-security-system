@@ -15,7 +15,7 @@ export class HomeComponent {
   private facilityService = inject(FacilityService);
 
   floors = computed(() => this.facilityService.facility()?.floors); 
-  activeFloor: number = 1;
+  activeFloor?: number = 1;
 
   changeFloor(event: Event) {
     const element = event.target as HTMLDivElement;
