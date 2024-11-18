@@ -88,7 +88,7 @@ export class BuildingSchemaComponent {
 
   showContextSensor(event: any, data: any) {
     if (
-      this.sensors.find((s) => s.id === data.properties.id) &&
+      this.sensors.find((s) => s.locationId === data.properties.id) &&
       data.properties.type !== 'area'
     )
       return;
@@ -182,8 +182,8 @@ export class BuildingSchemaComponent {
     }
 
     this.sensors.push({
-      id: this.sensorData.properties.id,
-      pos: { x: projectedCoords[0], y: projectedCoords[1] },
+      locationId: this.sensorData.properties.id,
+      position: { x: projectedCoords[0], y: projectedCoords[1] },
       type: name,
     });
 
@@ -197,7 +197,7 @@ export class BuildingSchemaComponent {
   }
 
   roomContainsType(id: number, type: string) {
-    return this.sensors.findIndex((s) => s.id === id && s.type === type) === -1
+    return this.sensors.findIndex((s) => s.locationId === id && s.type === type) === -1
       ? false
       : true;
   }

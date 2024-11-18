@@ -1,14 +1,14 @@
 <img src="default/user.png" alt="profile picture" />
-<p class="name">{{ userInfo?.firstname }}</p>
+<p class="name">{{ userInfo()?.firstname }}</p>
 
 <ul class="dropdown">
   <li class="user-info">
     <img src="default/user.png" alt="profile picture" />
     <div>
       <p class="fullname">
-        {{ userInfo?.firstname + ' ' + userInfo?.lastname }}
+        {{ userInfo()?.firstname + ' ' + userInfo()?.lastname }}
       </p>
-      <p class="email">{{ userInfo?.email }}</p>
+      <p class="email">{{ userInfo()?.email }}</p>
     </div>
   </li>
   <li>

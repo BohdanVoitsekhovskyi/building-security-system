@@ -22,14 +22,14 @@ export class FacilityService {
   ];
   facility = signal<Facility | null>(null);
   environment = apiUrl;
-  facilityId = this.authService.getUserInfo()?.id;
+  facilityId = computed(() => this.authService.userInfoSignal()?.id);
 
   constructor() {
     this.getFacility();
   }
 
   getFacility() {
-    this.httpClient.get<Facility>(apiUrl + '/facility/' + this.facilityId).subscribe({
+    this.httpClient.get<Facility>(apiUrl + '/facility/' + this.facilityId()).subscribe({
       next: (data) => {
         console.log(data);
         this.facility.set(data);
@@ -42,7 +42,7 @@ export class FacilityService {
 
   addFloor(floorNumber: number, file: string) {
     return this.httpClient.put<Facility>(
-      `${apiUrl}/facility/${this.facilityId}/floor/${floorNumber}/create`,
+      `${apiUrl}/facility/${this.facilityId()}/floor/${floorNumber}/create`,
       file
     );
   }
