@@ -11,20 +11,20 @@ import lombok.ToString;
 @Data
 public class Detector {
     private long id;
-    private String description;
+    private String type;
     private Position position;
 
     public static DetectorEntity toEntity(Detector detector) {
         return DetectorEntity.builder()
                 .id(detector.id)
-                .description(detector.description)
+                .description(detector.type)
                 .position(detector.position)
                 .build();
     }
     public static Detector toModel(DetectorEntity entity) {
         return Detector.builder()
                 .id(entity.getId())
-                .description(entity.getDescription())
+                .type(entity.getDescription())
                 .position(entity.getPosition())
                 .build();
     }
