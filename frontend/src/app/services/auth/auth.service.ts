@@ -12,14 +12,15 @@ export class AuthService {
   private httpClient = inject(HttpClient);
   environment = apiUrl;
 
-  isLoggedIn = signal<boolean>(true);
+  isLoggedIn = signal<boolean>(false);
+  userInfoSignal = signal<User | undefined>(undefined);
 
   login(userDetails: LoginInfo): Observable<boolean> {
     return this.httpClient
       .post<any>(this.environment + '/login', userDetails)
       .pipe(
         map((response) => {
-          localStorage.setItem('JWT_Token', response.token);
+          this.userInfoSignal.set(response);
           this.isLoggedIn.set(true);
           return true;
         }),
@@ -36,8 +37,8 @@ export class AuthService {
       .post<any>(this.environment + '/signup', userDetails)
       .pipe(
         map((response) => {
-          localStorage.setItem('JWT_Token', response.token);
-          this.isLoggedIn.set(false);
+          this.userInfoSignal = response;
+          this.isLoggedIn.set(true);
           return true;
         }),
         catchError((error) => {
@@ -49,6 +50,7 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('JWT_Token');
+    this.userInfoSignal.set(undefined);
+    this.isLoggedIn.set(false);
   }
 }

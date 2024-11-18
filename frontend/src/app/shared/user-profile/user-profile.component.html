@@ -1,12 +1,23 @@
 <img src="default/user.png" alt="profile picture" />
+<<<<<<< HEAD
 <p class="name">User</p>
+=======
+<p class="name">{{ userInfo()?.firstname }}</p>
+>>>>>>> 55e4b68 (Fix frontend)
 
 <ul class="dropdown">
   <li class="user-info">
     <img src="default/user.png" alt="profile picture" />
     <div>
+<<<<<<< HEAD
       <p class="fullname">User User</p>
       <p class="email">example&#64;gmail.com</p>
+=======
+      <p class="fullname">
+        {{ userInfo()?.firstname + ' ' + userInfo()?.lastname }}
+      </p>
+      <p class="email">{{ userInfo()?.email }}</p>
+>>>>>>> 55e4b68 (Fix frontend)
     </div>
   </li>
   <li>

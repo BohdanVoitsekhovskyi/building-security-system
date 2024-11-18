@@ -21,14 +21,22 @@ export class FacilityService {
   userHasFacility?: false;
   facility = signal<Facility | null>(null);
   environment = apiUrl;
+<<<<<<< HEAD
   facilityId = 1731945034824;
+=======
+  facilityId = computed(() => this.authService.userInfoSignal()?.id);
+>>>>>>> 55e4b68 (Fix frontend)
 
   constructor() {
     this.getFacility();
   }
 
   getFacility() {
+<<<<<<< HEAD
     this.httpClient.get<Facility>(apiUrl + '/' + this.facilityId).subscribe({
+=======
+    this.httpClient.get<Facility>(apiUrl + '/facility/' + this.facilityId()).subscribe({
+>>>>>>> 55e4b68 (Fix frontend)
       next: (data) => {
         console.log(data);
         this.facility.set(data);
@@ -40,8 +48,13 @@ export class FacilityService {
   }
 
   addFloor(floorNumber: number, file: string) {
+<<<<<<< HEAD
     return this.httpClient.post<Facility>(
       `${apiUrl}/${this.facilityId}/floor/${floorNumber}/create`,
+=======
+    return this.httpClient.put<Facility>(
+      `${apiUrl}/facility/${this.facilityId()}/floor/${floorNumber}/create`,
+>>>>>>> 55e4b68 (Fix frontend)
       file
     );
   }
