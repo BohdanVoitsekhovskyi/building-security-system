@@ -12,13 +12,14 @@ import { User } from '../../models/user.model';
 export class AuthService {
   private httpClient = inject(HttpClient);
   environment = apiUrl;
+  path = '/user';
 
   isLoggedIn = signal<boolean>(false);
   userInfoSignal = signal<User | undefined>(undefined);
 
   login(userDetails: LoginInfo): Observable<boolean> {
     return this.httpClient
-      .post<any>(this.environment + '/login', userDetails)
+      .post<any>(this.environment + this.path + '/login', userDetails)
       .pipe(
         map((response) => {
           this.userInfoSignal.set(response);
@@ -35,7 +36,7 @@ export class AuthService {
 
   singup(userDetails: SignUpInfo): Observable<boolean> {
     return this.httpClient
-      .post<any>(this.environment + '/signup', userDetails)
+      .post<any>(this.environment + this.path + '/signup', userDetails)
       .pipe(
         map((response) => {
           this.userInfoSignal = response;

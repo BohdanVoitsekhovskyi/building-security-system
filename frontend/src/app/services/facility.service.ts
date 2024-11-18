@@ -12,6 +12,7 @@ import { AuthService } from './auth/auth.service';
 export class FacilityService {
   private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
+  private authService = inject(AuthService);
 
   readonly sensorsTypes: { name: string; type: string }[] = [
     { name: 'motion', type: 'entrance' },
@@ -20,7 +21,6 @@ export class FacilityService {
     { name: 'temperature', type: 'area' },
     { name: 'flood', type: 'area' },
   ];
-  userHasFacility?: false;
   facility = signal<Facility | null>(null);
   environment = apiUrl;
   facilityId = computed(() => this.authService.userInfoSignal()?.id);

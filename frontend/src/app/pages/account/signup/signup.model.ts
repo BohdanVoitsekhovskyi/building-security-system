@@ -1,6 +1,6 @@
 export type SignUpInfo = {
-  name: string;
-  surname: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
 };

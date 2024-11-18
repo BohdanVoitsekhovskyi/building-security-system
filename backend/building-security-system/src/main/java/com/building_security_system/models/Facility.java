@@ -12,13 +12,12 @@ import java.util.stream.Collectors;
 @Data
 public class Facility {
     private long id;
-    private User user;
     List<Floor> floors;
 
     public static FacilityEntity toEntity(Facility facility) {
         return FacilityEntity.builder()
                 .id(facility.id)
-                .user(facility.user)
+
                 .floors(facility.floors.stream().map(Floor::toEntity).collect(Collectors.toList()))
                 .build();
     }
@@ -26,7 +25,7 @@ public class Facility {
     public static Facility toModel(FacilityEntity entity) {
         return Facility.builder()
                 .id(entity.getId())
-                .user(entity.getUser())
+
                 .floors(entity.getFloors().stream().map(Floor::toModel).collect(Collectors.toList()))
                 .build();
     }

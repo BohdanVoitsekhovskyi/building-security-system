@@ -18,8 +18,8 @@ export class SignupComponent {
   isLoading: boolean = false;
 
   signInInfo: SignUpInfo = {
-    name: '',
-    surname: '',
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
   };
