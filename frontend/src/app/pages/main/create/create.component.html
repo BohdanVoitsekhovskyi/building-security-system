@@ -1,13 +1,21 @@
 <app-navbar />
 <main>
   <ul class="floors">
-    @for (floor of floors; track $index) {
+    @for (floor of floors(); track $index) {
     <li
-      [ngClass]="{ selected: activeFloor === floor.id }"
-      [id]="floor.id"
+      [ngClass]="{ selected: activeFloor === floor.floorNumber }"
+      [id]="floor.floorNumber"
       (click)="changeFloor($event)"
     >
-      {{ floor.id }}
+      {{ floor.floorNumber }}
+    </li>
+    } @if (newFloor) {
+    <li
+      [ngClass]="{ selected: activeFloor === newFloor.floorNumber }"
+      [id]="newFloor.floorNumber"
+      (click)="changeFloor($event)"
+    >
+      {{ newFloor.floorNumber }}
     </li>
     }
     <li class="add" (click)="addFloor()">
@@ -33,7 +41,10 @@
       </svg>
     </li>
   </ul>
-  @if (state === 'creating') {
+  @if (state === 'saved') { @for (item of floors(); track $index) { @if
+  (activeFloor === item.floorNumber) {
+  <app-building-schema [floor]="item" [mode]="'edit'" />
+  } } } @else if (state === 'creating') {
   <div class="file-upload-container">
     <div class="file-upload">
       <label class="file-drop-area">
@@ -51,9 +62,9 @@
     </div>
   </div>
   } @else if (state === 'modifying') {
-  <!-- <app-building-schema [floorId]="activeFloor || 0" /> -->
+  <img [src]="svgUrl" alt="" />
   }
-  <button class="save" [disabled]="state !== 'modifying'" (click)="saveFloor()">
+  <button class="save" [disabled]="state !== 'modifying'" (click)="onSaveFloor()">
     Save floor
   </button>
 </main>

@@ -5,12 +5,12 @@ export interface JsonData {
 }
 
 export interface GeometryCollection {
-  type: string; // Default value: "GeometryCollection"
+  type: string;
   geometries: Geometry[];
 }
 
 export interface Geometry {
-  type: string; // Default value: "Polygon"
+  type: string;
   arcs: number[][];
   properties: Properties;
 }

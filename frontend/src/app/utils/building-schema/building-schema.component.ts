@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   inject,
+  input,
   Input,
   Output,
 } from '@angular/core';
@@ -24,7 +25,8 @@ export class BuildingSchemaComponent {
   private el = inject(ElementRef);
   private facilityService = inject(FacilityService);
 
-  @Input({ required: true }) floor!: Floor;
+  floor = input.required<Floor>();
+  @Input({ required: true }) mode!: 'edit' | 'view';
   @Output() onAddSensor = new EventEmitter();
   sensors: { id: number; pos: { x: number; y: number }; type: string }[] = [];
   projection: any;
@@ -36,7 +38,7 @@ export class BuildingSchemaComponent {
   sensorData?: any;
 
   ngOnInit(): void {
-    this.renderMap(this.floor.data);
+    this.renderMap(this.floor().placement);
   }
 
   private renderMap(topoData: any): void {
@@ -47,7 +49,7 @@ export class BuildingSchemaComponent {
       geoData[key] = topojson.feature(topoData, topoData.objects[key]);
     });
 
-    arrOfKeys.push('sensors');
+    arrOfKeys.push('sensor');
 
     const d3Identity = d3.geoIdentity();
     this.projection = d3Identity.fitSize(
@@ -62,9 +64,11 @@ export class BuildingSchemaComponent {
       .attr('viewBox', `0 0 ${this.canvas.w} ${this.canvas.h}`)
       .classed('floormap', true);
 
+    const renderOrder = ['apartment', 'area', 'window', 'entrance', 'sensor'];
+
     const groups = svgContainer
       .selectAll('g')
-      .data(arrOfKeys)
+      .data(renderOrder)
       .enter()
       .append('g')
       .attr('class', (d) => d);
@@ -76,19 +80,15 @@ export class BuildingSchemaComponent {
       .append('path')
       .attr('d', (feature) => d3Path(feature as d3.GeoPermissibleObjects) || '')
       .on('click', (e: any, d: any) => {
-        if (
-          d.properties.type === 'window' ||
-          d.properties.type === 'door' ||
-          d.properties.type === 'room'
-        )
-          return this.showContextSensor(e, d);
+        if (d.properties.type === 'apartment' || this.mode === 'view') return;
+        return this.showContextSensor(e, d);
       });
   }
 
   showContextSensor(event: any, data: any) {
     if (
       this.sensors.find((s) => s.id === data.properties.id) &&
-      data.properties.type !== 'room'
+      data.properties.type !== 'area'
     )
       return;
 
@@ -102,37 +102,36 @@ export class BuildingSchemaComponent {
     const coords: [number, number] = d3.polygonCentroid(
       this.sensorData.geometry.coordinates[0]
     );
-
+    const id = this.sensorData.properties.id;
     const projectedCoords = this.projection(coords);
 
     const size = 50;
-
-    d3.select('.sensors')
+    d3.select('.sensor')
       .append('image')
       .attr('x', projectedCoords[0] - size / 2)
       .attr('y', projectedCoords[1] - size / 2)
       .attr('width', size)
       .attr('height', size)
       .attr('xlink:href', `icons/${name}.svg`)
+      .attr('type', name)
       .attr('class', this.sensorData.properties.type)
       .attr('id', this.sensorData.properties.id)
       .on('click', () => alert(`Sensor clicked!`));
 
-    if (this.sensorData.properties.type === 'room') {
+    if (this.sensorData.properties.type === 'area') {
       let centered = false;
-      const id = this.sensorData.properties.id;
 
       const count = d3
-        .select('.sensors')
-        .selectAll('.room')
+        .select('.sensor')
+        .selectAll('.area')
         .filter(function () {
           const image: any = d3.select(this);
           return image.attr('id') == id;
         })
         .size();
-      console.log(this.sensorData);
-      d3.select('.sensors')
-        .selectAll('.room')
+        
+      d3.select('.sensor')
+        .selectAll('.area')
         .each(function () {
           const image: any = d3.select(this);
           const currentX = parseFloat(image.attr('x')) || 0;
@@ -141,7 +140,7 @@ export class BuildingSchemaComponent {
           if (count == 0) {
             return;
           }
-          
+
           if (image.attr('id') != id) return;
 
           let newX = 0;
@@ -165,7 +164,7 @@ export class BuildingSchemaComponent {
             return;
           }
 
-          image.transition().duration(500).attr('x', newX).attr('y', currentY);
+          image.transition().duration(200).attr('x', newX).attr('y', currentY);
         });
     }
 

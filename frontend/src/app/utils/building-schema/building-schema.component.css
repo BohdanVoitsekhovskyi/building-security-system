@@ -11,37 +11,36 @@
   fill: gray;
 }
 
-
-::ng-deep .areas path {
+::ng-deep .area path {
   fill: white;
   transition: fill 0.2s;
   stroke: none;
   transition: fill 0.2s;
 }
 
-::ng-deep .entrances path {
+::ng-deep .entrance path {
   fill: #ff7777;
   transition: fill 0.2s;
   stroke: 1px solid #000;
   stroke-width: 1px;
 }
 
-::ng-deep .windows path {
+::ng-deep .window path {
   fill: #a2b5ff;
   transition: fill 0.2s;
   stroke: 1px solid #000;
   stroke-width: 1px;
 }
 
-::ng-deep .areas path:hover {
+::ng-deep .area path:hover {
   fill: #cacaca;
 }
 
-::ng-deep .entrances path:hover {
+::ng-deep .entrance path:hover {
   fill: #ff3737;
 }
 
-::ng-deep .windows path:hover {
+::ng-deep .window path:hover {
   fill: #5a7bff;
 }
 

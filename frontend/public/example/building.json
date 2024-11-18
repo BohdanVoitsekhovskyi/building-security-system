@@ -1,6 +1,20 @@
 {
   "type": "Topology",
   "objects": {
+    "windows": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Polygon",
+          "arcs": [[13]],
+          "properties": {
+            "id": 1,
+            "type": "window"
+          }
+        }
+      ]
+    }
+  },
     "apartment": {
       "type": "GeometryCollection",
       "geometries": [
@@ -110,20 +124,7 @@
         }
       ]
     },
-    "windows": {
-      "type": "GeometryCollection",
-      "geometries": [
-        {
-          "type": "Polygon",
-          "arcs": [[13]],
-          "properties": {
-            "id": 1,
-            "type": "window"
-          }
-        }
-      ]
-    }
-  },
+    
   "arcs": [
     [[-0.353, -0.353], [297.392, -0.353], [297.392, 210.608], [-0.353, 210.608], [-0.353, -0.353]],
     [[136.213, 137.079], [136.213, 134.079], [145.213, 134.079], [145.213, 137.079], [136.213, 137.079]],

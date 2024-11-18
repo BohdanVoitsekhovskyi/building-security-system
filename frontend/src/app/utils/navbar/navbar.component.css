@@ -82,6 +82,11 @@ li svg {
   padding: 0.3rem;
 }
 
+.logo img {
+  height: 100%;
+  width: 100%;
+}
+
 .header h2 {
   font-size: 1.3rem;
   font-weight: 400;
