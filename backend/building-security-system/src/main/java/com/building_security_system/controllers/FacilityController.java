@@ -1,5 +1,6 @@
 package com.building_security_system.controllers;
 
+import com.building_security_system.dto.DetectorDto;
 import com.building_security_system.models.Facility;
 import com.building_security_system.models.Floor;
 import com.building_security_system.models.detectors.Detector;
@@ -37,7 +38,7 @@ public class FacilityController {
     }
 
     @PutMapping("facility/{facilityId}/floor/{floorNo}/edit")
-    public ResponseEntity<Facility> updateFloor(@RequestBody List<Detector> detectors,
+    public ResponseEntity<Facility> updateFloor(@RequestBody List<DetectorDto> detectors,
                                                 @PathVariable long facilityId, @PathVariable int floorNo) {
         Facility facility = facilityService.getFacilityById(facilityId);
 
@@ -48,7 +49,7 @@ public class FacilityController {
                 .toList()
                 .getFirst();
 
-        floor.setDetectors(detectors);
+        floor.setDetectors(detectors.stream().map(Detector::dtoToModel).toList());
 
         facility = facilityService.saveFacility(facility);
 
