@@ -48,3 +48,32 @@ main {
   background-color: #2864f670;
   border: none;
 }
+
+.no-floors {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.no-floors p {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 2rem 0;
+}
+
+.no-floors button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #2864f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 12rem;
+}

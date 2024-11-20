@@ -1,5 +1,8 @@
 <app-navbar />
 <main>
+  @if (!floors()) {
+  <app-load-spinner-alt />
+  } @else {
   <ul class="floors">
     @for (floor of floors(); track $index) {
     <li
@@ -11,7 +14,13 @@
     </li>
     }
   </ul>
-  @for (item of floors(); track $index) { @if (activeFloor === item.floorNumber) {
+  @for (item of floors(); track $index) { @if (activeFloor === item.floorNumber)
+  {
   <app-building-schema [floor]="item" [mode]="'view'" />
+  } } @if (floors()?.length === 0) {
+  <div class="no-floors">
+    <p>You don't have any floors in your building yet</p>
+    <button routerLink="/create">Add floors</button>
+  </div>
   } }
 </main>

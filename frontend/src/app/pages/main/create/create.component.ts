@@ -5,16 +5,20 @@ import { BuildingSchemaComponent } from '../../../utils/building-schema/building
 import { FacilityService } from '../../../services/facility.service';
 import { Floor } from '../../../models/floor.model';
 import { Detector } from '../../../models/detector.model';
+import { PopupService } from '../../../utils/info-popup/popup.service';
+import { PopupInfo } from '../../../utils/info-popup/popup.model';
+import { LoadSpinnerAltComponent } from "../../../shared/load-spinner-alt/load-spinner-alt.component";
 
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [NavbarComponent, CommonModule, BuildingSchemaComponent],
+  imports: [NavbarComponent, CommonModule, BuildingSchemaComponent, LoadSpinnerAltComponent],
 
   templateUrl: './create.component.html',
   styleUrl: './create.component.css',
 })
 export class CreateComponent {
+  private popupService = inject(PopupService);
   private facilityService = inject(FacilityService);
   floors = computed(() => this.facilityService.facility()?.floors);
   activeFloor?: number = 1;
@@ -89,6 +93,8 @@ export class CreateComponent {
           },
           error: (err) => {
             console.log(err);
+            this.showPopup('fail');
+            return;
           },
         });
       this.newFloor = undefined;
@@ -102,11 +108,14 @@ export class CreateComponent {
           },
           error: (err) => {
             console.log(err);
+            this.showPopup('fail');
+            return;
           },
         });
     }
 
     this.state = 'saved';
+    this.showPopup('success');
   }
 
   onAddSensor(detectors: Detector[]) {
@@ -114,9 +123,33 @@ export class CreateComponent {
     this.state = 'placing';
   }
 
+  removeFloor(floor: Floor) {
+    //remove floor
+  }
+
   ngOnDestroy(): void {
     if (this.svgUrl) {
       URL.revokeObjectURL(this.svgUrl);
     }
+  }
+
+  showPopup(type: 'success' | 'fail') {
+    let info: PopupInfo;
+    if (type === 'success'){
+      info = {
+        name: 'Success',
+        description: 'Floor was successfully saved!',
+        type: type
+      };
+    }
+    else {
+      info = {
+        name: 'Unexpected',
+        description: 'Unexpected something happened. Never do that again, please',
+        type: 'error'
+      };
+    }
+
+    this.popupService.showPopup(info);
   }
 }
