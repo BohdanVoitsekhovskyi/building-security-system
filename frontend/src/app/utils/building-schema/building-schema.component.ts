@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FacilityService } from '../../services/facility.service';
 import { Floor } from '../../models/floor.model';
 import { Detector } from '../../models/detector.model';
+import { PopupService } from '../info-popup/popup.service';
 
 @Component({
   selector: 'app-building-schema',
@@ -23,6 +24,7 @@ import { Detector } from '../../models/detector.model';
   styleUrl: './building-schema.component.css',
 })
 export class BuildingSchemaComponent {
+  private popupService = inject(PopupService);
   private el = inject(ElementRef);
   private facilityService = inject(FacilityService);
 
@@ -127,7 +129,9 @@ export class BuildingSchemaComponent {
       .attr('type', name)
       .attr('class', type || 'default')
       .attr('id', id)
-      .on('click', () => alert(`Sensor clicked!`));
+      .on('click', () =>
+        this.deleteSensor(id, name)
+      );
 
     if (type === 'area') {
       let centered = false;
@@ -205,7 +209,9 @@ export class BuildingSchemaComponent {
       .attr('type', name)
       .attr('class', this.sensorData.properties.type)
       .attr('id', this.sensorData.properties.id)
-      .on('click', () => alert(`Sensor clicked!`));
+      .on('click', () => {
+        this.deleteSensor(this.sensorData.properties.id, name);
+      });
 
     if (this.sensorData.properties.type === 'area') {
       let centered = false;
@@ -276,5 +282,35 @@ export class BuildingSchemaComponent {
     return this.sensors.findIndex((s) => s.id === id && s.type === type) === -1
       ? false
       : true;
+  }
+
+  deleteSensor(id: number, type: string) {
+    if (this.mode === 'view') return;
+    const sensor = this.sensors.find((s) => s.id === id && s.type === type);
+    if (!sensor) {
+      console.error('No such sensor');
+      return;
+    }
+    this.facilityService.deleteDetector(this.floor().id, sensor).subscribe({
+      next: (res) => {
+        this.facilityService.facility.set(res);
+        this.popupService.showPopup({
+          name: 'Success',
+          description: 'Detector was successfully deleted',
+          type: 'success',
+        });
+        console.log(res);
+      },
+      error: (err) => {
+        {
+          console.log(err);
+          this.popupService.showPopup({
+            name: 'Fail',
+            description: 'Something went wrong',
+            type: 'error',
+          });
+        }
+      },
+    });
   }
 }

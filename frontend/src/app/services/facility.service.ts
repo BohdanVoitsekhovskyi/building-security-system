@@ -55,4 +55,12 @@ export class FacilityService {
       detectors
     );
   }
+
+  deleteFloor(floorId: number) {
+    return this.httpClient.delete<Facility>(`${apiUrl}/facility/${this.facilityId()}/floor/${floorId}/delete`);
+  }
+
+  deleteDetector(floorId: number, detector: Detector) {
+    return this.httpClient.delete<Facility>(`${apiUrl}/facility/${this.facilityId()}/floor/${floorId}/delete`);
+  }
 }
