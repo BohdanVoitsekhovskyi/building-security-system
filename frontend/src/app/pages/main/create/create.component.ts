@@ -151,7 +151,8 @@ export class CreateComponent {
   }
 
   removeFloor(floor: Floor) {
-    this.facilityService.deleteFloor(floor.id).subscribe({
+    debugger
+    this.facilityService.deleteFloor(floor.floorNumber).subscribe({
       next: (res) => {
         this.facilityService.facility.set(res);
         this.popupService.showPopup({

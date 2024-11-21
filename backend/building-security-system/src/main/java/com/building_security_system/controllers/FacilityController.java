@@ -38,28 +38,28 @@ public class FacilityController {
         );
     }
 
-    @PutMapping("facility/{facilityId}/floor/{floorId}/edit")
+    @PutMapping("facility/{facilityId}/floor/{floorNumber}/edit")
     public ResponseEntity<Facility> updateFloor(@RequestBody List<DetectorDto> detectors,
-                                                @PathVariable long facilityId, @PathVariable long floorId) {
+                                                @PathVariable long facilityId, @PathVariable int floorNumber) {
         Facility facility =
                 facilityService.updateFloor(
-                        facilityId, floorId, detectors.stream().map(Detector::dtoToModel).toList()
+                        facilityId, floorNumber, detectors.stream().map(Detector::dtoToModel).toList()
                 );
 
         return new ResponseEntity<>(facility, HttpStatus.OK);
     }
 
-    @DeleteMapping("facility/{facilityId}/floor/{floorId}/delete")
-    public ResponseEntity<String> deleteFloor(@PathVariable long facilityId, @PathVariable long floorId) {
-        facilityService.deleteFloor(facilityId, floorId);
-        return new ResponseEntity<>("Floor successfully deleted", HttpStatus.OK);
+    @DeleteMapping("facility/{facilityId}/floor/{floorNumber}/delete")
+    public ResponseEntity<Facility> deleteFloor(@PathVariable long facilityId, @PathVariable int floorNumber) {
+        Facility facility = facilityService.deleteFloor(facilityId, floorNumber);
+        return new ResponseEntity<>(facility, HttpStatus.OK);
     }
 
-    @DeleteMapping("facility/{facilityId}/floor/{floorId}/detector/{roomId}/{detectorType}/delete")
-    public ResponseEntity<String> deleteDetector(@PathVariable long facilityId, @PathVariable long floorId,
+    @DeleteMapping("facility/{facilityId}/floor/{floorNumber}/detector/{roomId}/{detectorType}/delete")
+    public ResponseEntity<Facility> deleteDetector(@PathVariable long facilityId, @PathVariable int floorNumber,
                                                  @PathVariable long roomId, @PathVariable String detectorType) {
-        facilityService.deleteDetector(facilityId, floorId, roomId,
+        Facility facility = facilityService.deleteDetector(facilityId, floorNumber, roomId,
                 Detector.DetectorType.valueOf(detectorType.toUpperCase()));
-        return new ResponseEntity<>("Detector successfully deleted", HttpStatus.OK);
+        return new ResponseEntity<>(facility, HttpStatus.OK);
     }
 }

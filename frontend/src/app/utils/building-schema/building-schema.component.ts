@@ -125,13 +125,14 @@ export class BuildingSchemaComponent {
       .attr('y', coords.y - size / 2)
       .attr('width', size)
       .attr('height', size)
-      .attr('xlink:href', `icons/${name}.svg`)
+      .attr('xlink:href', `icons/${name.toLowerCase()}.svg`)
       .attr('type', name)
       .attr('class', type || 'default')
       .attr('id', id)
-      .on('click', () =>
-        this.deleteSensor(id, name)
-      );
+      .on('click', (event) => {
+        this.deleteSensor(id, name);
+        d3.select(event.target).remove();
+      });
 
     if (type === 'area') {
       let centered = false;
@@ -205,12 +206,13 @@ export class BuildingSchemaComponent {
       .attr('y', projectedCoords[1] - size / 2)
       .attr('width', size)
       .attr('height', size)
-      .attr('xlink:href', `icons/${name}.svg`)
+      .attr('xlink:href', `icons/${name.toLowerCase()}.svg`)
       .attr('type', name)
       .attr('class', this.sensorData.properties.type)
       .attr('id', this.sensorData.properties.id)
-      .on('click', () => {
+      .on('click', (event) => {
         this.deleteSensor(this.sensorData.properties.id, name);
+        d3.select(event.target).remove();
       });
 
     if (this.sensorData.properties.type === 'area') {
@@ -291,26 +293,34 @@ export class BuildingSchemaComponent {
       console.error('No such sensor');
       return;
     }
-    this.facilityService.deleteDetector(this.floor().id, sensor).subscribe({
-      next: (res) => {
-        this.facilityService.facility.set(res);
-        this.popupService.showPopup({
-          name: 'Success',
-          description: 'Detector was successfully deleted',
-          type: 'success',
-        });
-        console.log(res);
-      },
-      error: (err) => {
-        {
-          console.log(err);
+    this.facilityService
+      .deleteDetector(this.floor().floorNumber, sensor)
+      .subscribe({
+        next: (res) => {
+          this.facilityService.facility.set(res);
           this.popupService.showPopup({
-            name: 'Fail',
-            description: 'Something went wrong',
-            type: 'error',
+            name: 'Success',
+            description: 'Detector was successfully deleted',
+            type: 'success',
           });
-        }
-      },
-    });
+          this.sensors.splice(
+            this.sensors.findIndex(
+              (s) => JSON.stringify(s) === JSON.stringify(sensor)
+            ),
+            1
+          );
+          console.log(res);
+        },
+        error: (err) => {
+          {
+            console.log(err);
+            this.popupService.showPopup({
+              name: 'Fail',
+              description: 'Something went wrong',
+              type: 'error',
+            });
+          }
+        },
+      });
   }
 }
