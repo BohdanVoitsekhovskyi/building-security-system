@@ -34,5 +34,4 @@ public class User {
                 .password(entity.getPassword())
                 .build();
     }
-
 }

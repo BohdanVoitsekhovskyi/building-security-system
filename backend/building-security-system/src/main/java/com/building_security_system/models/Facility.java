@@ -17,7 +17,6 @@ public class Facility {
     public static FacilityEntity toEntity(Facility facility) {
         return FacilityEntity.builder()
                 .id(facility.id)
-
                 .floors(facility.floors.stream().map(Floor::toEntity).collect(Collectors.toList()))
                 .build();
     }
@@ -25,9 +24,7 @@ public class Facility {
     public static Facility toModel(FacilityEntity entity) {
         return Facility.builder()
                 .id(entity.getId())
-
                 .floors(entity.getFloors().stream().map(Floor::toModel).collect(Collectors.toList()))
                 .build();
     }
-
 }
