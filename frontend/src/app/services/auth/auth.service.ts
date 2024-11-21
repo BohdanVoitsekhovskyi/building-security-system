@@ -15,15 +15,26 @@ export class AuthService {
   path = '/user';
 
   isLoggedIn = signal<boolean>(false);
-  userInfoSignal = signal<User | undefined>(undefined);
+  userInfo = signal<User | undefined>(undefined);
 
   login(userDetails: LoginInfo): Observable<boolean> {
     return this.httpClient
       .post<any>(this.environment + this.path + '/login', userDetails)
       .pipe(
         map((response) => {
-          this.userInfoSignal.set(response);
+          this.userInfo.set(response);
           this.isLoggedIn.set(true);
+
+          const currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() + 1);
+          const userSession: UserSession = {
+            id: this.userInfo()!.id,
+            firstname: this.userInfo()!.firstname,
+            lastname: this.userInfo()!.lastname,
+            email: this.userInfo()!.email,
+            expire: Date.now() + 1000 * 60 * 60 * 3,
+          };
+          localStorage.setItem('auth', JSON.stringify(userSession));
           return true;
         }),
         catchError((error) => {
@@ -39,8 +50,17 @@ export class AuthService {
       .post<any>(this.environment + this.path + '/signup', userDetails)
       .pipe(
         map((response) => {
-          this.userInfoSignal = response;
+          this.userInfo.set(response);
           this.isLoggedIn.set(true);
+
+          const userSession: UserSession = {
+            id: this.userInfo()!.id,
+            firstname: this.userInfo()!.firstname,
+            lastname: this.userInfo()!.lastname,
+            email: this.userInfo()!.email,
+            expire: Date.now() + 1000 * 60 * 60 * 3,
+          };
+          localStorage.setItem('auth', JSON.stringify(userSession));
           return true;
         }),
         catchError((error) => {
@@ -51,8 +71,43 @@ export class AuthService {
       );
   }
 
+  restoreSession(): boolean {
+    const storedAuth = localStorage.getItem('auth');
+    console.log(storedAuth);
+    if (storedAuth) {
+      try {
+        const auth: UserSession = JSON.parse(storedAuth);
+
+        if (auth.expire > Date.now()) {
+          this.isLoggedIn.set(true);
+          this.userInfo.set({
+            id: auth.id,
+            firstname: auth.firstname,
+            lastname: auth.lastname,
+            password: '',
+            email: auth.email,
+          });
+          return true;
+        }
+      } catch (error) {
+        console.error('Failed to parse stored auth data:', error);
+      }
+    }
+    this.logout();
+    return false;
+  }
+
   logout(): void {
-    this.userInfoSignal.set(undefined);
+    this.userInfo.set(undefined);
     this.isLoggedIn.set(false);
+    localStorage.removeItem('auth');
   }
 }
+
+export type UserSession = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  expire: number;
+};

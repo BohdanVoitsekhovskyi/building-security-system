@@ -13,7 +13,7 @@ export class UserProfileComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
 
-  userInfo = this.authService.userInfoSignal;
+  userInfo = this.authService.userInfo;
 
   onLogout() {
     this.authService.logout();

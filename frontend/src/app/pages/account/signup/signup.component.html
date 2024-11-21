@@ -85,4 +85,8 @@
   <div class="footer-text">
     Already have an account? <a routerLink="/login">Login</a>
   </div>
+
+  @if (isLoading) {
+    <app-load-spinner />
+  }
 </div>

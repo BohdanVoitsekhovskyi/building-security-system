@@ -3,11 +3,13 @@ import { NavbarComponent } from "../../utils/navbar/navbar.component";
 import { BuildingSchemaComponent } from "../../utils/building-schema/building-schema.component";
 import { CommonModule } from '@angular/common';
 import { FacilityService } from '../../services/facility.service';
+import { RouterLink } from '@angular/router';
+import { LoadSpinnerAltComponent } from "../../shared/load-spinner-alt/load-spinner-alt.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, BuildingSchemaComponent, CommonModule],
+  imports: [NavbarComponent, BuildingSchemaComponent, CommonModule, RouterLink, LoadSpinnerAltComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

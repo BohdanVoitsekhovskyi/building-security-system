@@ -86,7 +86,7 @@ export class BuildingSchemaComponent {
       });
 
     for (let i of this.floor().detectors) {
-      this.addSaveSensor(i.type, i.position, i.id);
+      this.addSaveSensor(i.type.toString(), i.position, i.id);
     }
   }
 
@@ -117,7 +117,6 @@ export class BuildingSchemaComponent {
   addSaveSensor(name: string, coords: { x: number; y: number }, id: number) {
     const size = 50;
     const type = this.sensorTypes.find((t) => t.name === name)?.type;
-    console.log(id);
     d3.select('.sensor')
       .append('image')
       .attr('x', coords.x - size / 2)
@@ -274,9 +273,7 @@ export class BuildingSchemaComponent {
   }
 
   roomContainsType(id: number, type: string) {
-    return this.sensors.findIndex(
-      (s) => s.id === id && s.type === type
-    ) === -1
+    return this.sensors.findIndex((s) => s.id === id && s.type === type) === -1
       ? false
       : true;
   }
