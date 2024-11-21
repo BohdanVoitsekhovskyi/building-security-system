@@ -1,7 +1,7 @@
 package com.building_security_system.controllers;
 
+import com.building_security_system.dto.DetectorDto;
 import com.building_security_system.models.Facility;
-import com.building_security_system.models.Floor;
 import com.building_security_system.models.detectors.Detector;
 import com.building_security_system.service.FacilityService;
 import com.building_security_system.util.SvgToJsonParser;
@@ -33,25 +33,33 @@ public class FacilityController {
     public ResponseEntity<Facility> createFloor(@RequestBody String fileContent,
                                         @PathVariable long facilityId, @PathVariable int floorNumber){
         SvgToJsonParser.JsonContent.counter = 0;
-        return new ResponseEntity<>(facilityService.updateFacility(facilityId,floorNumber,fileContent), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                facilityService.updateFacility(facilityId, floorNumber, fileContent), HttpStatus.CREATED
+        );
     }
 
-    @PutMapping("facility/{facilityId}/floor/{floorNo}/edit")
-    public ResponseEntity<Facility> updateFloor(@RequestBody List<Detector> detectors,
-                                                @PathVariable long facilityId, @PathVariable int floorNo) {
-        Facility facility = facilityService.getFacilityById(facilityId);
-
-        Floor floor = facility
-                .getFloors()
-                .stream()
-                .filter(f -> f.getFloorNumber() == floorNo)
-                .toList()
-                .getFirst();
-
-        floor.setDetectors(detectors);
-
-        facility = facilityService.saveFacility(facility);
+    @PutMapping("facility/{facilityId}/floor/{floorId}/edit")
+    public ResponseEntity<Facility> updateFloor(@RequestBody List<DetectorDto> detectors,
+                                                @PathVariable long facilityId, @PathVariable long floorId) {
+        Facility facility =
+                facilityService.updateFloor(
+                        facilityId, floorId, detectors.stream().map(Detector::dtoToModel).toList()
+                );
 
         return new ResponseEntity<>(facility, HttpStatus.OK);
+    }
+
+    @DeleteMapping("facility/{facilityId}/floor/{floorId}/delete")
+    public ResponseEntity<String> deleteFloor(@PathVariable long facilityId, @PathVariable long floorId) {
+        facilityService.deleteFloor(facilityId, floorId);
+        return new ResponseEntity<>("Floor successfully deleted", HttpStatus.OK);
+    }
+
+    @DeleteMapping("facility/{facilityId}/floor/{floorId}/detector/{roomId}/{detectorType}/delete")
+    public ResponseEntity<String> deleteDetector(@PathVariable long facilityId, @PathVariable long floorId,
+                                                 @PathVariable long roomId, @PathVariable String detectorType) {
+        facilityService.deleteDetector(facilityId, floorId, roomId,
+                Detector.DetectorType.valueOf(detectorType.toUpperCase()));
+        return new ResponseEntity<>("Detector successfully deleted", HttpStatus.OK);
     }
 }

@@ -3,6 +3,7 @@ package com.building_security_system.service.impl;
 import com.building_security_system.db_access.repositories.FacilityRepository;
 import com.building_security_system.models.Facility;
 import com.building_security_system.models.Floor;
+import com.building_security_system.models.detectors.Detector;
 import com.building_security_system.service.FacilityService;
 import com.building_security_system.util.SvgToJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,8 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public List<Facility> getFacilities() {
-        return facilityRepository.findAll().stream().map(Facility::toModel).toList();
-    }
-
-    @Override
-    public Facility getFacilityById(long id) {
-        return Facility.toModel(facilityRepository.findOneById(id));
+    public Facility getFacilityById(long facilityId) {
+        return Facility.toModel(facilityRepository.findOneById(facilityId));
     }
 
     @Override
@@ -36,24 +32,72 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public void deleteFacilityById(long id) {
-        facilityRepository.deleteById(id);
-    }
-
-    @Override
-    public Facility updateFacility(long id, int floorNumber, String fileContent) {
+    public Facility updateFacility(long facilityId, int floorNo, String fileContent) {
         SvgToJsonParser.JsonContent jsonContent = SvgToJsonParser.parseToJson(fileContent);
         Floor floor = new Floor(System.currentTimeMillis(),
-                floorNumber,
+                floorNo,
                 jsonContent,
                 new ArrayList<>());
 
-        Facility facility = Facility.toModel(facilityRepository.findOneById(id));
+        Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
         if (facility.getFloors() == null) {
             facility.setFloors(new ArrayList<>());
         }
 
         facility.getFloors().add(floor);
         return Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
+    }
+
+    @Override
+    public Facility updateFloor(long facilityId, long floorId, List<Detector> detectors) {
+        Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
+
+        Floor floor = facility
+                .getFloors()
+                .stream()
+                .filter(f -> f.getId() == floorId)
+                .toList()
+                .getFirst();
+
+        floor.setDetectors(detectors);
+        return Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
+    }
+
+
+    @Override
+    public void deleteFloor(long facilityId, long floorId) {
+        Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
+
+        Floor floor = facility
+                .getFloors()
+                .stream()
+                .filter(f -> f.getId() == floorId)
+                .toList()
+                .getFirst();
+
+        facility.getFloors().remove(floor);
+        facilityRepository.save(Facility.toEntity(facility));
+    }
+
+    @Override
+    public void deleteDetector(long facilityId, long floorId, long roomId, Detector.DetectorType detectorType) {
+        Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
+
+        Floor floor = facility
+                .getFloors()
+                .stream()
+                .filter(f -> f.getId() == floorId)
+                .toList()
+                .getFirst();
+
+        Detector detector = floor
+                .getDetectors()
+                .stream()
+                .filter(d -> d.getType().equals(detectorType))
+                .toList()
+                .getFirst();
+
+        floor.setDetectors(floor.getDetectors().stream().filter(d -> d != detector).toList());
+        facilityRepository.save(Facility.toEntity(facility));
     }
 }

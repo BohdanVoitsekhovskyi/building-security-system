@@ -25,6 +25,7 @@ public class UserController {
         this.userService = userService;
         this.facilityService = facilityService;
     }
+
     @PostMapping("/user/login")
     public ResponseEntity<?> logIn(@RequestBody LoginDto user) {
         User loginUser = userService.logIn(user);
@@ -33,9 +34,9 @@ public class UserController {
         }
         return ResponseEntity.ok(loginUser);
     }
+
     @PostMapping("/user/signup")
     public ResponseEntity<?> signUp( @RequestBody SignUpDTO signUpDTO){
-
         long id = System.currentTimeMillis();
         User newUser = User.builder()
                 .id(id)
@@ -48,14 +49,12 @@ public class UserController {
         boolean successSignUp = userService.signUp(newUser);
 
         if(successSignUp) {
-
             Facility facility = Facility.builder()
                             .id(id)
                             .floors(new ArrayList<>())
                             .build();
 
             facilityService.saveFacility(facility);
-
             return ResponseEntity.ok(newUser);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
