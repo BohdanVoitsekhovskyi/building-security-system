@@ -2,7 +2,7 @@
   <h2>Welcome back!</h2>
   <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
     <label for="email"
-      >Email address @if (email.invalid && (email.touched || email.dirty)) {
+      >Email address @if (email.invalid && emailTouched) {
       <div class="alert email">
         @if (email.errors?.['required']) { Email is required } @else if
         (email.errors?.['email']) { Wrong email }
@@ -18,10 +18,11 @@
       required
       email
       #email="ngModel"
+      (input)="onEmailInput()"
     />
 
     <label for="password"
-      >Password @if (password.invalid && (password.touched || password.dirty)) {
+      >Password @if (password.invalid && passwordTouched) {
       <div class="alert password">
         @if (password.errors?.['required']) { Password is required }@else if
         (password.errors?.['minlength']) { Password must be at least 8 symbols }
@@ -39,6 +40,7 @@
       minlength="8"
       pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9!?#$.,=+\-_]+$"
       #password="ngModel"
+      (input)="onPasswordInput()"
     />
 
     <div class="checkbox-container">

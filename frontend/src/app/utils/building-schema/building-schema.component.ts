@@ -32,6 +32,7 @@ export class BuildingSchemaComponent {
   @Input({ required: true }) mode!: 'edit' | 'view';
   @Output() onAddSensor = new EventEmitter<Detector[]>();
   sensors: Detector[] = [];
+  deletedSensors: Detector[] = [];
   projection: any;
   private readonly canvas = { w: 1000, h: 1000 };
 
@@ -88,7 +89,7 @@ export class BuildingSchemaComponent {
       });
 
     for (let i of this.floor().detectors) {
-      this.addSaveSensor(i.type.toString(), i.position, i.id);
+      this.addSaveSensor(i.type.toLowerCase(), i.position, i.id);
     }
   }
 
@@ -127,9 +128,10 @@ export class BuildingSchemaComponent {
       .attr('height', size)
       .attr('xlink:href', `icons/${name.toLowerCase()}.svg`)
       .attr('type', name)
-      .attr('class', type || 'default')
+      .attr('class', type!)
       .attr('id', id)
       .on('click', (event) => {
+        if (this.mode === 'view') return;
         this.deleteSensor(id, name);
         d3.select(event.target).remove();
       });
@@ -180,7 +182,7 @@ export class BuildingSchemaComponent {
             return;
           }
 
-          image.transition().duration(200).attr('x', newX).attr('y', currentY);
+          image.attr('x', newX).attr('y', currentY);
         });
     }
 
@@ -211,6 +213,7 @@ export class BuildingSchemaComponent {
       .attr('class', this.sensorData.properties.type)
       .attr('id', this.sensorData.properties.id)
       .on('click', (event) => {
+        if (this.mode === 'view') return;
         this.deleteSensor(this.sensorData.properties.id, name);
         d3.select(event.target).remove();
       });
@@ -287,6 +290,7 @@ export class BuildingSchemaComponent {
   }
 
   deleteSensor(id: number, type: string) {
+    debugger
     if (this.mode === 'view') return;
     const sensor = this.sensors.find((s) => s.id === id && s.type === type);
     if (!sensor) {

@@ -2,7 +2,7 @@
   <h2>Welcome!</h2>
   <form (ngSubmit)="onSubmit(signinForm)" #signinForm="ngForm">
     <label for="name"
-      >First name @if (name.invalid && (name.touched || name.dirty)) {
+      >First name @if (name.invalid && firstnameTouched) {
       <div class="alert name">
         @if (name.errors?.['required']) { Name is required } @else if
         (name.errors?.['pattern']) { Wrong name }
@@ -18,10 +18,11 @@
       pattern="^[A-Z][a-z]+$"
       required
       #name="ngModel"
+      (input)="onfirstnameInput()"
     />
 
     <label for="surname"
-      >Last name @if (surname.invalid && (surname.touched || surname.dirty)) {
+      >Last name @if (surname.invalid && lastnameTouched) {
       <div class="alert surname">
         @if (surname.errors?.['required']) { Surname is required } @else if
         (surname.errors?.['pattern']) { Wrong surname }
@@ -37,10 +38,11 @@
       pattern="^[A-Z][a-z]+$"
       required
       #surname="ngModel"
+      (input)="onlastnameInput()"
     />
 
     <label for="email"
-      >Email address @if (email.invalid && (email.touched || email.dirty)) {
+      >Email address @if (email.invalid && emailTouched) {
       <div class="alert email">
         @if (email.errors?.['required']) { Email is required } @else if
         (email.errors?.['email']) { Wrong email }
@@ -56,10 +58,11 @@
       email
       required
       #email="ngModel"
+      (input)="onEmailInput()"
     />
 
     <label for="password"
-      >Password @if (password.invalid && (password.touched || password.dirty)) {
+      >Password @if (password.invalid && passwordTouched) {
       <div class="alert password">
         @if (password.errors?.['required']) { Password is required }@else if
         (password.errors?.['minlength']) { Password must be at least 8 symbols }
@@ -77,6 +80,7 @@
       minlength="8"
       pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9!?#$.,=+\-_]+$"
       #password="ngModel"
+      (input)="onPasswordInput()"
     />
 
     <button type="submit" [disabled]="!signinForm.valid">Sign in</button>
