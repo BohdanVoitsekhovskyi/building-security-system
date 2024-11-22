@@ -93,7 +93,7 @@ public class FacilityServiceImpl implements FacilityService {
         Detector detector = floor
                 .getDetectors()
                 .stream()
-                .filter(d -> d.getType().equals(detectorType))
+                .filter(d -> d.getType().equals(detectorType) && d.getId() == roomId)
                 .toList()
                 .getFirst();
 
