@@ -15,5 +15,11 @@
   {
   <app-building-schema [floor]="item" [mode]="'view'" />
   } }
-  <app-logger />
+  <div class="logger-box">
+    <app-logger />
+    <div class="button-control">
+      <button class="custom-button run">Run</button>
+      <button class="custom-button stop">Stop</button>
+    </div>
+  </div>
 </main>

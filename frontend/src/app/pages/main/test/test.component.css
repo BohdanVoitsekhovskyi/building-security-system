@@ -18,14 +18,13 @@ main {
 
 app-building-schema {
   flex-grow: 1;
-  height: 100%;
+  height: 80%;
   margin-left: 2rem;
 }
 
 app-logger {
   min-width: 24rem;
   max-width: 24rem;
-  height: 90%;
   flex-grow: 1;
 }
 
@@ -66,4 +65,44 @@ app-logger {
   transform: scale(1.1);
   background-color: #2864f670;
   border: none;
+}
+.button-control{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+.logger-box{
+  padding-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:0.6rem;
+  height: 100%;
+}
+.custom-button{
+  margin:0.2rem;
+  width: 20%;
+  padding: 0.5rem;
+  background-color: #2864f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.run{
+  background-color: #28a745;
+}
+.run:hover{
+  background-color: #218838;
+}
+.stop{
+  background-color: #dc3545;
+}
+.stop:hover{
+  background-color: #C82333;
 }
