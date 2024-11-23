@@ -7,6 +7,7 @@ import { LogComponent } from './pages/main/log/log.component';
 import { LoginComponent } from './pages/account/login/login.component';
 import { SignupComponent } from './pages/account/signup/signup.component';
 import { AuthGuard } from './services/auth/auth.guard';
+import { AboutComponent } from './pages/about/about.component';
 
 export const routes: Routes = [
   {
@@ -40,5 +41,9 @@ export const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent,
+  },
+    {
+    path: 'about',
+    component: AboutComponent,
   },
 ];
