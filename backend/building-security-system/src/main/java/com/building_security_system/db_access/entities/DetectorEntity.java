@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class DetectorEntity {
     @Id
     private long id;
+    private long furnitureId;
     private String type;
     private Position position;
 }

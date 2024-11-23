@@ -1,8 +1,7 @@
-package com.building_security_system.models.detectors;
+package com.building_security_system.models;
 
 import com.building_security_system.db_access.entities.DetectorEntity;
 import com.building_security_system.dto.DetectorDto;
-import com.building_security_system.models.Position;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -12,12 +11,14 @@ import lombok.ToString;
 @Data
 public class Detector {
     private long id;
+    private long furnitureId;
     private DetectorType type;
     private Position position;
 
     public static DetectorEntity toEntity(Detector detector) {
         return DetectorEntity.builder()
                 .id(detector.id)
+                .furnitureId(detector.furnitureId)
                 .type(detector.type.toString())
                 .position(detector.position)
                 .build();
@@ -25,6 +26,7 @@ public class Detector {
     public static Detector toModel(DetectorEntity entity) {
         return Detector.builder()
                 .id(entity.getId())
+                .furnitureId(entity.getFurnitureId())
                 .type(DetectorType.valueOf(entity.getType().toUpperCase()))
                 .position(entity.getPosition())
                 .build();
@@ -32,7 +34,8 @@ public class Detector {
 
     public static DetectorDto modelToDto(Detector detector) {
         return DetectorDto.builder()
-                .id(detector.getId())
+                .id(detector.id)
+                .furnitureId(detector.furnitureId)
                 .type(detector.type.toString())
                 .position(detector.position)
                 .build();
@@ -41,6 +44,7 @@ public class Detector {
     public static Detector dtoToModel(DetectorDto dto) {
         return Detector.builder()
                 .id(dto.getId())
+                .furnitureId(dto.getFurnitureId())
                 .type(DetectorType.valueOf(dto.getType().toUpperCase()))
                 .position(dto.getPosition())
                 .build();

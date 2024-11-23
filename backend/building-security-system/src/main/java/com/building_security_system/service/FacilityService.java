@@ -1,7 +1,7 @@
 package com.building_security_system.service;
 
 import com.building_security_system.models.Facility;
-import com.building_security_system.models.detectors.Detector;
+import com.building_security_system.models.Detector;
 
 import java.util.List;
 
@@ -11,5 +11,4 @@ public interface FacilityService {
     Facility updateFacility(long facilityId, int floorNo, String fileContent);
     Facility updateFloor(long facilityId, long floorId, List<Detector> detectors);
     void deleteFloor(long facilityId, long floorId);
-    void deleteDetector(long facilityId, long floorId, long roomId, Detector.DetectorType detectorType);
 }
