@@ -70,7 +70,7 @@ public class FacilityServiceImpl implements FacilityService {
 
 
     @Override
-    public void deleteFloor(long facilityId, int floorNumber) {
+    public Facility deleteFloor(long facilityId, int floorNumber) {
         Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
 
         Floor floor = facility
@@ -82,5 +82,7 @@ public class FacilityServiceImpl implements FacilityService {
 
         facility.getFloors().remove(floor);
         facilityRepository.save(Facility.toEntity(facility));
+
+        return facility;
     }
 }

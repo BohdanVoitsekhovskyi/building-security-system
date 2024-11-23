@@ -50,8 +50,8 @@ public class FacilityController {
     }
 
     @DeleteMapping("facility/{facilityId}/floor/{floorNumber}/delete")
-    public ResponseEntity<String> deleteFloor(@PathVariable long facilityId, @PathVariable int floorNumber) {
-        facilityService.deleteFloor(facilityId, floorNumber);
-        return new ResponseEntity<>("Floor successfully deleted", HttpStatus.OK);
+    public ResponseEntity<Facility> deleteFloor(@PathVariable long facilityId, @PathVariable int floorNumber) {
+        Facility facility = facilityService.deleteFloor(facilityId, floorNumber);
+        return new ResponseEntity<>(facility, HttpStatus.OK);
     }
 }
