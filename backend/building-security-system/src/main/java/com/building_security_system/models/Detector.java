@@ -50,6 +50,10 @@ public class Detector {
                 .build();
     }
 
+    public SystemReaction invoke(){
+        return null;
+    }
+
     public enum DetectorType {
         SMOKE("smoke"), FLOOD("flood"),
         TEMPERATURE("temperature"), MOTION("motion");
