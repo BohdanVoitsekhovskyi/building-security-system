@@ -1,0 +1,81 @@
+.document-style{
+    margin-top: 5vh;
+    max-width: 1000px;
+    display: block;
+}
+
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Базовий стиль для документа */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Заголовки */
+h2, h3 {
+    color: #2c3e50;
+    text-align: center;
+}
+
+/* Секція вимог */
+ol {
+    margin: 20px;
+    padding-left: 40px;
+}
+
+/* Список елементів */
+ol > li {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+/* Вкладений список */
+ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+ul > li {
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+/* Виділення кольорів */
+li:has(ul) {
+    font-weight: bold;
+    color: #34495e;
+}
+
+/* Виділення кольорів для коду */
+ul > li:before {
+    content: "• ";
+    color: #16a085;
+    font-weight: bold;
+}
+
+
+/* Стиль для секцій "Критичні вимоги" та "Додаткові вимоги" */
+h3 {
+    border-bottom: 2px solid #bdc3c7;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+/* Вирівнювання контейнерів */
+body > ol {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
