@@ -2,7 +2,7 @@ package com.building_security_system.controllers;
 
 import com.building_security_system.dto.DetectorDto;
 import com.building_security_system.models.Facility;
-import com.building_security_system.models.detectors.Detector;
+import com.building_security_system.models.Detector;
 import com.building_security_system.service.FacilityService;
 import com.building_security_system.util.SvgToJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +53,5 @@ public class FacilityController {
     public ResponseEntity<String> deleteFloor(@PathVariable long facilityId, @PathVariable long floorId) {
         facilityService.deleteFloor(facilityId, floorId);
         return new ResponseEntity<>("Floor successfully deleted", HttpStatus.OK);
-    }
-
-    @DeleteMapping("facility/{facilityId}/floor/{floorId}/detector/{roomId}/{detectorType}/delete")
-    public ResponseEntity<String> deleteDetector(@PathVariable long facilityId, @PathVariable long floorId,
-                                                 @PathVariable long roomId, @PathVariable String detectorType) {
-        facilityService.deleteDetector(facilityId, floorId, roomId,
-                Detector.DetectorType.valueOf(detectorType.toUpperCase()));
-        return new ResponseEntity<>("Detector successfully deleted", HttpStatus.OK);
     }
 }

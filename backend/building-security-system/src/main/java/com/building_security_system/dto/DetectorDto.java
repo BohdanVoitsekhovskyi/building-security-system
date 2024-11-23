@@ -10,6 +10,7 @@ import lombok.*;
 @ToString
 public class DetectorDto {
     private long id;
+    private long furnitureId;
     private String type;
     private Position position;
 }

@@ -1,7 +1,6 @@
 package com.building_security_system.models;
 
 import com.building_security_system.db_access.entities.FloorEntity;
-import com.building_security_system.models.detectors.Detector;
 import com.building_security_system.util.SvgToJsonParser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

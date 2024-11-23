@@ -3,7 +3,7 @@ package com.building_security_system.service.impl;
 import com.building_security_system.db_access.repositories.FacilityRepository;
 import com.building_security_system.models.Facility;
 import com.building_security_system.models.Floor;
-import com.building_security_system.models.detectors.Detector;
+import com.building_security_system.models.Detector;
 import com.building_security_system.service.FacilityService;
 import com.building_security_system.util.SvgToJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +59,11 @@ public class FacilityServiceImpl implements FacilityService {
                 .toList()
                 .getFirst();
 
+        long id = System.currentTimeMillis();
+        for (Detector detector : detectors) {
+            detector.setId(id++);
+        }
+
         floor.setDetectors(detectors);
         return Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
     }
@@ -76,28 +81,6 @@ public class FacilityServiceImpl implements FacilityService {
                 .getFirst();
 
         facility.getFloors().remove(floor);
-        facilityRepository.save(Facility.toEntity(facility));
-    }
-
-    @Override
-    public void deleteDetector(long facilityId, long floorId, long roomId, Detector.DetectorType detectorType) {
-        Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
-
-        Floor floor = facility
-                .getFloors()
-                .stream()
-                .filter(f -> f.getId() == floorId)
-                .toList()
-                .getFirst();
-
-        Detector detector = floor
-                .getDetectors()
-                .stream()
-                .filter(d -> d.getType().equals(detectorType) && d.getId() == roomId)
-                .toList()
-                .getFirst();
-
-        floor.setDetectors(floor.getDetectors().stream().filter(d -> d != detector).toList());
         facilityRepository.save(Facility.toEntity(facility));
     }
 }
