@@ -24,22 +24,23 @@ import { PopupService } from '../info-popup/popup.service';
   styleUrl: './building-schema.component.css',
 })
 export class BuildingSchemaComponent {
-  private popupService = inject(PopupService);
   private el = inject(ElementRef);
   private facilityService = inject(FacilityService);
 
   floor = input.required<Floor>();
   @Input({ required: true }) mode!: 'edit' | 'view';
-  @Output() onAddSensor = new EventEmitter<Detector[]>();
-  sensors: Detector[] = [];
-  deletedSensors: Detector[] = [];
+  @Output() onChangeDetectors = new EventEmitter<Detector[]>();
+  detectors: Detector[] = [];
+
   projection: any;
   private readonly canvas = { w: 1000, h: 1000 };
 
-  sensorTypes = this.facilityService.sensorsTypes;
+  detectorTypes = this.facilityService.detectorTypes;
   contextMenuVisible = false;
   contextMenuPos?: { x: number; y: number };
-  sensorData?: any;
+
+  currentDetector?: Detector;
+  detectorSize = 50;
 
   ngOnInit(): void {
     this.renderMap(this.floor().placement);
@@ -53,7 +54,8 @@ export class BuildingSchemaComponent {
       geoData[key] = topojson.feature(topoData, topoData.objects[key]);
     });
 
-    arrOfKeys.push('sensor');
+    arrOfKeys.push('detector');
+    const renderOrder = ['apartment', 'area', 'window', 'entrance', 'detector'];
 
     const d3Identity = d3.geoIdentity();
     this.projection = d3Identity.fitSize(
@@ -68,8 +70,6 @@ export class BuildingSchemaComponent {
       .attr('viewBox', `0 0 ${this.canvas.w} ${this.canvas.h}`)
       .classed('floormap', true);
 
-    const renderOrder = ['apartment', 'area', 'window', 'entrance', 'sensor'];
-
     const groups = svgContainer
       .selectAll('g')
       .data(renderOrder)
@@ -83,248 +83,167 @@ export class BuildingSchemaComponent {
       .enter()
       .append('path')
       .attr('d', (feature) => d3Path(feature as d3.GeoPermissibleObjects) || '')
+      .attr('id', (d: any) => d.properties.id)
       .on('click', (e: any, d: any) => {
-        if (d.properties.type === 'apartment' || this.mode === 'view') return;
-        return this.showContextSensor(e, d);
+        if (this.mode === 'view' || d.properties.type === 'apartment') return;
+        return this.showContextDetector(e, d);
       });
 
-    for (let i of this.floor().detectors) {
-      this.addSaveSensor(i.type.toLowerCase(), i.position, i.id);
+    for (let detector of this.floor().detectors) {
+      detector.type.toLowerCase();
+      this.addDetector(detector);
     }
   }
 
-  showContextSensor(event: any, data: any) {
+  containsDetector(furnitureId: number, type: string) {
+    return (
+      d3
+        .select('.detector')
+        .selectAll('image')
+        .filter(function () {
+          const detector: any = d3.select(this);
+          return (
+            detector.attr('type') == type && detector.attr('fid') == furnitureId
+          );
+        })
+        .size() > 0
+    );
+  }
+
+  showContextDetector(event: any, data: any) {
     if (
-      this.sensors.find((s) => s.id === data.properties.id) &&
+      this.detectors.find((s) => s.furnitureId === data.properties.id) &&
       data.properties.type !== 'area'
     )
       return;
 
-    if (
-      d3
-        .select('.sensor')
-        .selectAll('.area')
-        .filter(function () {
-          const image: any = d3.select(this);
-          return image.attr('id') == data.properties.id;
-        })
-        .size() >= this.sensorTypes.filter((t) => t.type === 'area').length
-    )
-      return;
-
-    this.contextMenuVisible = true;
-    this.contextMenuPos = { x: event.x, y: event.y };
-    this.sensorData = data;
-  }
-
-  addSaveSensor(name: string, coords: { x: number; y: number }, id: number) {
-    const size = 50;
-    const type = this.sensorTypes.find((t) => t.name === name)?.type;
-    d3.select('.sensor')
-      .append('image')
-      .attr('x', coords.x - size / 2)
-      .attr('y', coords.y - size / 2)
-      .attr('width', size)
-      .attr('height', size)
-      .attr('xlink:href', `icons/${name.toLowerCase()}.svg`)
-      .attr('type', name)
-      .attr('class', type!)
-      .attr('id', id)
-      .on('click', (event) => {
-        if (this.mode === 'view') return;
-        this.deleteSensor(id, name);
-        d3.select(event.target).remove();
-      });
-
-    if (type === 'area') {
-      let centered = false;
-
-      const count = d3
-        .select('.sensor')
-        .selectAll('.area')
-        .filter(function () {
-          const image: any = d3.select(this);
-          return image.attr('id') == id;
-        })
-        .size();
-
-      d3.select('.sensor')
-        .selectAll('.area')
-        .each(function () {
-          const image: any = d3.select(this);
-          const currentX = parseFloat(image.attr('x')) || 0;
-          const currentY = parseFloat(image.attr('y')) || 0;
-
-          if (count == 0) {
-            return;
-          }
-
-          if (image.attr('id') != id) return;
-
-          let newX = 0;
-          if (
-            currentX === coords.x - size / 2 &&
-            count > 1 &&
-            count % 2 === 0
-          ) {
-            if (centered === false) {
-              newX = currentX - size / 2 - 10;
-              centered = true;
-            } else {
-              newX = currentX + size / 2 + 10;
-              centered = false;
-            }
-          } else if (currentX > coords.x - size / 2) {
-            newX = currentX + size / 2 + 10;
-          } else if (currentX < coords.x - size / 2) {
-            newX = currentX - size / 2 - 10;
-          } else {
-            return;
-          }
-
-          image.attr('x', newX).attr('y', currentY);
-        });
-    }
-
-    this.sensors.push({
-      id: id,
-      position: { x: coords.x, y: coords.y },
-      type: name,
-    });
-  }
-
-  addSensor(event: Event) {
-    const name = (event.target as HTMLDivElement).id;
     const coords: [number, number] = d3.polygonCentroid(
-      this.sensorData.geometry.coordinates[0]
+      data.geometry.coordinates[0]
     );
-    const id = this.sensorData.properties.id;
     const projectedCoords = this.projection(coords);
 
-    const size = 50;
-    d3.select('.sensor')
+    this.currentDetector = {
+      id: 0,
+      furnitureId: data.properties.id,
+      position: {
+        x: projectedCoords[0] - this.detectorSize / 2,
+        y: projectedCoords[1] - this.detectorSize / 2,
+      },
+      type: '',
+    };
+    this.contextMenuVisible = true;
+    this.contextMenuPos = { x: event.x, y: event.y };
+    debugger;
+    this.detectorTypes = this.facilityService.detectorTypes.filter(
+      (t) =>
+        t.facilityType === data.properties.type &&
+        !this.containsDetector(data.properties.id, t.type)
+    );
+  }
+
+  onAddDetector(event: Event) {
+    if (!this.currentDetector) {
+      console.error('No detector chosen');
+      return;
+    }
+    const type = (event.target as HTMLDivElement).id;
+    this.currentDetector.type = type;
+    this.addDetector(this.currentDetector!, 500);
+    this.onChangeDetectors.emit(this.detectors);
+    this.contextMenuVisible = false;
+  }
+
+  addDetector(detector: Detector, animation?: number) {
+    d3.select('.detector')
       .append('image')
-      .attr('x', projectedCoords[0] - size / 2)
-      .attr('y', projectedCoords[1] - size / 2)
-      .attr('width', size)
-      .attr('height', size)
-      .attr('xlink:href', `icons/${name.toLowerCase()}.svg`)
-      .attr('type', name)
-      .attr('class', this.sensorData.properties.type)
-      .attr('id', this.sensorData.properties.id)
+      .attr('x', detector.position.x)
+      .attr('y', detector.position.y)
+      .attr('width', this.detectorSize)
+      .attr('height', this.detectorSize)
+      .attr('xlink:href', `icons/${detector.type.toLowerCase()}.svg`)
+      .attr('type', detector.type.toLowerCase())
+      .attr('id', detector.id)
+      .attr('fid', detector.furnitureId)
       .on('click', (event) => {
         if (this.mode === 'view') return;
-        this.deleteSensor(this.sensorData.properties.id, name);
+        this.detectors.splice(
+          this.detectors.findIndex((d) => detector.id === d.id),
+          1
+        );
+        this.onChangeDetectors.emit(this.detectors);
         d3.select(event.target).remove();
+        this.placeDetectors(detector.furnitureId, 500);
       });
 
-    if (this.sensorData.properties.type === 'area') {
-      let centered = false;
+    this.placeDetectors(detector.furnitureId, animation);
 
-      const count = d3
-        .select('.sensor')
-        .selectAll('.area')
-        .filter(function () {
-          const image: any = d3.select(this);
-          return image.attr('id') == id;
-        })
-        .size();
+    this.detectors.push(detector);
+  }
 
-      d3.select('.sensor')
-        .selectAll('.area')
-        .each(function () {
-          const image: any = d3.select(this);
-          const currentX = parseFloat(image.attr('x')) || 0;
-          const currentY = parseFloat(image.attr('y')) || 0;
+  placeDetectors(furnitureId: number, animation?: number) {
+    let count = d3
+      .select('.detector')
+      .selectAll('image')
+      .filter(function () {
+        const image: any = d3.select(this);
+        return image.attr('fid') == furnitureId;
+      })
+      .size();
 
-          if (count == 0) {
-            return;
-          }
+    const area: any = d3
+      .select('.area')
+      .selectAll('path')
+      .filter(function () {
+        const path: any = d3.select(this);
+        return path.attr('id') == furnitureId;
+      })
+      .node();
 
-          if (image.attr('id') != id) return;
+    let centroid: { x: number; y: number };
+    if (area) {
+      const pathElement = area as SVGPathElement;
 
-          let newX = 0;
-          if (
-            currentX === projectedCoords[0] - size / 2 &&
-            count > 1 &&
-            count % 2 === 0
-          ) {
-            if (centered === false) {
-              newX = currentX - size / 2 - 10;
-              centered = true;
-            } else {
-              newX = currentX + size / 2 + 10;
-              centered = false;
-            }
-          } else if (currentX > projectedCoords[0] - size / 2) {
-            newX = currentX + size / 2 + 10;
-          } else if (currentX < projectedCoords[0] - size / 2) {
-            newX = currentX - size / 2 - 10;
-          } else {
-            return;
-          }
+      const length = pathElement.getTotalLength();
 
-          image.transition().duration(200).attr('x', newX).attr('y', currentY);
-        });
+      let sumX = 0,
+        sumY = 0,
+        numPoints = 100;
+      for (let i = 0; i <= numPoints; i++) {
+        const point = pathElement.getPointAtLength((i / numPoints) * length);
+        sumX += point.x;
+        sumY += point.y;
+      }
+
+      centroid = { x: sumX / numPoints, y: sumY / numPoints };
     }
 
-    this.sensors.push({
-      id: this.sensorData.properties.id,
-      position: { x: projectedCoords[0], y: projectedCoords[1] },
-      type: name,
-    });
+    count = count / 2 - 1;
 
-    this.onAddSensor.emit(this.sensors);
+    d3.select('.detector')
+      .selectAll('image')
+      .nodes()
+      .forEach((node: any) => {
+        const image: any = d3.select(node);
+        if (image.attr('fid') != furnitureId) return;
 
-    this.contextMenuVisible = false;
+        const newX = centroid.x + this.detectorSize * count + 10 * count;
+        count--;
+
+        const currentY = parseFloat(image.attr('y')) || 0;
+
+        if (animation) {
+          image
+            .transition()
+            .duration(animation)
+            .attr('x', newX)
+            .attr('y', currentY);
+        } else {
+          image.attr('x', newX).attr('y', currentY);
+        }
+      });
   }
 
   onCloseContext() {
     this.contextMenuVisible = false;
-  }
-
-  roomContainsType(id: number, type: string) {
-    return this.sensors.findIndex((s) => s.id === id && s.type === type) === -1
-      ? false
-      : true;
-  }
-
-  deleteSensor(id: number, type: string) {
-    debugger
-    if (this.mode === 'view') return;
-    const sensor = this.sensors.find((s) => s.id === id && s.type === type);
-    if (!sensor) {
-      console.error('No such sensor');
-      return;
-    }
-    this.facilityService
-      .deleteDetector(this.floor().floorNumber, sensor)
-      .subscribe({
-        next: (res) => {
-          this.facilityService.facility.set(res);
-          this.popupService.showPopup({
-            name: 'Success',
-            description: 'Detector was successfully deleted',
-            type: 'success',
-          });
-          this.sensors.splice(
-            this.sensors.findIndex(
-              (s) => JSON.stringify(s) === JSON.stringify(sensor)
-            ),
-            1
-          );
-          console.log(res);
-        },
-        error: (err) => {
-          {
-            console.log(err);
-            this.popupService.showPopup({
-              name: 'Fail',
-              description: 'Something went wrong',
-              type: 'error',
-            });
-          }
-        },
-      });
   }
 }

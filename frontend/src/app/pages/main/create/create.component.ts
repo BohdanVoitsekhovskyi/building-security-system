@@ -28,7 +28,7 @@ export class CreateComponent {
   floors = computed(() => this.facilityService.facility()?.floors);
   activeFloor?: number = 1;
   newFloor?: { floorNumber: number; file: string };
-  state: 'creating' | 'modifying' | 'placing' | 'saved' = 'saved';
+  state: 'creating' | 'setting' | 'modifying' | 'saved' = 'saved';
   svgUrl?: string;
   detectors?: Detector[];
 
@@ -42,6 +42,7 @@ export class CreateComponent {
   }
 
   addFloor() {
+    console.log(this.state);
     if (this.state !== 'saved') return;
 
     this.newFloor = {
@@ -84,6 +85,11 @@ export class CreateComponent {
       reader.readAsText(file);
     }
 
+    this.state = 'setting';
+  }
+
+  onChangeDetectors(detectors: Detector[]) {
+    this.detectors = detectors;
     this.state = 'modifying';
   }
 
@@ -97,7 +103,7 @@ export class CreateComponent {
             this.popupService.showPopup({
               name: 'Success',
               description: 'Floor was successfully saved',
-              type: 'success'
+              type: 'success',
             });
             console.log(res);
           },
@@ -106,7 +112,7 @@ export class CreateComponent {
             this.popupService.showPopup({
               name: 'Fail',
               description: 'Something went wrong',
-              type: 'error'
+              type: 'error',
             });
             return;
           },
@@ -114,14 +120,14 @@ export class CreateComponent {
       this.newFloor = undefined;
     } else if (this.detectors && this.activeFloor) {
       this.facilityService
-        .addDetectors(this.activeFloor, this.detectors)
+        .editDetectors(this.activeFloor, this.detectors)
         .subscribe({
           next: (res) => {
             this.facilityService.facility.set(res);
             this.popupService.showPopup({
               name: 'Success',
               description: 'Detectors were successfully saved',
-              type: 'success'
+              type: 'success',
             });
             console.log(res);
           },
@@ -130,7 +136,7 @@ export class CreateComponent {
             this.popupService.showPopup({
               name: 'Fail',
               description: 'Something went wrong',
-              type: 'error'
+              type: 'error',
             });
             return;
           },
@@ -145,20 +151,15 @@ export class CreateComponent {
     });
   }
 
-  onAddSensor(detectors: Detector[]) {
-    this.detectors = detectors;
-    this.state = 'placing';
-  }
-
   removeFloor(floor: Floor) {
-    debugger
+    debugger;
     this.facilityService.deleteFloor(floor.floorNumber).subscribe({
       next: (res) => {
         this.facilityService.facility.set(res);
         this.popupService.showPopup({
           name: 'Success',
           description: 'Floor was successfully removed',
-          type: 'success'
+          type: 'success',
         });
         console.log(res);
       },
@@ -166,7 +167,7 @@ export class CreateComponent {
         this.popupService.showPopup({
           name: 'Fail',
           description: 'Something went wrong',
-          type: 'error'
+          type: 'error',
         });
         console.log(err);
       },

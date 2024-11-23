@@ -13,12 +13,12 @@ export class FacilityService {
   private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
 
-  readonly sensorsTypes: { name: string; type: string }[] = [
-    { name: 'motion', type: 'entrance' },
-    { name: 'motion', type: 'window' },
-    { name: 'smoke', type: 'area' },
-    { name: 'temperature', type: 'area' },
-    { name: 'flood', type: 'area' },
+  readonly detectorTypes: { type: string; facilityType: string }[] = [
+    { type: 'motion', facilityType: 'entrance' },
+    { type: 'motion', facilityType: 'window' },
+    { type: 'smoke', facilityType: 'area' },
+    { type: 'temperature', facilityType: 'area' },
+    { type: 'flood', facilityType: 'area' },
   ];
   facility = signal<Facility | null>(null);
   environment = apiUrl;
@@ -49,7 +49,7 @@ export class FacilityService {
     );
   }
 
-  addDetectors(floorNumber: number, detectors: Detector[]) {
+  editDetectors(floorNumber: number, detectors: Detector[]) {
     return this.httpClient.put<Facility>(
       `${apiUrl}/facility/${this.facilityId()}/floor/${floorNumber}/edit`,
       detectors

@@ -49,13 +49,13 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public Facility updateFloor(long facilityId, long floorId, List<Detector> detectors) {
+    public Facility updateFloor(long facilityId, int floorNumber, List<Detector> detectors) {
         Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
 
         Floor floor = facility
                 .getFloors()
                 .stream()
-                .filter(f -> f.getId() == floorId)
+                .filter(f -> f.getFloorNumber() == floorNumber)
                 .toList()
                 .getFirst();
 
@@ -70,13 +70,13 @@ public class FacilityServiceImpl implements FacilityService {
 
 
     @Override
-    public void deleteFloor(long facilityId, long floorId) {
+    public void deleteFloor(long facilityId, int floorNumber) {
         Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));
 
         Floor floor = facility
                 .getFloors()
                 .stream()
-                .filter(f -> f.getId() == floorId)
+                .filter(f -> f.getFloorNumber() == floorNumber)
                 .toList()
                 .getFirst();
 

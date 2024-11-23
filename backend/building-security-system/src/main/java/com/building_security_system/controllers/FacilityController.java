@@ -38,20 +38,20 @@ public class FacilityController {
         );
     }
 
-    @PutMapping("facility/{facilityId}/floor/{floorId}/edit")
+    @PutMapping("facility/{facilityId}/floor/{floorNumber}/edit")
     public ResponseEntity<Facility> updateFloor(@RequestBody List<DetectorDto> detectors,
-                                                @PathVariable long facilityId, @PathVariable long floorId) {
+                                                @PathVariable long facilityId, @PathVariable int floorNumber) {
         Facility facility =
                 facilityService.updateFloor(
-                        facilityId, floorId, detectors.stream().map(Detector::dtoToModel).toList()
+                        facilityId, floorNumber, detectors.stream().map(Detector::dtoToModel).toList()
                 );
 
         return new ResponseEntity<>(facility, HttpStatus.OK);
     }
 
-    @DeleteMapping("facility/{facilityId}/floor/{floorId}/delete")
-    public ResponseEntity<String> deleteFloor(@PathVariable long facilityId, @PathVariable long floorId) {
-        facilityService.deleteFloor(facilityId, floorId);
+    @DeleteMapping("facility/{facilityId}/floor/{floorNumber}/delete")
+    public ResponseEntity<String> deleteFloor(@PathVariable long facilityId, @PathVariable int floorNumber) {
+        facilityService.deleteFloor(facilityId, floorNumber);
         return new ResponseEntity<>("Floor successfully deleted", HttpStatus.OK);
     }
 }

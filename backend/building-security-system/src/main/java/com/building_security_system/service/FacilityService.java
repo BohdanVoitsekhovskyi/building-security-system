@@ -9,6 +9,6 @@ public interface FacilityService {
     Facility getFacilityById(long facilityId);
     Facility saveFacility(Facility facility);
     Facility updateFacility(long facilityId, int floorNo, String fileContent);
-    Facility updateFloor(long facilityId, long floorId, List<Detector> detectors);
-    void deleteFloor(long facilityId, long floorId);
+    Facility updateFloor(long facilityId, int floorNumber, List<Detector> detectors);
+    void deleteFloor(long facilityId, int floorNumber);
 }

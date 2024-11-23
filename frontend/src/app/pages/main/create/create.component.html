@@ -45,12 +45,12 @@
       </svg>
     </li>
   </ul>
-  @if (state === 'saved' || state === 'placing') { @for (item of floors(); track
+  @if (state === 'saved' || state === 'modifying') { @for (item of floors(); track
   $index) { @if (activeFloor === item.floorNumber) {
   <app-building-schema
     [floor]="item"
     [mode]="'edit'"
-    (onAddSensor)="onAddSensor($event)"
+    (onChangeDetectors)="onChangeDetectors($event)"
   />
   } } } @else if (state === 'creating') {
   <div class="file-upload-container">
@@ -69,12 +69,12 @@
       </label>
     </div>
   </div>
-  } @else if (state === 'modifying') {
+  } @else if (state === 'setting') {
   <img [src]="svgUrl" alt="" />
   }
   <button
     class="save"
-    [disabled]="state !== 'modifying' && state !== 'placing'"
+    [disabled]="state !== 'setting' && state !== 'modifying'"
     (click)="onSaveFloor()"
   >
     Save floor
