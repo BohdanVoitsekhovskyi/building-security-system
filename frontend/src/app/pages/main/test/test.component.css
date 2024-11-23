@@ -6,19 +6,64 @@
 }
 
 main {
+  position: relative;
   flex-grow: 1;
   padding: 1rem 2.4rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
 }
 
 app-building-schema {
-  width: 70%;
+  flex-grow: 1;
+  height: 100%;
+  margin-left: 2rem;
 }
 
 app-logger {
-  height: 30rem;
-  width: 16rem;
+  min-width: 18rem;
+  max-width: 18rem;
+  height: 90%;
+  flex-grow: 1;
 }
 
+.floors {
+  z-index: 2000;
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0;
+}
+
+.floors li {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid #8b8b8bb0;
+  cursor: pointer;
+  color: #0c2a76;
+  font-weight: 600;
+  transition: 0.3s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floors li:hover {
+  background-color: #2864f630;
+  border: 1px solid #2864f650;
+}
+
+.floors li.selected {
+  transform: scale(1.1);
+  background-color: #2864f670;
+  border: none;
+}

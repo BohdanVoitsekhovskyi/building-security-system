@@ -33,7 +33,6 @@ export const routes: Routes = [
     component: LogComponent,
     canActivate: [AuthGuard]
   },
-
   {
     path: 'login',
     component: LoginComponent,
