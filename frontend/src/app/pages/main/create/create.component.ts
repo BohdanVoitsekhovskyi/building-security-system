@@ -5,16 +5,25 @@ import { BuildingSchemaComponent } from '../../../utils/building-schema/building
 import { FacilityService } from '../../../services/facility.service';
 import { Floor } from '../../../models/floor.model';
 import { Detector } from '../../../models/detector.model';
+import { PopupService } from '../../../utils/info-popup/popup.service';
+import { PopupInfo } from '../../../utils/info-popup/popup.model';
+import { LoadSpinnerAltComponent } from '../../../shared/load-spinner-alt/load-spinner-alt.component';
 
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [NavbarComponent, CommonModule, BuildingSchemaComponent],
+  imports: [
+    NavbarComponent,
+    CommonModule,
+    BuildingSchemaComponent,
+    LoadSpinnerAltComponent,
+  ],
 
   templateUrl: './create.component.html',
   styleUrl: './create.component.css',
 })
 export class CreateComponent {
+  private popupService = inject(PopupService);
   private facilityService = inject(FacilityService);
   floors = computed(() => this.facilityService.facility()?.floors);
   activeFloor?: number = 1;
@@ -85,10 +94,21 @@ export class CreateComponent {
         .subscribe({
           next: (res) => {
             this.facilityService.facility.set(res);
+            this.popupService.showPopup({
+              name: 'Success',
+              description: 'Floor was successfully saved',
+              type: 'success'
+            });
             console.log(res);
           },
           error: (err) => {
             console.log(err);
+            this.popupService.showPopup({
+              name: 'Fail',
+              description: 'Something went wrong',
+              type: 'error'
+            });
+            return;
           },
         });
       this.newFloor = undefined;
@@ -98,20 +118,59 @@ export class CreateComponent {
         .subscribe({
           next: (res) => {
             this.facilityService.facility.set(res);
+            this.popupService.showPopup({
+              name: 'Success',
+              description: 'Detectors were successfully saved',
+              type: 'success'
+            });
             console.log(res);
           },
           error: (err) => {
             console.log(err);
+            this.popupService.showPopup({
+              name: 'Fail',
+              description: 'Something went wrong',
+              type: 'error'
+            });
+            return;
           },
         });
     }
 
     this.state = 'saved';
+    this.popupService.showPopup({
+      name: 'Success',
+      description: 'Floor was successfully saved!',
+      type: 'success',
+    });
   }
 
   onAddSensor(detectors: Detector[]) {
     this.detectors = detectors;
     this.state = 'placing';
+  }
+
+  removeFloor(floor: Floor) {
+    debugger
+    this.facilityService.deleteFloor(floor.floorNumber).subscribe({
+      next: (res) => {
+        this.facilityService.facility.set(res);
+        this.popupService.showPopup({
+          name: 'Success',
+          description: 'Floor was successfully removed',
+          type: 'success'
+        });
+        console.log(res);
+      },
+      error: (err) => {
+        this.popupService.showPopup({
+          name: 'Fail',
+          description: 'Something went wrong',
+          type: 'error'
+        });
+        console.log(err);
+      },
+    });
   }
 
   ngOnDestroy(): void {

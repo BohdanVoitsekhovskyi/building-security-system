@@ -12,7 +12,7 @@
 :host.success {
   background-color: #82d48230;
   border: 1px solid #579d5721;
-  color: #56d856;
+  color: #39b339;
 }
 
 :host.warning {
@@ -34,7 +34,7 @@
 .name {
   font-size: 0.9rem;
   font-weight: 500;
-  margin-left: 0.6rem;
+  margin-bottom: 0.4rem;
 }
 
 .description {

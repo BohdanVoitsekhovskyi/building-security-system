@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FacilityService } from '../../services/facility.service';
 import { Floor } from '../../models/floor.model';
 import { Detector } from '../../models/detector.model';
+import { PopupService } from '../info-popup/popup.service';
 
 @Component({
   selector: 'app-building-schema',
@@ -23,6 +24,7 @@ import { Detector } from '../../models/detector.model';
   styleUrl: './building-schema.component.css',
 })
 export class BuildingSchemaComponent {
+  private popupService = inject(PopupService);
   private el = inject(ElementRef);
   private facilityService = inject(FacilityService);
 
@@ -30,6 +32,7 @@ export class BuildingSchemaComponent {
   @Input({ required: true }) mode!: 'edit' | 'view';
   @Output() onAddSensor = new EventEmitter<Detector[]>();
   sensors: Detector[] = [];
+  deletedSensors: Detector[] = [];
   projection: any;
   private readonly canvas = { w: 1000, h: 1000 };
 
@@ -86,7 +89,7 @@ export class BuildingSchemaComponent {
       });
 
     for (let i of this.floor().detectors) {
-      this.addSaveSensor(i.type, i.position, i.id);
+      this.addSaveSensor(i.type.toLowerCase(), i.position, i.id);
     }
   }
 
@@ -117,18 +120,21 @@ export class BuildingSchemaComponent {
   addSaveSensor(name: string, coords: { x: number; y: number }, id: number) {
     const size = 50;
     const type = this.sensorTypes.find((t) => t.name === name)?.type;
-    console.log(id);
     d3.select('.sensor')
       .append('image')
       .attr('x', coords.x - size / 2)
       .attr('y', coords.y - size / 2)
       .attr('width', size)
       .attr('height', size)
-      .attr('xlink:href', `icons/${name}.svg`)
+      .attr('xlink:href', `icons/${name.toLowerCase()}.svg`)
       .attr('type', name)
-      .attr('class', type || 'default')
+      .attr('class', type!)
       .attr('id', id)
-      .on('click', () => alert(`Sensor clicked!`));
+      .on('click', (event) => {
+        if (this.mode === 'view') return;
+        this.deleteSensor(id, name);
+        d3.select(event.target).remove();
+      });
 
     if (type === 'area') {
       let centered = false;
@@ -176,7 +182,7 @@ export class BuildingSchemaComponent {
             return;
           }
 
-          image.transition().duration(200).attr('x', newX).attr('y', currentY);
+          image.attr('x', newX).attr('y', currentY);
         });
     }
 
@@ -202,11 +208,15 @@ export class BuildingSchemaComponent {
       .attr('y', projectedCoords[1] - size / 2)
       .attr('width', size)
       .attr('height', size)
-      .attr('xlink:href', `icons/${name}.svg`)
+      .attr('xlink:href', `icons/${name.toLowerCase()}.svg`)
       .attr('type', name)
       .attr('class', this.sensorData.properties.type)
       .attr('id', this.sensorData.properties.id)
-      .on('click', () => alert(`Sensor clicked!`));
+      .on('click', (event) => {
+        if (this.mode === 'view') return;
+        this.deleteSensor(this.sensorData.properties.id, name);
+        d3.select(event.target).remove();
+      });
 
     if (this.sensorData.properties.type === 'area') {
       let centered = false;
@@ -274,10 +284,47 @@ export class BuildingSchemaComponent {
   }
 
   roomContainsType(id: number, type: string) {
-    return this.sensors.findIndex(
-      (s) => s.id === id && s.type === type
-    ) === -1
+    return this.sensors.findIndex((s) => s.id === id && s.type === type) === -1
       ? false
       : true;
+  }
+
+  deleteSensor(id: number, type: string) {
+    debugger
+    if (this.mode === 'view') return;
+    const sensor = this.sensors.find((s) => s.id === id && s.type === type);
+    if (!sensor) {
+      console.error('No such sensor');
+      return;
+    }
+    this.facilityService
+      .deleteDetector(this.floor().floorNumber, sensor)
+      .subscribe({
+        next: (res) => {
+          this.facilityService.facility.set(res);
+          this.popupService.showPopup({
+            name: 'Success',
+            description: 'Detector was successfully deleted',
+            type: 'success',
+          });
+          this.sensors.splice(
+            this.sensors.findIndex(
+              (s) => JSON.stringify(s) === JSON.stringify(sensor)
+            ),
+            1
+          );
+          console.log(res);
+        },
+        error: (err) => {
+          {
+            console.log(err);
+            this.popupService.showPopup({
+              name: 'Fail',
+              description: 'Something went wrong',
+              type: 'error',
+            });
+          }
+        },
+      });
   }
 }
