@@ -1,6 +1,7 @@
+import { Detector } from "./detector.model";
+
 export type SystemReaction = {
-  sessionHash: string;
-  detectorType: string;
-  managerAnswer: string;
+  detectors: Detector[]
+  systemAnswer: string;
   time: Date;
 };

@@ -23,8 +23,8 @@ app-building-schema {
 }
 
 app-logger {
-  min-width: 18rem;
-  max-width: 18rem;
+  min-width: 24rem;
+  max-width: 24rem;
   height: 90%;
   flex-grow: 1;
 }
