@@ -89,7 +89,7 @@ public class SvgToJsonParser {
     }
 
     private static void processIdAttribute(JsonContent jsonContent, String pathTag) {
-        Pattern idPattern = Pattern.compile("id=\"([a-zA-Z]+)\\d+\"");
+        Pattern idPattern = Pattern.compile("id=\"([a-zA-Z]+)\\d*\"");
         Matcher idMatcher = idPattern.matcher(pathTag);
 
         while (idMatcher.find()) {
