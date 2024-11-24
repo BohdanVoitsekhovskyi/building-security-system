@@ -6,19 +6,110 @@
 }
 
 main {
+  position: relative;
   flex-grow: 1;
   padding: 1rem 2.4rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
 }
 
 app-building-schema {
-  width: 70%;
+  flex-grow: 1;
+  height: 80%;
+  margin-left: 2rem;
 }
 
 app-logger {
-  height: 30rem;
-  width: 16rem;
+  min-width: 24rem;
+  max-width: 24rem;
+  flex-grow: 1;
 }
 
+.floors {
+  z-index: 2000;
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0;
+}
+
+.floors li {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid #8b8b8bb0;
+  cursor: pointer;
+  color: #0c2a76;
+  font-weight: 600;
+  transition: 0.3s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floors li:hover {
+  background-color: #2864f630;
+  border: 1px solid #2864f650;
+}
+
+.floors li.selected {
+  transform: scale(1.1);
+  background-color: #2864f670;
+  border: none;
+}
+
+.button-control {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  gap: 0.8rem;
+  padding: 0 0.8rem;
+}
+
+.logger-box {
+  padding-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  height: 100%;
+}
+
+.custom-button {
+  margin: 0.2rem;
+  width: 6rem;
+  padding: 0.5rem;
+  background-color: #2864f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 1em;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.run:hover {
+  background-color: #1f56d6;
+}
+
+.stop {
+  color: #242428;
+  background-color: #fff;
+  border: 1px solid #242428;
+}
+
+.stop:hover {
+  color: #2864f6;
+  border: 1px solid #2864f6;
+}

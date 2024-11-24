@@ -28,14 +28,14 @@ h1 {
   flex-grow: 1;
 }
 
-.tools {
+.about {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   border-right: 1px solid #00000020;
 }
 
-.tools button {
+.about button {
   border: none;
 }
 

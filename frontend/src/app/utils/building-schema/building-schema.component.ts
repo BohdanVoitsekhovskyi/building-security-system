@@ -133,7 +133,6 @@ export class BuildingSchemaComponent {
     };
     this.contextMenuVisible = true;
     this.contextMenuPos = { x: event.x, y: event.y };
-    debugger;
     this.detectorTypes = this.facilityService.detectorTypes.filter(
       (t) =>
         t.facilityType === data.properties.type &&
@@ -164,6 +163,7 @@ export class BuildingSchemaComponent {
       .attr('type', detector.type.toLowerCase())
       .attr('id', detector.id)
       .attr('fid', detector.furnitureId)
+      .attr('class', 'alert')
       .on('click', (event) => {
         if (this.mode === 'view') return;
         this.detectors.splice(
@@ -198,6 +198,8 @@ export class BuildingSchemaComponent {
         return path.attr('id') == furnitureId;
       })
       .node();
+
+    if (!area) return;
 
     let centroid: { x: number; y: number };
     if (area) {
