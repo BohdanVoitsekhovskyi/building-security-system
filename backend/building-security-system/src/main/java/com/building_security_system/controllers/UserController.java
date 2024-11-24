@@ -30,7 +30,7 @@ public class UserController {
     public ResponseEntity<?> logIn(@RequestBody LoginDto user) {
         User loginUser = userService.logIn(user);
         if(loginUser == null) {
-            return new ResponseEntity<>("Error during login user(user doesn`t exist)", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error during login user (user doesn't exist)", HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(loginUser);
     }

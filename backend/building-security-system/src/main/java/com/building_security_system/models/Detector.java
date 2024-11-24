@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Calendar;
+import java.util.List;
+
 @Builder
 @ToString
 @Data
@@ -47,6 +50,15 @@ public class Detector {
                 .furnitureId(dto.getFurnitureId())
                 .type(DetectorType.valueOf(dto.getType().toUpperCase()))
                 .position(dto.getPosition())
+                .build();
+    }
+
+    public SystemReaction invoke() {
+        return SystemReaction
+                .builder()
+                .detectors(List.of(this))
+                .systemAnswer("")
+                .reactionTime(Calendar.getInstance())
                 .build();
     }
 

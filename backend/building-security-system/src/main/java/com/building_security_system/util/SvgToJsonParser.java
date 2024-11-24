@@ -37,8 +37,8 @@ public class SvgToJsonParser {
 
             @Data
             public static class Geometry implements Comparable<Geometry> {
-                private String type = "Polygon";
-                private int[][] arcs = new int[1][1];
+                private String type;
+                private int[][] arcs;
                 private Properties properties;
 
                 public Geometry(String type, int[][] arcs, Properties properties) {
@@ -89,7 +89,7 @@ public class SvgToJsonParser {
     }
 
     private static void processIdAttribute(JsonContent jsonContent, String pathTag) {
-        Pattern idPattern = Pattern.compile("id=\"([a-zA-Z]+)\\d+\"");
+        Pattern idPattern = Pattern.compile("id=\"([a-zA-Z]+)\\d*\"");
         Matcher idMatcher = idPattern.matcher(pathTag);
 
         while (idMatcher.find()) {
