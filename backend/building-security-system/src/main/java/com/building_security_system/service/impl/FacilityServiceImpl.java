@@ -68,7 +68,6 @@ public class FacilityServiceImpl implements FacilityService {
         return Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
     }
 
-
     @Override
     public void deleteFloor(long facilityId, long floorId) {
         Facility facility = Facility.toModel(facilityRepository.findOneById(facilityId));

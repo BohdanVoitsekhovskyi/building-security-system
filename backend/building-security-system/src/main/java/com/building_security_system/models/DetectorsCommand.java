@@ -1,6 +1,5 @@
 package com.building_security_system.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DetectorsCommand {

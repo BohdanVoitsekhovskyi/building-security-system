@@ -12,7 +12,6 @@ import static lombok.AccessLevel.PRIVATE;
 @Component
 @FieldDefaults(level = PRIVATE)
 public class SocketConfig {
-
     @Value("${server.address}")
     String socketHost;
 
