@@ -31,7 +31,6 @@ export class TesterService {
   }
 
   private on(event: string): Observable<any> {
-    console.log(this.socket);
     return new Observable((observer) => {
       this.socket.on(event, (data) => {
         observer.next(data);
@@ -50,7 +49,7 @@ export class TesterService {
     //TODO
   }
 
-  onLog(): Observable<SystemReaction> {
+  onLog(): Observable<SystemReaction[]> {
     return this.on('floorsList');
   }
 

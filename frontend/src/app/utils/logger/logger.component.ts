@@ -21,11 +21,10 @@ export class LoggerComponent implements OnDestroy {
   socket?: Subscription;
 
   constructor() {
-    console.log('Kurwa');
     this.socket = this.testerService.onLog().subscribe({
       next: (data) => {
-        console.log(data);
-        this.systemReactions = [...this.systemReactions, data];
+        this.systemReactions = [...this.systemReactions, ...data];
+        console.log(this.systemReactions);
       },
       error: (err) => {
         console.error(err);
