@@ -72,6 +72,8 @@ public class SocketController {
         long fId = Long.parseLong(facilityId.getContents());
         AtomicBoolean stopFlag = facilityStopFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
         AtomicBoolean pauseFlag = facilityPauseFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
+        stopFlag.set(false);
+        pauseFlag.set(false);
 
         Thread thread = new Thread(TestingThread.builder()
                 .counter(0)
