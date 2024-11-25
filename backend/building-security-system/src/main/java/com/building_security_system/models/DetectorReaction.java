@@ -1,5 +1,7 @@
 package com.building_security_system.models;
 
+import java.util.Calendar;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SystemReaction {
-    private List<DetectorReaction> detectorsReaction;
+public class DetectorReaction {
+    private Detector detector;
+    private String detectorAnswer;
+    private Calendar detectorReactionTime = Calendar.getInstance();
 }

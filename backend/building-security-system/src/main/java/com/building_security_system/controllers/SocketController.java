@@ -98,11 +98,12 @@ public class SocketController {
                         continue;
                     }
 
-                    List<SystemReaction> systemReactions = commandManager.invokeCommands();
-                    if (systemReactions == null) {
+                    SystemReaction systemReaction = commandManager.invokeCommands();
+
+                    if (systemReaction == null) {
                         break;
                     }
-                    client.sendEvent("floorsList", systemReactions);
+                    client.sendEvent("floorsList", systemReaction);
 
                     Thread.sleep(1500); // Adjust delay as needed
                 }

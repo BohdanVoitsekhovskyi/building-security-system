@@ -53,12 +53,12 @@ public class Detector {
                 .build();
     }
 
-    public SystemReaction invoke() {
-        return SystemReaction
+    public DetectorReaction invoke() {
+        return DetectorReaction
                 .builder()
                 .detector(this)
-                .systemAnswer("")
-                .reactionTime(Calendar.getInstance())
+                .detectorAnswer("")
+                .detectorReactionTime(Calendar.getInstance())
                 .build();
     }
 

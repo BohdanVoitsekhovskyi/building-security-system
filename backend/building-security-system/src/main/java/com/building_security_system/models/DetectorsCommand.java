@@ -8,7 +8,14 @@ public class DetectorsCommand {
         this.detectors = detectors;
     }
 
-    public List<SystemReaction> invoke() {
-        return detectors.stream().map(Detector::invoke).toList();
+    public SystemReaction invoke() {
+        SystemReaction reaction = new SystemReaction();
+
+        for (Detector detector : detectors) {
+            DetectorReaction detectorReaction = detector.invoke();
+            reaction.getDetectorsReaction().add(detectorReaction);
+        }
+
+        return reaction;
     }
 }
