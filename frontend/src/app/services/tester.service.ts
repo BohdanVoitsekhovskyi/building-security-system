@@ -19,7 +19,7 @@ export class TesterService {
   facilityId = this.facilityService.facilityId();
 
   constructor() {
-    this.socket = io(this.socketUrl);
+    this.socket = io(this.socketUrl, { transports: ['websocket'] });
   }
 
   private emit(event: string, data: any) {
@@ -31,6 +31,7 @@ export class TesterService {
   }
 
   private on(event: string): Observable<any> {
+    console.log(this.socket);
     return new Observable((observer) => {
       this.socket.on(event, (data) => {
         observer.next(data);
@@ -49,15 +50,19 @@ export class TesterService {
     //TODO
   }
 
-  onLog(): Observable<any> {
+  onLog(): Observable<SystemReaction> {
     return this.on('floorsList');
   }
 
   stopSimulation() {
-    this.emit('stop-resume-testing', `STOP:${this.facilityId}`);
+    this.emit('stop-resume-testing', {
+      contents: `STOP:${this.facilityId}`,
+    });
   }
 
   startSimulation() {
-    this.emit('testing-system', this.facilityId?.toString());
+    this.emit('testing-system', {
+      contents: this.facilityId?.toString(),
+    });
   }
 }
