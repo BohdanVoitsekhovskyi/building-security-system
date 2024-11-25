@@ -34,8 +34,6 @@ public class CommandManager {
                 commands.add(new DetectorsCommand(twoDetectorsList));
             }
         }
-
-        Collections.shuffle(commands);
     }
 
     /**
