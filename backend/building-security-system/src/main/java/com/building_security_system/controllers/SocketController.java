@@ -1,5 +1,6 @@
 package com.building_security_system.controllers;
 
+import com.building_security_system.dto.SocketCommandDto;
 import com.building_security_system.models.Facility;
 import com.building_security_system.models.SystemReaction;
 import com.building_security_system.service.FacilityService;
@@ -36,8 +37,8 @@ public class SocketController {
 
         socketServer.addConnectListener(onUserConnectWithSocket);
         socketServer.addDisconnectListener(onUserDisconnectWithSocket);
-        socketServer.addEventListener("testing-system", Long.class, onSendMessage);
-        socketServer.addEventListener("stop-resume-testing", String.class, onStopResume);
+        socketServer.addEventListener("testing-system", SocketCommandDto.class, onSendMessage);
+        socketServer.addEventListener("stop-resume-testing", SocketCommandDto.class, onStopResume);
     }
 
     public ConnectListener onUserConnectWithSocket = client ->
@@ -46,8 +47,8 @@ public class SocketController {
     public DisconnectListener onUserDisconnectWithSocket = client ->
             log.info("Client disconnected: {}", client.getSessionId());
 
-    public DataListener<String> onStopResume = (client, command, ackRequest) -> {
-        String[] parts = command.split(":");
+    public DataListener<SocketCommandDto> onStopResume = (client, command, ackRequest) -> {
+        String[] parts = command.getContents().split(":");
         if (parts.length != 2) {
             client.sendEvent("error", "Invalid command format. Expected format: STOP/RESUME:facilityId");
             return;
@@ -71,17 +72,18 @@ public class SocketController {
         }
     };
 
-    public DataListener<Long> onSendMessage = (client, facilityId, ackRequest) -> {
+    public DataListener<SocketCommandDto> onSendMessage = (client, facilityId, ackRequest) -> {
         log.info("Requested floors list of facility with id: {}", facilityId);
-        Facility facility = facilityService.getFacilityById(facilityId);
+        Facility facility = facilityService.getFacilityById(Long.parseLong(facilityId.getContents()));
 
         if (facility == null) {
             client.sendEvent("error", "Invalid facility ID: " + facilityId);
             return;
         }
 
-        AtomicBoolean stopFlag = facilityStopFlags.computeIfAbsent(facilityId, id -> new AtomicBoolean(false));
-        AtomicBoolean pauseFlag = facilityPauseFlags.computeIfAbsent(facilityId, id -> new AtomicBoolean(false));
+        long fId = Long.parseLong(facilityId.getContents());
+        AtomicBoolean stopFlag = facilityStopFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
+        AtomicBoolean pauseFlag = facilityPauseFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
 
         executorService.submit(() -> {
             commandManager.createCommands(facility.getFloors()
