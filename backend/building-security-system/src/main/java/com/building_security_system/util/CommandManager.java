@@ -42,7 +42,7 @@ public class CommandManager {
      *  Socket
      */
     //Викликає всі команди по черзі, і повертає їх реакції через сокет з затримкою в 500 мс
-    public List<SystemReaction> invokeCommands() {
+    public SystemReaction invokeCommands() {
         if (commands.size() <= currentCommandIndex) {
             return null;
         }
