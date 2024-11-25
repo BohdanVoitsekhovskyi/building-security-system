@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -13,5 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SystemReaction {
-    private List<DetectorReaction> detectorsReaction;
+    private List<DetectorReaction> detectorsReaction = new ArrayList<>();
 }
