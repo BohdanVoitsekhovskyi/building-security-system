@@ -1,5 +1,7 @@
 import {
   Component,
+  effect,
+  EffectRef,
   ElementRef,
   EventEmitter,
   inject,
@@ -15,6 +17,8 @@ import { FacilityService } from '../../services/facility.service';
 import { Floor } from '../../models/floor.model';
 import { Detector } from '../../models/detector.model';
 import { PopupService } from '../info-popup/popup.service';
+import { TesterService } from '../../services/tester.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-building-schema',
@@ -26,6 +30,7 @@ import { PopupService } from '../info-popup/popup.service';
 export class BuildingSchemaComponent {
   private el = inject(ElementRef);
   private facilityService = inject(FacilityService);
+  private testerService = inject(TesterService);
 
   floor = input.required<Floor>();
   @Input({ required: true }) mode!: 'edit' | 'view';
@@ -42,8 +47,33 @@ export class BuildingSchemaComponent {
   currentDetector?: Detector;
   detectorSize = 50;
 
+  systemReactions = this.testerService.systemReaction;
+  subscription!: EffectRef;
+
+  constructor() {
+    this.subscription = effect(() => {
+      this.systemReactions()
+        .at(-1)
+        ?.detectorsReaction.forEach((dr) => {
+          d3.select(`image[id="${dr.detector.id}"]`).attr('class', 'alert');
+        });
+    });
+  }
+
   ngOnInit(): void {
     this.renderMap(this.floor().placement);
+    if(this.mode !== 'view') {
+      this.subscription.destroy();
+      return
+    }
+
+    if (this.mode === 'view') {
+      this.systemReactions().forEach((dr) => {
+        dr.detectorsReaction.forEach((dr) => {
+          d3.select(`image[id="${dr.detector.id}"]`).attr('class', 'alert');
+        });
+      });
+    }
   }
 
   private renderMap(topoData: any): void {
@@ -163,7 +193,6 @@ export class BuildingSchemaComponent {
       .attr('type', detector.type.toLowerCase())
       .attr('id', detector.id)
       .attr('fid', detector.furnitureId)
-      .attr('class', 'alert')
       .on('click', (event) => {
         if (this.mode === 'view') return;
         this.detectors.splice(

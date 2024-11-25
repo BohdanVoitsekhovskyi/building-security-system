@@ -1,5 +1,5 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { inject, Injectable, OnDestroy, signal } from '@angular/core';
+import { from, Observable, Subscription } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { apiUrl, socketUrl } from '../environment';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { Detector } from '../models/detector.model';
 @Injectable({
   providedIn: 'root',
 })
-export class TesterService {
+export class TesterService implements OnDestroy {
   private socket: Socket;
   private socketUrl = socketUrl;
   private apiUrl = apiUrl;
@@ -18,9 +18,21 @@ export class TesterService {
   private facilityService = inject(FacilityService);
 
   facilityId = this.facilityService.facilityId();
+  systemReaction = signal<SystemReaction[]>([]);
+  subscription!: Subscription;
+  testStatus: 'stopped' | 'running' | 'not-initiated' = 'not-initiated';
 
   constructor() {
     this.socket = io(this.socketUrl, { transports: ['websocket'] });
+
+    this.subscription = this.onLog().subscribe({
+      next: (data) => {
+        this.systemReaction.set([...this.systemReaction(), data]);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 
   private emit(event: string, data: any) {
@@ -50,19 +62,35 @@ export class TesterService {
     //TODO
   }
 
-  onLog(): Observable<SystemReaction> {
+  private onLog(): Observable<SystemReaction> {
     return this.on('floorsList');
   }
 
   stopSimulation() {
-    this.emit('stop-resume-testing', {
-      contents: `STOP:${this.facilityId}`,
-    });
+    if (this.testStatus === 'running') {
+      this.emit('stop-resume-testing', {
+        contents: `STOP:${this.facilityId}`,
+      });
+      this.testStatus = 'stopped';
+    }
   }
 
   startSimulation() {
-    this.emit('testing-system', {
-      contents: this.facilityId,
-    });
+    if (this.testStatus === 'not-initiated') {
+      this.emit('testing-system', {
+        contents: this.facilityId,
+      });
+    } else if (this.testStatus === 'stopped') {
+      this.emit('stop-resume-testing', {
+        contents: `RESUME:${this.facilityId}`,
+      });
+    } else {
+      return;
+    }
+    this.testStatus = 'running';
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

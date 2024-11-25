@@ -67,3 +67,22 @@ app-logger {
   border: none;
 }
 
+@keyframes blink {
+  0% {
+    background-color: #ffffff;
+  }
+  50% {
+    background-color: #ff000080;
+  }
+  100% {
+    background-color: #ffffff;
+  }
+}
+
+.pinged {
+  animation: blink 1.4s infinite;
+}
+
+.pinged.selected {
+  animation: none;
+}
