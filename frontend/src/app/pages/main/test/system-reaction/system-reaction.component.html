@@ -1,9 +1,13 @@
-<div>
-  <img
-    src="icons/{{ systemReaction.detector.type.toLowerCase() }}.svg"
-    class="detector-icon"
-  />
+@for (item of systemReaction.detectorsReaction; track $index) {
+<div class="detector-reaction">
+  <div>
+    <img
+      src="icons/{{ item.detector.type.toLowerCase() }}.svg"
+      class="detector-icon"
+    />
+  </div>
+  <div class="reaction-time">
+    {{ item.detectorReactionTime | date : 'MMM dd HH:mm:ss' }}
+  </div>
 </div>
-<div class="reaction-time">
-  {{ systemReaction.reactionTime | date : 'MMM dd HH:mm:ss' }}
-</div>
+}

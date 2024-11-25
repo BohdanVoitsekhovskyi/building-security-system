@@ -50,7 +50,7 @@ export class TesterService {
     //TODO
   }
 
-  onLog(): Observable<SystemReaction[]> {
+  onLog(): Observable<SystemReaction> {
     return this.on('floorsList');
   }
 

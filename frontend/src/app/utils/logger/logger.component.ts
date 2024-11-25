@@ -22,7 +22,8 @@ export class LoggerComponent implements OnDestroy {
   constructor() {
     this.socket = this.testerService.onLog().subscribe({
       next: (data) => {
-        this.systemReactions = [...this.systemReactions, ...data];
+        console.log(data);
+        this.systemReactions = [...this.systemReactions, data];
       },
       error: (err) => {
         console.error(err);
