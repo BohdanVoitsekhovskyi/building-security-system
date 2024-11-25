@@ -14,4 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 public class SystemReaction {
     private List<DetectorReaction> detectorsReaction = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (DetectorReaction detectorReaction : detectorsReaction) {
+            str.append(detectorReaction.toString());
+        }
+        return str.toString();
+    }
 }

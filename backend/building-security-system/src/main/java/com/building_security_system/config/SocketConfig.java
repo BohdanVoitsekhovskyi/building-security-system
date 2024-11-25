@@ -2,6 +2,8 @@ package com.building_security_system.config;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.corundumstudio.socketio.protocol.JacksonJsonSupport;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +25,7 @@ public class SocketConfig {
         Configuration configuration = new Configuration();
         configuration.setHostname(socketHost);
         configuration.setPort(socketPort);
+        configuration.setJsonSupport(new JacksonJsonSupport(new JavaTimeModule()));
 
         SocketIOServer server = new SocketIOServer(configuration);
         server.start();

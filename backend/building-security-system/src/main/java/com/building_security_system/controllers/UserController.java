@@ -3,8 +3,10 @@ package com.building_security_system.controllers;
 import com.building_security_system.dto.LoginDto;
 import com.building_security_system.dto.SignUpDTO;
 import com.building_security_system.models.Facility;
+import com.building_security_system.models.FacilityLog;
 import com.building_security_system.models.User;
 import com.building_security_system.service.FacilityService;
+import com.building_security_system.service.LoggerService;
 import com.building_security_system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +21,13 @@ import java.util.ArrayList;
 public class UserController {
     private final UserService userService;
     private final FacilityService facilityService;
+    private final LoggerService loggerService;
 
     @Autowired
-    public UserController(UserService userService, FacilityService facilityService) {
+    public UserController(UserService userService, FacilityService facilityService, LoggerService loggerService) {
         this.userService = userService;
         this.facilityService = facilityService;
+        this.loggerService = loggerService;
     }
 
     @PostMapping("/user/login")
@@ -55,6 +59,14 @@ public class UserController {
                             .build();
 
             facilityService.saveFacility(facility);
+
+            FacilityLog facilityLog = FacilityLog.builder()
+                    .id(id)
+                    .logMessages(new ArrayList<>())
+                    .build();
+            loggerService.saveLog(facilityLog);
+
+
             return ResponseEntity.ok(newUser);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

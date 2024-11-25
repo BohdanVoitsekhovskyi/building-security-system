@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 @Builder
@@ -57,7 +58,7 @@ public class Detector {
                 .builder()
                 .detector(this)
                 .detectorAnswer("")
-                .detectorReactionTime(Calendar.getInstance())
+                .detectorReactionTime(LocalDateTime.now())
                 .build();
     }
 

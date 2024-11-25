@@ -2,6 +2,7 @@ package com.building_security_system.controllers;
 
 import com.building_security_system.dto.SocketCommandDto;
 import com.building_security_system.service.FacilityService;
+import com.building_security_system.service.LoggerService;
 import com.building_security_system.util.CommandManager;
 import com.building_security_system.util.TestingThread;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -21,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @CrossOrigin
 public class SocketController {
     private FacilityService facilityService;
+    private LoggerService loggerService;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     // Maps to track facility states
@@ -28,8 +30,9 @@ public class SocketController {
     private final ConcurrentHashMap<Long, AtomicBoolean> facilityPauseFlags = new ConcurrentHashMap<>();
 
     @Autowired
-    public SocketController(SocketIOServer socketServer, FacilityService facilityService) {
+    public SocketController(SocketIOServer socketServer, FacilityService facilityService, LoggerService loggerService) {
         this.facilityService = facilityService;
+        this.loggerService = loggerService;
 
         socketServer.addConnectListener(onUserConnectWithSocket);
         socketServer.addDisconnectListener(onUserDisconnectWithSocket);
@@ -72,8 +75,6 @@ public class SocketController {
         long fId = Long.parseLong(facilityId.getContents());
         AtomicBoolean stopFlag = facilityStopFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
         AtomicBoolean pauseFlag = facilityPauseFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
-        stopFlag.set(false);
-        pauseFlag.set(false);
 
         Thread thread = new Thread(TestingThread.builder()
                 .counter(0)
@@ -85,6 +86,7 @@ public class SocketController {
                 .facilityId(fId)
                 .stopFlag(stopFlag)
                 .pauseFlag(pauseFlag)
+                .loggerService(loggerService)
                 .build());
 
         thread.start();

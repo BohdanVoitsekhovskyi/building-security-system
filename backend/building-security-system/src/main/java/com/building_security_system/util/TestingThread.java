@@ -3,6 +3,7 @@ package com.building_security_system.util;
 import com.building_security_system.models.Facility;
 import com.building_security_system.models.SystemReaction;
 import com.building_security_system.service.FacilityService;
+import com.building_security_system.service.LoggerService;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class TestingThread implements Runnable {
     private ExecutorService executorService;
     private AtomicBoolean stopFlag;
     private AtomicBoolean pauseFlag;
+    private LoggerService loggerService;
 
     @Override
     public void run() {
@@ -57,6 +59,7 @@ public class TestingThread implements Runnable {
                     if (systemReaction == null) {
                         break;
                     }
+                    loggerService.log(systemReaction,facilityId);
                     client.sendEvent("floorsList", systemReaction);
 
                     Thread.sleep(5000); // Adjust delay as needed

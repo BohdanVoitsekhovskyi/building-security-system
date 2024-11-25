@@ -1,11 +1,8 @@
 package com.building_security_system.models;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Data
@@ -14,5 +11,12 @@ import lombok.NoArgsConstructor;
 public class DetectorReaction {
     private Detector detector;
     private String detectorAnswer;
-    private Calendar detectorReactionTime = Calendar.getInstance();
+    private LocalDateTime detectorReactionTime = LocalDateTime.now();
+
+
+    @Override
+    public String toString() {
+        return String.format("[ %s ] - Спрацював %s датчик( id = %d), %s",
+                detectorReactionTime.toString(), detector.getType().name(), detector.getId(), detectorAnswer);
+    }
 }
