@@ -48,7 +48,7 @@ public class TestingThread implements Runnable {
             try {
                 while (!stopFlag.get()) {
                     if (pauseFlag.get()) {
-                        Thread.sleep(5000); // Wait briefly while paused
+                        Thread.sleep(500); // Wait briefly while paused
                         continue;
                     }
 
@@ -59,7 +59,7 @@ public class TestingThread implements Runnable {
                     }
                     client.sendEvent("floorsList", systemReaction);
 
-                    Thread.sleep(1500); // Adjust delay as needed
+                    Thread.sleep(5000); // Adjust delay as needed
                 }
 
                 pauseFlag.set(false);
