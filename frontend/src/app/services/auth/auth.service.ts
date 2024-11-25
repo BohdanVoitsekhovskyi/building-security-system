@@ -5,17 +5,20 @@ import { apiUrl } from '../../environment';
 import { LoginInfo } from '../../pages/account/login/login.model';
 import { SignUpInfo } from '../../pages/account/signup/signup.model';
 import { User } from '../../models/user.model';
+import { FacilityService } from '../facility.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private httpClient = inject(HttpClient);
+
   environment = apiUrl;
   path = '/user';
 
   isLoggedIn = signal<boolean>(false);
   userInfo = signal<User | undefined>(undefined);
+  
 
   login(userDetails: LoginInfo): Observable<boolean> {
     return this.httpClient

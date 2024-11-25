@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Floor } from '../models/floor.model';
 import { Facility } from '../models/facility.model';
 import { HttpClient } from '@angular/common/http';
@@ -25,7 +25,9 @@ export class FacilityService {
   facilityId = computed(() => this.authService.userInfo()?.id);
 
   constructor() {
-    this.getFacility();
+    effect(() => {
+      this.getFacility();
+    });
   }
 
   getFacility() {

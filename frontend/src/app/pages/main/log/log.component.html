@@ -2,7 +2,7 @@
 <main>
     <div class="logs">
         <div class="title">Recent logs</div>
-        @for (item of systemReactions; track $index) {
+        @for (item of systemReactions(); track $index) {
             <app-detailed-system-reaction [systemReaction]="item" />
         }
     </div>

@@ -14,25 +14,7 @@ import { DetailedSystemReactionComponent } from "./detailed-system-reaction/deta
 })
 export class LogComponent {
   private testerService = inject(TesterService);
-  systemReactions: SystemReaction[] = [];
-
-  socket?: Subscription;
-
-  constructor() {
-    this.socket = this.testerService.onLog().subscribe({
-      next: (data) => {
-        console.log(data);
-        this.systemReactions = [...this.systemReactions, data];
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.socket?.unsubscribe();
-  }
+  systemReactions = this.testerService.systemReaction;
 
   onExport() {
     //TODO
