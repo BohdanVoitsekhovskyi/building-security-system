@@ -1,13 +1,23 @@
 @for (item of systemReaction.detectorsReaction; track $index) {
     <div class="detector-reaction">
-      <div>
-        <img
-          src="icons/{{ item.detector.type.toLowerCase() }}.svg"
-          class="detector-icon"
-        />
-      </div>
-      <div class="reaction-time">
-        {{ item.detectorReactionTime | date : 'MMM dd HH:mm:ss' }}
+      <div class="flex-box">
+        <div>
+          <div>
+            {{ getFloorNumber(item) }}
+          </div>
+          <img
+            src="icons/{{ item.detector.type.toLowerCase() }}.svg"
+            class="detector-icon"
+          />
+        </div>
+        <div>
+          <div class="detector-type">
+            {{ item.detector.type.toLowerCase() }}
+          </div>
+          <div class="reaction-time">
+            {{ item.detectorReactionTime | date : 'MMM dd HH:mm:ss' }}
+          </div>
+        </div>
       </div>
       <div class="reaction-text">
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo, repellendus est! Quasi eos repellat, libero cumque dolor quisquam iure nemo atque magni numquam aut a voluptate sed. A, dolor placeat?
