@@ -1,0 +1,38 @@
+:host {
+    background-color: #2864F6;
+    color: #ffffff;
+    border-radius: 1rem;
+    padding: 0.6rem;
+    border-radius: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+  
+  .detector-reaction {
+    background-color: #ffffff;
+    color: #242428;
+    font-size: 0.9rem;
+    margin: 0.3rem 0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.8rem;
+    box-shadow: inset 1px 1px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  
+  .detector-icon {
+    width: 2rem;
+    margin: 0.2rem;
+    display: block;
+  }
+
+  .reaction-time{
+    margin: 0.8rem;
+  }
+  
+  .detector-reaction:hover {
+    box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.5);
+  }
