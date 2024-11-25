@@ -27,8 +27,8 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public Facility saveFacility(Facility facility) {
-        return Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
+    public void saveFacility(Facility facility) {
+        Facility.toModel(facilityRepository.save(Facility.toEntity(facility)));
     }
 
     @Override

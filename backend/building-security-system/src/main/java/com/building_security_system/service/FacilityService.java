@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FacilityService {
     Facility getFacilityById(long facilityId);
-    Facility saveFacility(Facility facility);
+    void saveFacility(Facility facility);
     Facility updateFacility(long facilityId, int floorNo, String fileContent);
     Facility updateFloor(long facilityId, int floorNumber, List<Detector> detectors);
     Facility deleteFloor(long facilityId, int floorNumber);

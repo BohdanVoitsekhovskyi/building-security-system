@@ -1,10 +1,9 @@
 package com.building_security_system.controllers;
 
 import com.building_security_system.dto.SocketCommandDto;
-import com.building_security_system.models.Facility;
-import com.building_security_system.models.SystemReaction;
 import com.building_security_system.service.FacilityService;
 import com.building_security_system.util.CommandManager;
+import com.building_security_system.util.TestingThread;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -14,18 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 @Controller
 @Log4j2
 @CrossOrigin
 public class SocketController {
     private FacilityService facilityService;
-    private final ExecutorService executorService = Executors.newScheduledThreadPool(5);
-    private final CommandManager commandManager = new CommandManager();
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     // Maps to track facility states
     private final ConcurrentHashMap<Long, AtomicBoolean> facilityStopFlags = new ConcurrentHashMap<>();
@@ -73,45 +69,22 @@ public class SocketController {
     };
 
     public DataListener<SocketCommandDto> onSendMessage = (client, facilityId, ackRequest) -> {
-        log.info("Requested floors list of facility with id: {}", facilityId);
-        Facility facility = facilityService.getFacilityById(Long.parseLong(facilityId.getContents()));
-
-        if (facility == null) {
-            client.sendEvent("error", "Invalid facility ID: " + facilityId);
-            return;
-        }
-
         long fId = Long.parseLong(facilityId.getContents());
         AtomicBoolean stopFlag = facilityStopFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
         AtomicBoolean pauseFlag = facilityPauseFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
 
-        executorService.submit(() -> {
-            commandManager.createCommands(facility.getFloors()
-                    .stream()
-                    .flatMap(floor -> floor.getDetectors().stream())
-                    .collect(Collectors.toList()));
+        Thread thread = new Thread(TestingThread.builder()
+                .counter(0)
+                .ackRequest(ackRequest)
+                .executorService(executorService)
+                .commandManager(new CommandManager())
+                .client(client)
+                .facilityService(facilityService)
+                .facilityId(fId)
+                .stopFlag(stopFlag)
+                .pauseFlag(pauseFlag)
+                .build());
 
-            try {
-                while (!stopFlag.get()) {
-                    if (pauseFlag.get()) {
-                        Thread.sleep(500); // Wait briefly while paused
-                        continue;
-                    }
-
-                    SystemReaction systemReaction = commandManager.invokeCommands();
-
-                    if (systemReaction == null) {
-                        break;
-                    }
-                    client.sendEvent("floorsList", systemReaction);
-
-                    Thread.sleep(1500); // Adjust delay as needed
-                }
-                log.info("Processing terminated for facility: {}", facilityId);
-            } catch (InterruptedException e) {
-                log.error("Processing interrupted for facility: {}", facilityId, e);
-                Thread.currentThread().interrupt();
-            }
-        });
+        thread.start();
     };
 }
