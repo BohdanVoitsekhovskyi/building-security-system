@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, Signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, Signal } from '@angular/core';
 import { SystemReactionComponent } from '../../pages/main/test/system-reaction/system-reaction.component';
 import { SystemReaction } from '../../models/system-reaction.model';
 import { FacilityService } from '../../services/facility.service';
@@ -15,21 +15,8 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class LoggerComponent implements OnDestroy {
   private testerService = inject(TesterService);
-  systemReactions: SystemReaction[] = [];
-
-  socket?: Subscription;
-
-  constructor() {
-    this.socket = this.testerService.onLog().subscribe({
-      next: (data) => {
-        console.log(data);
-        this.systemReactions = [...this.systemReactions, data];
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
-  }
+  systemReactions = this.testerService.systemReaction;
+  subscription?: Subscription;
 
   onStart() {
     this.testerService.startSimulation();
@@ -40,6 +27,7 @@ export class LoggerComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.socket?.unsubscribe();
+    console.log('unsubscribed');
+    this.subscription?.unsubscribe();
   }
 }

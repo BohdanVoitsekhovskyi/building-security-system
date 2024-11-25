@@ -113,5 +113,5 @@
 }
 
 ::ng-deep .alert {
-  /* animation: blink 1.4s infinite; */
+  animation: blink 1.4s infinite;
 }
