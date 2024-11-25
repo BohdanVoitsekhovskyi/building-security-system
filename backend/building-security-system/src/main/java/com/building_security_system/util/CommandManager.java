@@ -43,6 +43,9 @@ public class CommandManager {
      */
     //Викликає всі команди по черзі, і повертає їх реакції через сокет з затримкою в 500 мс
     public List<SystemReaction> invokeCommands() {
+        if (commands.size() <= currentCommandIndex) {
+            return null;
+        }
         return commands.get(currentCommandIndex++).invoke();
     }
 }
