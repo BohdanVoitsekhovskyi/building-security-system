@@ -54,7 +54,7 @@ export class LoginComponent {
   onSubmit(form: NgForm) {
     if (form.invalid) return;
 
-    debugger;
+    //debugger;
     this.isLoading = true;
     this.authService.login(this.loginInfo).subscribe({
       next: (res) => {

@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SystemReaction {
-    private List<Detector> detectors;
+    private Detector detector;
     private String systemAnswer;
     private Calendar reactionTime = Calendar.getInstance();
 }
