@@ -58,7 +58,6 @@ export class LoginComponent {
     this.isLoading = true;
     this.authService.login(this.loginInfo).subscribe({
       next: (res) => {
-        console.log(res);
         this.isLoading = false;
         if (!res) {
           const test: PopupInfo = {

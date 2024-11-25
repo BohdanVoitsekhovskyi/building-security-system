@@ -21,16 +21,14 @@ export class LoggerComponent implements OnDestroy {
   socket?: Subscription;
 
   constructor() {
-    this.socket = this.testerService
-    .getAnswer()
-    .subscribe((data) => {
+    this.socket = this.testerService.onLog().subscribe((data) => {
       console.log(data);
       this.systemReactions = [...this.systemReactions, data];
     });
   }
 
   onStart() {
-    this.testerService.testRequest();
+    this.testerService.startSimulation();
   }
 
   ngOnDestroy(): void {

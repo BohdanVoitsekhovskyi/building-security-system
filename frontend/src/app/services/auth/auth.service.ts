@@ -73,7 +73,6 @@ export class AuthService {
 
   restoreSession(): boolean {
     const storedAuth = localStorage.getItem('auth');
-    console.log(storedAuth);
     if (storedAuth) {
       try {
         const auth: UserSession = JSON.parse(storedAuth);

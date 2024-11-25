@@ -16,17 +16,18 @@ export class TesterService {
   private httpClient = inject(HttpClient);
   private facilityService = inject(FacilityService);
 
-
   facilityId = this.facilityService.facilityId();
 
   constructor() {
-    this.socket = io(this.socketUrl, {
-      transports: ['websocket'], // Force WebSocket transport
-    });
+    this.socket = io(this.socketUrl);
   }
 
   private emit(event: string, data: any) {
     this.socket.emit(event, data);
+
+    this.socket.on('connect_error', () => {
+      console.log('error');
+    });
   }
 
   private on(event: string): Observable<any> {
@@ -40,7 +41,6 @@ export class TesterService {
       };
     });
   }
-  
 
   getLogs() {
     return this.httpClient.get<SystemReaction[]>(
@@ -50,26 +50,14 @@ export class TesterService {
   }
 
   onLog(): Observable<any> {
-    return this.on('testing-system');
-    //TODO
+    return this.on('floorsList');
   }
 
   stopSimulation() {
-    this.emit('stop', { message: 'stop' });
-    //TODO
+    this.emit('stop-resume-testing', `STOP:${this.facilityId}`);
   }
 
   startSimulation() {
-    this.emit('start', { message: this.facilityId });
-    //TODO
-  }
-
-  //temp functions
-  testRequest() {
-    this.emit('testing-system', this.facilityId);
-  }
-
-  getAnswer(): Observable<SystemReaction> {
-    return this.on('testing-result');
+    this.emit('testing-system', this.facilityId?.toString());
   }
 }
