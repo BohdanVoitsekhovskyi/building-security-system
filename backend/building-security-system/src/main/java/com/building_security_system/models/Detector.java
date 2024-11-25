@@ -56,7 +56,7 @@ public class Detector {
     public SystemReaction invoke() {
         return SystemReaction
                 .builder()
-                .detectors(List.of(this))
+                .detector(this)
                 .systemAnswer("")
                 .reactionTime(Calendar.getInstance())
                 .build();
