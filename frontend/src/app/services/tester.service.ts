@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { io, Socket } from 'socket.io-client';
+import { from, Observable } from 'rxjs';
+import { Socket, io } from 'socket.io-client';
 import { apiUrl, socketUrl } from '../environment';
 import { HttpClient } from '@angular/common/http';
 import { SystemReaction } from '../models/system-reaction.model';
@@ -15,11 +15,14 @@ export class TesterService {
   private apiUrl = apiUrl;
   private httpClient = inject(HttpClient);
   private facilityService = inject(FacilityService);
-  
-  facilityId = this.facilityService.facilityId;
+
+
+  facilityId = this.facilityService.facilityId();
 
   constructor() {
-    this.socket = io(this.socketUrl);
+    this.socket = io(this.socketUrl, {
+      transports: ['websocket'], // Force WebSocket transport
+    });
   }
 
   private emit(event: string, data: any) {
@@ -37,6 +40,7 @@ export class TesterService {
       };
     });
   }
+  
 
   getLogs() {
     return this.httpClient.get<SystemReaction[]>(
@@ -46,7 +50,7 @@ export class TesterService {
   }
 
   onLog(): Observable<any> {
-    return this.on('system-reaction');
+    return this.on('testing-system');
     //TODO
   }
 
@@ -55,8 +59,17 @@ export class TesterService {
     //TODO
   }
 
-  resumeSimulation() {
-    this.emit('resume', { message: 'resume' });
+  startSimulation() {
+    this.emit('start', { message: this.facilityId });
     //TODO
+  }
+
+  //temp functions
+  testRequest() {
+    this.emit('testing-system', this.facilityId);
+  }
+
+  getAnswer(): Observable<SystemReaction> {
+    return this.on('testing-result');
   }
 }

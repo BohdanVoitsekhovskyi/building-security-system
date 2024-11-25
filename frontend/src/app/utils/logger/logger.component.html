@@ -1,4 +1,10 @@
-<div class="title">Recent logs</div>
-<app-system-reaction [systemReaction]="reaction()" />
-<app-system-reaction [systemReaction]="reaction()" />
-<app-system-reaction [systemReaction]="reaction()" />
+<div class="logs">
+  <div class="title">Recent logs</div>
+  @for (item of systemReactions; track $index) {
+  <app-system-reaction [systemReaction]="item" />
+  }
+</div>
+<div class="button-control">
+  <button class="custom-button run" (click)="onStart()">Run</button>
+  <button class="custom-button stop">Stop</button>
+</div>
