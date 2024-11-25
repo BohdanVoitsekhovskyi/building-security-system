@@ -1,14 +1,4 @@
 :host {
-  background-color: #2864f6;
-  color: #ffffff;
-  border-radius: 1rem;
-  padding: 0.6rem;
-  border-radius: 0.8rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-.detector-reaction {
   background-color: #ffffff;
   color: #242428;
   font-size: 0.9rem;
@@ -29,6 +19,6 @@
   display: block;
 }
 
-.detector-reaction:hover {
+:host:hover {
   box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.5);
 }

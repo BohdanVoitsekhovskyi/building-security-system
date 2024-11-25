@@ -14,7 +14,6 @@ import { Observable, Subscription } from 'rxjs';
   styleUrl: './logger.component.css',
 })
 export class LoggerComponent implements OnDestroy {
-  private facilityService = inject(FacilityService);
   private testerService = inject(TesterService);
   systemReactions: SystemReaction[] = [];
 
@@ -24,7 +23,6 @@ export class LoggerComponent implements OnDestroy {
     this.socket = this.testerService.onLog().subscribe({
       next: (data) => {
         this.systemReactions = [...this.systemReactions, ...data];
-        console.log(this.systemReactions);
       },
       error: (err) => {
         console.error(err);

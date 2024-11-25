@@ -1,7 +1,7 @@
 import { Detector } from "./detector.model";
 
 export type SystemReaction = {
-  detectors: Detector[]
+  detector: Detector
   systemAnswer: string;
   reactionTime: Date;
 };

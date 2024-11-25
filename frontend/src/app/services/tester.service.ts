@@ -1,10 +1,11 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { apiUrl, socketUrl } from '../environment';
 import { HttpClient } from '@angular/common/http';
 import { SystemReaction } from '../models/system-reaction.model';
 import { FacilityService } from './facility.service';
+import { Detector } from '../models/detector.model';
 
 @Injectable({
   providedIn: 'root',
@@ -61,7 +62,7 @@ export class TesterService {
 
   startSimulation() {
     this.emit('testing-system', {
-      contents: this.facilityId?.toString(),
+      contents: this.facilityId,
     });
   }
 }
