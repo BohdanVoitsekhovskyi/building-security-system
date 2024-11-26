@@ -9,6 +9,10 @@
   <div class="reaction-time">
     {{ item.detectorReactionTime | date : 'MMM dd HH:mm:ss' }}
   </div>
+  @if (isMarked(systemReaction)) {
+  <app-timer (timerComplete)="onDelete()" [duration]="0" />
+  }@else {
   <app-timer (timerComplete)="onDelete()" />
+  }
 </div>
 }

@@ -14,11 +14,20 @@ import { TimerComponent } from '../../../../shared/timer/timer.component';
 export class SystemReactionComponent {
   private testerService = inject(TesterService);
   @Input({ required: true }) systemReaction!: SystemReaction;
+  skipped = this.testerService.systemReactionSkipped();
 
   onDelete() {
     this.testerService.systemReactionSkipped.set([
       ...this.testerService.systemReactionSkipped(),
       this.systemReaction,
     ]);
+  }
+
+  isMarked(systemReaction: SystemReaction) {
+    return this.skipped.find(
+      (s) =>
+        s.detectorsReaction.at(0)?.detectorReactionTime ===
+        systemReaction.detectorsReaction.at(0)?.detectorReactionTime
+    );
   }
 }

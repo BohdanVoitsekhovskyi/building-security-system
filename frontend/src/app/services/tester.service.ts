@@ -34,7 +34,9 @@ export class TesterService implements OnDestroy {
         this.systemReactionSkipped.set([
           ...this.systemReactionSkipped().splice(
             this.systemReactionSkipped().findIndex(
-              (s) => JSON.stringify(s) === JSON.stringify(data),
+              (s) =>
+                s.detectorsReaction.at(0)?.detectorReactionTime ===
+                data.detectorsReaction.at(0)?.detectorReactionTime,
               1
             )
           ),

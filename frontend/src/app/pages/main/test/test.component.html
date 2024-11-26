@@ -1,5 +1,8 @@
 <app-navbar />
 <main>
+  @if (!floors()) {
+  <app-load-spinner-alt />
+  } @else {
   <ul class="floors">
     @for (floor of floors(); track $index) {
     <li
@@ -19,4 +22,5 @@
   <app-building-schema [floor]="item" [mode]="'view'" />
   } }
   <app-logger />
+  }
 </main>

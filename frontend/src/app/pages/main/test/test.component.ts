@@ -5,6 +5,7 @@ import { FacilityService } from '../../../services/facility.service';
 import { LoggerComponent } from '../../../utils/logger/logger.component';
 import { CommonModule } from '@angular/common';
 import { TesterService } from '../../../services/tester.service';
+import { LoadSpinnerAltComponent } from "../../../shared/load-spinner-alt/load-spinner-alt.component";
 
 @Component({
   selector: 'app-test',
@@ -14,7 +15,8 @@ import { TesterService } from '../../../services/tester.service';
     BuildingSchemaComponent,
     LoggerComponent,
     CommonModule,
-  ],
+    LoadSpinnerAltComponent
+],
   templateUrl: './test.component.html',
   styleUrl: './test.component.css',
 })
@@ -41,7 +43,7 @@ export class TestComponent {
   notPingFloors = computed(() =>
     this.floors()
       ?.filter((f) =>
-        f.detectors.some((d) =>
+        f.detectors.every((d) =>
           this.testerService
             .systemReactionSkipped()
             .map((sr) => sr.detectorsReaction.map((dr) => dr.detector.id))
