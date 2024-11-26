@@ -68,7 +68,7 @@ public class TestingThread implements Runnable {
                     client.sendEvent("floorsList", dto);
                     loggerService.log(systemReaction,facilityId);
 
-                    Thread.sleep(5000); // Adjust delay as needed
+                    Thread.sleep(1000); // Adjust delay as needed
                 }
 
                 pauseFlag.set(false);

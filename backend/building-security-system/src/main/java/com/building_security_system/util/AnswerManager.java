@@ -13,6 +13,6 @@ public class AnswerManager {
 
         String[] possibleAnswers = answer.getAnswers();
 
-        return possibleAnswers[Randomizer.getRandomNumber(possibleAnswers.length)];
+        return possibleAnswers[Randomizer.getRandomNumber(possibleAnswers.length-1)];
     }
 }
