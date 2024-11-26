@@ -10,5 +10,5 @@ import lombok.*;
 public class SocketCommandDto {
     long id;
     String command;
-    boolean isRandom;
+    String isRandom;
 }

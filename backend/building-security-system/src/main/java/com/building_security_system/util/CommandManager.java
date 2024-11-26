@@ -31,8 +31,10 @@ public class CommandManager {
                 commands.add(new DetectorsCommand(twoDetectorsList));
             }
         }
+        System.out.println(commands);
         if(isRandom)
             Collections.shuffle(commands);
+        System.out.println(commands);
     }
 
     /**

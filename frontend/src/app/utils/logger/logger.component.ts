@@ -27,6 +27,10 @@ export class LoggerComponent implements OnDestroy {
   subscription?: Subscription;
   isRandom: boolean = false;
 
+  ngOnInit() {
+    this.isRandom = this.testerService.isRandom;
+  }
+
   onStart() {
     this.testerService.startSimulation(this.isRandom);
   }

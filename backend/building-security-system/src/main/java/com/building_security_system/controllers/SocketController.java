@@ -24,6 +24,7 @@ public class SocketController {
     private FacilityService facilityService;
     private LoggerService loggerService;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ConcurrentHashMap<String, Thread> clientThreads = new ConcurrentHashMap<>();
 
     // Maps to track facility states
     private final ConcurrentHashMap<Long, AtomicBoolean> facilityStopFlags = new ConcurrentHashMap<>();
@@ -43,16 +44,19 @@ public class SocketController {
     public ConnectListener onUserConnectWithSocket = client ->
             log.info("Client connected: {}", client.getSessionId());
 
-    public DisconnectListener onUserDisconnectWithSocket = client ->
-            log.info("Client disconnected: {}", client.getSessionId());
+    public DisconnectListener onUserDisconnectWithSocket = client -> {
+        log.info("Client disconnected: {}", client.getSessionId());
+
+
+        Thread thread = clientThreads.remove(client.getSessionId().toString());
+        if (thread != null) {
+            log.info("Stopping thread for client: {}", client.getSessionId());
+            thread.interrupt();
+        }
+    };
+
 
     public DataListener<SocketCommandDto> onStopResume = (client, command, ackRequest) -> {
-//        String[] parts = command.getContents().split(":");
-//        if (parts.length != 2) {
-//            client.sendEvent("error", "Invalid command format. Expected format: STOP/RESUME:facilityId");
-//            return;
-//        }
-
         String action = command.getCommand().toUpperCase();
         long facilityId = command.getId();
 
@@ -71,12 +75,13 @@ public class SocketController {
         }
     };
 
-    public DataListener<SocketCommandDto> onSendMessage = (client, facilityId, ackRequest) -> {
-
-        long fId = facilityId.getId();
+    public DataListener<SocketCommandDto> onSendMessage = (client, socketCommandDto, ackRequest) -> {
+        System.out.println(socketCommandDto);
+        long fId = socketCommandDto.getId();
 
         AtomicBoolean stopFlag = facilityStopFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
         AtomicBoolean pauseFlag = facilityPauseFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
+
         stopFlag.set(false);
         pauseFlag.set(false);
 
@@ -91,9 +96,11 @@ public class SocketController {
                 .stopFlag(stopFlag)
                 .pauseFlag(pauseFlag)
                 .loggerService(loggerService)
-                .isRandom(facilityId.isRandom())
+                .isRandom(Boolean.parseBoolean(socketCommandDto.getIsRandom()))
                 .build());
 
+        clientThreads.put(client.getSessionId().toString(), thread);
         thread.start();
     };
+
 }

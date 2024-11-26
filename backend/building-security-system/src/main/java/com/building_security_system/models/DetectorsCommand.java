@@ -1,7 +1,10 @@
 package com.building_security_system.models;
 
+import lombok.ToString;
+
 import java.util.List;
 
+@ToString
 public class DetectorsCommand {
     private final List<Detector> detectors;
     public DetectorsCommand(List<Detector> detectors) {
@@ -18,4 +21,6 @@ public class DetectorsCommand {
 
         return reaction;
     }
+
+
 }

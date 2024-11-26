@@ -56,6 +56,9 @@ public class TestingThread implements Runnable {
             try {
                 while (!stopFlag.get()) {
                     if (pauseFlag.get()) {
+                        if (Thread.currentThread().isInterrupted()) {
+                            break;
+                        }
                         Thread.sleep(500); // Wait briefly while paused
                         continue;
                     }

@@ -22,6 +22,7 @@ export class TesterService implements OnDestroy {
   systemReactionSkipped = signal<SystemReaction[]>([]);
   subscription!: Subscription;
   testStatus: 'stopped' | 'running' | 'not-initiated' = 'not-initiated';
+  isRandom: boolean = false;
 
   constructor() {
     this.socket = io(this.socketUrl, { transports: ['websocket'] });
@@ -30,6 +31,14 @@ export class TesterService implements OnDestroy {
       next: (data) => {
         console.log(data);
         this.systemReaction.set([...this.systemReaction(), data]);
+        this.systemReactionSkipped.set([
+          ...this.systemReactionSkipped().splice(
+            this.systemReactionSkipped().findIndex(
+              (s) => JSON.stringify(s) === JSON.stringify(data),
+              1
+            )
+          ),
+        ]);
       },
       error: (err) => {
         console.error(err);
@@ -79,24 +88,25 @@ export class TesterService implements OnDestroy {
       this.emit('stop-resume-testing', {
         id: this.facilityId(),
         command: 'STOP',
-        isRandom: false,
+        isRandom: 'false',
       });
       this.testStatus = 'stopped';
     }
   }
 
   startSimulation(isRandom: boolean) {
+    this.isRandom = isRandom;
     if (this.testStatus === 'not-initiated') {
       this.emit('testing-system', {
         id: this.facilityId(),
         command: 'START',
-        isRandom: isRandom,
+        isRandom: isRandom + '',
       });
     } else if (this.testStatus === 'stopped') {
       this.emit('stop-resume-testing', {
         id: this.facilityId(),
         command: 'RESUME',
-        isRandom: isRandom,
+        isRandom: isRandom + '',
       });
     } else {
       return;
