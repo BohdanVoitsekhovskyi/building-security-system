@@ -38,6 +38,7 @@ public class TestingThread implements Runnable {
     @Override
     public void run() {
         loggerService.eraseLogs(facilityId);
+        System.out.println("Log erased" + facilityId);
         System.out.println("Requested floors list of facility with id: " + facilityId);
         Facility facility = facilityService.getFacilityById(facilityId);
 
@@ -70,7 +71,8 @@ public class TestingThread implements Runnable {
                     client.sendEvent("floorsList", dto);
                     loggerService.log(systemReaction,facilityId);
 
-                    Thread.sleep(1000); // Adjust delay as needed
+                    int seconds = Randomizer.getRandomNumber(3,7) * 1000;
+                    Thread.sleep(seconds);
                 }
 
                 pauseFlag.set(false);

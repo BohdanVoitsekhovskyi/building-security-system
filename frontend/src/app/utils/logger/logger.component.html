@@ -8,4 +8,8 @@
 <div class="button-control">
   <button class="custom-button run" (click)="onStart()">Run</button>
   <button class="custom-button stop" (click)="onStop()">Stop</button>
+  <div class="checkbox-wrap">
+    <input type="checkbox" class="random-check" id="random" [(ngModel)]="isRandom" />
+    <label for="random">Random mode</label>
+  </div>
 </div>

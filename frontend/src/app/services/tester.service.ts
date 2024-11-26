@@ -8,9 +8,9 @@ import { FacilityService } from './facility.service';
 import { FacilityLog } from '../models/facility-log.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class TesterService {
+export class TesterService implements OnDestroy {
   private socket: Socket;
   private socketUrl = socketUrl;
   private apiUrl = apiUrl;
@@ -64,7 +64,10 @@ export class TesterService {
   }
 
   exportLog() {
-    return this.httpClient.get(`${this.apiUrl}/test/reactions/as-file/${this.facilityId()}`,{ responseType: 'blob' });  
+    return this.httpClient.get(
+      `${this.apiUrl}/test/reactions/as-file/${this.facilityId()}`,
+      { responseType: 'blob' }
+    );
   }
 
   private onLog(): Observable<SystemReaction> {
@@ -74,24 +77,34 @@ export class TesterService {
   stopSimulation() {
     if (this.testStatus === 'running') {
       this.emit('stop-resume-testing', {
-        contents: `STOP:${this.facilityId()}`,
+        id: this.facilityId(),
+        command: 'STOP',
+        isRandom: false,
       });
       this.testStatus = 'stopped';
     }
   }
 
-  startSimulation() {
+  startSimulation(isRandom: boolean) {
     if (this.testStatus === 'not-initiated') {
       this.emit('testing-system', {
-        contents: this.facilityId(),
+        id: this.facilityId(),
+        command: 'START',
+        isRandom: isRandom,
       });
     } else if (this.testStatus === 'stopped') {
       this.emit('stop-resume-testing', {
-        contents: `RESUME:${this.facilityId()}`,
+        id: this.facilityId(),
+        command: 'RESUME',
+        isRandom: isRandom,
       });
     } else {
       return;
     }
     this.testStatus = 'running';
+  }
+
+  ngOnDestroy() {
+    this.stopSimulation();
   }
 }

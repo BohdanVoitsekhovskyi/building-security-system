@@ -82,3 +82,14 @@
   color: #2864f6;
   border: 1px solid #2864f6;
 }
+
+app-system-reaction {
+  z-index: 50;
+}
+
+.checkbox-wrap {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
