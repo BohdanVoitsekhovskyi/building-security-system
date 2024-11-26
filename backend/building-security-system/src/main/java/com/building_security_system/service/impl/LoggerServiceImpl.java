@@ -48,6 +48,7 @@ public class LoggerServiceImpl implements LoggerService {
 
         for(SystemReaction sr:facilityLogger.getLogMessages()){
             stringBuilder.append(sr);
+            stringBuilder.append("\n");
         }
 
         return stringBuilder.toString().getBytes(StandardCharsets.UTF_8);
