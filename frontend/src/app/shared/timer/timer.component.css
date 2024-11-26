@@ -1,0 +1,26 @@
+.timer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-timer {
+  width: 2.2rem; /* Adjust size */
+  height: 2.2rem;
+  transform: rotate(-90deg); /* Start from the top */
+}
+
+.background-circle {
+  fill: none;
+  stroke: #e6e6e6; /* Light gray background */
+  stroke-width: 2;
+}
+
+.progress-circle {
+  fill: none;
+  stroke: #3498db; /* Progress color */
+  stroke-width: 2;
+  stroke-dasharray: 100, 100; /* Total circumference */
+  stroke-dashoffset: 100; /* Initially hidden */
+}
+

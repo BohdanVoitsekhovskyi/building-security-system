@@ -19,6 +19,7 @@ export class TesterService implements OnDestroy {
 
   facilityId = this.facilityService.facilityId();
   systemReaction = signal<SystemReaction[]>([]);
+  systemReactionSkipped = signal<SystemReaction[]>([]);
   subscription!: Subscription;
   testStatus: 'stopped' | 'running' | 'not-initiated' = 'not-initiated';
 

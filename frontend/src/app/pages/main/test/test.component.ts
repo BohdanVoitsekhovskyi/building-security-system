@@ -38,6 +38,20 @@ export class TestComponent {
       .map((f) => f.floorNumber)
   );
 
+  notPingFloors = computed(() =>
+    this.floors()
+      ?.filter((f) =>
+        f.detectors.some((d) =>
+          this.testerService
+            .systemReactionSkipped()
+            .map((sr) => sr.detectorsReaction.map((dr) => dr.detector.id))
+            .reduce((arr, curr) => [...arr, ...curr], [])
+            .some((p) => p === d.id)
+        )
+      )
+      .map((f) => f.floorNumber)
+  );
+
   changeFloor(event: Event) {
     const element = event.target as HTMLDivElement;
     if (this.activeFloor === +element.id) return;
@@ -46,6 +60,6 @@ export class TestComponent {
   }
 
   floorPinged(floorNumber: number) {
-    return !!this.pingFloors()?.find((f) => f === floorNumber);
+    return !!this.pingFloors()?.find((f) => f === floorNumber && !this.notPingFloors()?.some(n => floorNumber === n));
   }
 }

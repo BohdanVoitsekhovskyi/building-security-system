@@ -1,5 +1,6 @@
 <div class="logs">
   <div class="title">Recent logs</div>
+  <button class="custom-button mark-all" (click)="markAll()">Mark All</button>
   @for (item of systemReactions(); track $index) {
   <app-system-reaction [systemReaction]="item" />
   }

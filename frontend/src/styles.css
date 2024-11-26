@@ -38,3 +38,9 @@ button, input, textarea {
   padding: 0;
   font-family: "Open Sans";
 }
+
+@keyframes progressAnimation {
+  to {
+    stroke-dashoffset: 0; /* Full progress */
+  }
+}
