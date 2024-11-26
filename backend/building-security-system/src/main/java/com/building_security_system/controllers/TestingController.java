@@ -1,7 +1,6 @@
 package com.building_security_system.controllers;
 
 import com.building_security_system.service.LoggerService;
-import com.building_security_system.service.impl.LoggerServiceImpl;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

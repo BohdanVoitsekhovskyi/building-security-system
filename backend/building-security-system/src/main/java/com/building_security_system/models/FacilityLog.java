@@ -1,6 +1,5 @@
 package com.building_security_system.models;
 
-
 import com.building_security_system.db_access.entities.FacilityLogEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

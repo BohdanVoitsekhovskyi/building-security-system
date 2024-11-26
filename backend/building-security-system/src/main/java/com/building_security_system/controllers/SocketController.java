@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SocketController {
     private FacilityService facilityService;
     private LoggerService loggerService;
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final ConcurrentHashMap<String, Thread> clientThreads = new ConcurrentHashMap<>();
 
     // Maps to track facility states
@@ -86,9 +85,7 @@ public class SocketController {
         pauseFlag.set(false);
 
         Thread thread = new Thread(TestingThread.builder()
-                .counter(0)
                 .ackRequest(ackRequest)
-                .executorService(executorService)
                 .commandManager(new CommandManager())
                 .client(client)
                 .facilityService(facilityService)

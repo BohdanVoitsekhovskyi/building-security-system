@@ -11,7 +11,6 @@ import java.util.List;
 public class CommandManager {
     private List<DetectorsCommand> commands;
     private int currentCommandIndex;
-    //private Logger logger; Need to be implemented
 
     //Формування списку на основі детекторів що є,потім на основі перестановок
     public void createCommands(List<Detector> detectors,boolean isRandom) {

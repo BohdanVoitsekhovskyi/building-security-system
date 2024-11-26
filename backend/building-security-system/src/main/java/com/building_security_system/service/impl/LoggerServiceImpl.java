@@ -8,21 +8,19 @@ import com.building_security_system.service.LoggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class LoggerServiceImpl implements LoggerService {
-
     private final LoggerRepository loggerRepository;
 
     @Autowired
     public LoggerServiceImpl(LoggerRepository loggerRepository) {
         this.loggerRepository = loggerRepository;
     }
+
     @Override
     public void log(SystemReaction message,long logId) {
         FacilityLog facilityLogger = FacilityLog.toModel(loggerRepository.findOneById(logId));
@@ -30,6 +28,7 @@ public class LoggerServiceImpl implements LoggerService {
 
         loggerRepository.save(FacilityLog.toEntity(facilityLogger));
     }
+
     @Override
     public FacilityLog getLog(long logId) {
         return FacilityLog.toModel(loggerRepository.findOneById(logId));
@@ -53,9 +52,6 @@ public class LoggerServiceImpl implements LoggerService {
 
         return stringBuilder.toString().getBytes(StandardCharsets.UTF_8);
     }
-
-
-
 
     @Override
     public void eraseLogs(long facilityId) {

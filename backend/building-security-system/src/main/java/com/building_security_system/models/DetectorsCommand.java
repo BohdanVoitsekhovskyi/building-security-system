@@ -21,6 +21,4 @@ public class DetectorsCommand {
 
         return reaction;
     }
-
-
 }

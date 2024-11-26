@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -22,13 +21,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 public class TestingThread implements Runnable {
-    private int counter;
     private long facilityId;
     private SocketIOClient client;
     private AckRequest ackRequest;
     private CommandManager commandManager;
     private FacilityService facilityService;
-    private ExecutorService executorService;
     private AtomicBoolean stopFlag;
     private AtomicBoolean pauseFlag;
     private LoggerService loggerService;

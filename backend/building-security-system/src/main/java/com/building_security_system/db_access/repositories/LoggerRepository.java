@@ -1,6 +1,5 @@
 package com.building_security_system.db_access.repositories;
 
-
 import com.building_security_system.db_access.entities.FacilityLogEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

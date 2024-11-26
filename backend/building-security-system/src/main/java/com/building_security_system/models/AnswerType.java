@@ -18,10 +18,8 @@ public enum AnswerType {
             " надіслано сигнал тривоги."
             );
 
-
     private final String[] answers;
     AnswerType(String... answers) {
         this.answers = answers;
     }
-
 }
