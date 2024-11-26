@@ -11,7 +11,9 @@
       (click)="changeFloor($event)"
     >
       {{ floor.floorNumber }}
+      @if (floor.floorNumber === floors()!.at(-1)?.floorNumber){
       <button class="remove-floor" (click)="removeFloor(floor)">-</button>
+      }
     </li>
     } @if (newFloor) {
     <li
@@ -45,8 +47,8 @@
       </svg>
     </li>
   </ul>
-  @if (state === 'saved' || state === 'modifying') { @for (item of floors(); track
-  $index) { @if (activeFloor === item.floorNumber) {
+  @if (state === 'saved' || state === 'modifying') { @for (item of floors();
+  track $index) { @if (activeFloor === item.floorNumber) {
   <app-building-schema
     [floor]="item"
     [mode]="'edit'"

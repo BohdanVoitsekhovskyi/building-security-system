@@ -1,12 +1,17 @@
 <app-navbar />
 <main>
+  @if (!systemReactions || !systemReactions()) {
+  <app-load-spinner-alt />
+  } @else {
   <div class="logs">
     <div class="title">Recent logs</div>
-    @if (systemReactions) { @for (item of systemReactions(); track $index) {
+    @for (item of systemReactions(); track $index) {
     <app-detailed-system-reaction [systemReaction]="item" />
-    } }
+    }
   </div>
+
   <div class="button-control">
     <button class="custom-button run" (click)="onExport()">Export</button>
   </div>
+  }
 </main>

@@ -4,11 +4,12 @@ import { TesterService } from '../../../services/tester.service';
 import { SystemReaction } from '../../../models/system-reaction.model';
 import { Subscription } from 'rxjs';
 import { DetailedSystemReactionComponent } from './detailed-system-reaction/detailed-system-reaction.component';
+import { LoadSpinnerAltComponent } from "../../../shared/load-spinner-alt/load-spinner-alt.component";
 
 @Component({
   selector: 'app-log',
   standalone: true,
-  imports: [NavbarComponent, DetailedSystemReactionComponent],
+  imports: [NavbarComponent, DetailedSystemReactionComponent, LoadSpinnerAltComponent],
   templateUrl: './log.component.html',
   styleUrl: './log.component.css',
 })
