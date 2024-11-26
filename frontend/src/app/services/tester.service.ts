@@ -63,6 +63,10 @@ export class TesterService implements OnDestroy {
     //TODO
   }
 
+  exportLog() {
+    return this.httpClient.get(`${this.apiUrl}/logFile`,{ responseType: 'blob' });  
+  }
+
   private onLog(): Observable<SystemReaction> {
     return this.on('floorsList');
   }
