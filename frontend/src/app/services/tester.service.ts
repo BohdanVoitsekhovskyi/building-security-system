@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { SystemReaction } from '../models/system-reaction.model';
 import { FacilityService } from './facility.service';
 import { Detector } from '../models/detector.model';
+import { FacilityLog } from '../models/facility-log.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,7 @@ export class TesterService implements OnDestroy {
 
     this.subscription = this.onLog().subscribe({
       next: (data) => {
+        console.log(data);
         this.systemReaction.set([...this.systemReaction(), data]);
       },
       error: (err) => {
@@ -57,14 +59,15 @@ export class TesterService implements OnDestroy {
   }
 
   getLogs() {
-    return this.httpClient.get<SystemReaction[]>(
-      `${this.apiUrl}/logs/${this.facilityId}`
+    return this.httpClient.get<FacilityLog>(
+      `${this.apiUrl}/test/reactions/${this.facilityId}`
     );
-    //TODO
   }
 
   exportLog() {
-    return this.httpClient.get(`${this.apiUrl}/logFile`,{ responseType: 'blob' });  
+    return this.httpClient.get(`${this.apiUrl}/logFile`, {
+      responseType: 'blob',
+    });
   }
 
   private onLog(): Observable<SystemReaction> {
