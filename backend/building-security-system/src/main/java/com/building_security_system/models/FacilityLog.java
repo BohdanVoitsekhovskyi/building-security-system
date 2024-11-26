@@ -16,6 +16,7 @@ import java.util.List;
 public class FacilityLog {
     long id;
     List<SystemReaction> logMessages;
+    boolean isFinished;
 
 
     public void log(SystemReaction message) {

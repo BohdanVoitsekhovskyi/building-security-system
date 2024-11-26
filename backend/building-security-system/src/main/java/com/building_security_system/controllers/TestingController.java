@@ -1,11 +1,41 @@
 package com.building_security_system.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.building_security_system.service.LoggerService;
+import com.building_security_system.service.impl.LoggerServiceImpl;
+import lombok.extern.apachecommons.CommonsLog;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+@CommonsLog
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
 public class TestingController {
+    private final LoggerServiceImpl loggerServiceImpl;
+    LoggerService loggerService;
+
+    @Autowired
+    public TestingController(LoggerService loggerService, LoggerServiceImpl loggerServiceImpl) {
+        this.loggerService = loggerService;
+        this.loggerServiceImpl = loggerServiceImpl;
+    }
+
+    @GetMapping("/test/reactions/{id}")
+    public ResponseEntity<?> getAllReactions(@PathVariable long id) {
+        return ResponseEntity.ok(loggerService.getLog(id));
+
+    }
+    @GetMapping("/test/reactions/as-file/{id}")
+    public ResponseEntity<?> getAllReactionsAsFile(@PathVariable long id) {
+
+       byte[] fileContent = loggerService.getLogAsByteArray(id);
+       HttpHeaders headers = new HttpHeaders();
+       headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=log.tx");
+       headers.add(HttpHeaders.CONTENT_TYPE, "text/plain;charset=UTF-8");
+
+       return new ResponseEntity<>(fileContent,headers, HttpStatus.OK);
+    }
 }

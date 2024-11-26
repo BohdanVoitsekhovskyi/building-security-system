@@ -2,6 +2,7 @@ package com.building_security_system.models;
 
 import com.building_security_system.db_access.entities.DetectorEntity;
 import com.building_security_system.dto.DetectorDto;
+import com.building_security_system.util.AnswerManager;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -57,7 +58,7 @@ public class Detector {
         return DetectorReaction
                 .builder()
                 .detector(this)
-                .detectorAnswer("")
+                .detectorAnswer(AnswerManager.getAnswer(this))
                 .detectorReactionTime(LocalDateTime.now())
                 .build();
     }

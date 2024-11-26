@@ -16,6 +16,7 @@ public class DetectorReaction {
 
     @Override
     public String toString() {
+
         return String.format("[ %s ] - Спрацював %s датчик( id = %d), %s",
                 detectorReactionTime.toString(), detector.getType().name(), detector.getId(), detectorAnswer);
     }

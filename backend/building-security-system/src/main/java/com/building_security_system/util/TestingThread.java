@@ -67,6 +67,7 @@ public class TestingThread implements Runnable {
 
                 pauseFlag.set(false);
                 stopFlag.set(false);
+
                 System.out.println("Processing terminated for facility: " + facilityId);
             } catch (InterruptedException e) {
                 System.out.println("Processing interrupted for facility: " + facilityId);
