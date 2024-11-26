@@ -15,14 +15,13 @@ import { DetailedSystemReactionComponent } from './detailed-system-reaction/deta
 export class LogComponent {
   private testerService = inject(TesterService);
   systemReactions?: Signal<SystemReaction[]>;
+  private subscription!: Subscription;
 
   ngOnInit() {
-    this.testerService.getLogs().subscribe({
+    this.subscription = this.testerService.getLogs().subscribe({
       next: (data) => {
         console.log(data);
-        this.systemReactions = computed(() => [
-          ...data.logMessages,
-        ]);
+        this.systemReactions = computed(() => [...data.logMessages]);
       },
     });
   }
@@ -36,5 +35,9 @@ export class LogComponent {
       a.click();
       window.URL.revokeObjectURL(url);
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
