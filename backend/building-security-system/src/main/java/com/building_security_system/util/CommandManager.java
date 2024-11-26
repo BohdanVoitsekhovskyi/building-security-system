@@ -5,6 +5,7 @@ import com.building_security_system.models.DetectorsCommand;
 import com.building_security_system.models.SystemReaction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandManager {
@@ -13,7 +14,7 @@ public class CommandManager {
     //private Logger logger; Need to be implemented
 
     //Формування списку на основі детекторів що є,потім на основі перестановок
-    public void createCommands(List<Detector> detectors) {
+    public void createCommands(List<Detector> detectors,boolean isRandom) {
         commands = new ArrayList<>();
 
         for (Detector detector : detectors) {
@@ -30,6 +31,8 @@ public class CommandManager {
                 commands.add(new DetectorsCommand(twoDetectorsList));
             }
         }
+        if(isRandom)
+            Collections.shuffle(commands);
     }
 
     /**

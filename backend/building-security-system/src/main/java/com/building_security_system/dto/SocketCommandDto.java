@@ -8,5 +8,7 @@ import lombok.*;
 @Builder
 @ToString
 public class SocketCommandDto {
-    String contents;
+    long id;
+    String command;
+    boolean isRandom;
 }

@@ -47,14 +47,14 @@ public class SocketController {
             log.info("Client disconnected: {}", client.getSessionId());
 
     public DataListener<SocketCommandDto> onStopResume = (client, command, ackRequest) -> {
-        String[] parts = command.getContents().split(":");
-        if (parts.length != 2) {
-            client.sendEvent("error", "Invalid command format. Expected format: STOP/RESUME:facilityId");
-            return;
-        }
+//        String[] parts = command.getContents().split(":");
+//        if (parts.length != 2) {
+//            client.sendEvent("error", "Invalid command format. Expected format: STOP/RESUME:facilityId");
+//            return;
+//        }
 
-        String action = parts[0];
-        long facilityId = Long.parseLong(parts[1]);
+        String action = command.getCommand().toUpperCase();
+        long facilityId = command.getId();
 
         switch (action.toUpperCase()) {
             case "STOP":
@@ -72,7 +72,9 @@ public class SocketController {
     };
 
     public DataListener<SocketCommandDto> onSendMessage = (client, facilityId, ackRequest) -> {
-        long fId = Long.parseLong(facilityId.getContents());
+
+        long fId = facilityId.getId();
+
         AtomicBoolean stopFlag = facilityStopFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
         AtomicBoolean pauseFlag = facilityPauseFlags.computeIfAbsent(fId, id -> new AtomicBoolean(false));
 
@@ -87,6 +89,7 @@ public class SocketController {
                 .stopFlag(stopFlag)
                 .pauseFlag(pauseFlag)
                 .loggerService(loggerService)
+                .isRandom(facilityId.isRandom())
                 .build());
 
         thread.start();
