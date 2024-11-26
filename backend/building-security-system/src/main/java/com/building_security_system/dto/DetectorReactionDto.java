@@ -20,7 +20,6 @@ public class DetectorReactionDto {
 
     public static DetectorReactionDto toDto(DetectorReaction detectorReaction) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(detectorReaction.getDetectorReactionTime().atZone(ZoneId.systemDefault()).toEpochSecond()));
         return new DetectorReactionDto(detectorReaction.getDetector(), detectorReaction.getDetectorAnswer(), calendar);
     }
 }
