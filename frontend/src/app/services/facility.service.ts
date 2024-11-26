@@ -26,7 +26,7 @@ export class FacilityService {
 
   constructor() {
     effect(() => {
-      this.getFacility();
+      if (this.facilityId()) this.getFacility();
     });
   }
 

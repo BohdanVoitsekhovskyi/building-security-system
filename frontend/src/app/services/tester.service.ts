@@ -5,19 +5,19 @@ import { apiUrl, socketUrl } from '../environment';
 import { HttpClient } from '@angular/common/http';
 import { SystemReaction } from '../models/system-reaction.model';
 import { FacilityService } from './facility.service';
-import { Detector } from '../models/detector.model';
+import { FacilityLog } from '../models/facility-log.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class TesterService implements OnDestroy {
+export class TesterService {
   private socket: Socket;
   private socketUrl = socketUrl;
   private apiUrl = apiUrl;
   private httpClient = inject(HttpClient);
   private facilityService = inject(FacilityService);
 
-  facilityId = this.facilityService.facilityId();
+  facilityId = this.facilityService.facilityId;
   systemReaction = signal<SystemReaction[]>([]);
   systemReactionSkipped = signal<SystemReaction[]>([]);
   subscription!: Subscription;
@@ -28,6 +28,7 @@ export class TesterService implements OnDestroy {
 
     this.subscription = this.onLog().subscribe({
       next: (data) => {
+        console.log(data);
         this.systemReaction.set([...this.systemReaction(), data]);
       },
       error: (err) => {
@@ -57,14 +58,13 @@ export class TesterService implements OnDestroy {
   }
 
   getLogs() {
-    return this.httpClient.get<SystemReaction[]>(
-      `${this.apiUrl}/logs/${this.facilityId}`
+    return this.httpClient.get<FacilityLog>(
+      `${this.apiUrl}/test/reactions/${this.facilityId()}`
     );
-    //TODO
   }
 
   exportLog() {
-    return this.httpClient.get(`${this.apiUrl}/logFile`,{ responseType: 'blob' });  
+    return this.httpClient.get(`${this.apiUrl}/test/reactions/as-file/${this.facilityId()}`,{ responseType: 'blob' });  
   }
 
   private onLog(): Observable<SystemReaction> {
@@ -74,7 +74,7 @@ export class TesterService implements OnDestroy {
   stopSimulation() {
     if (this.testStatus === 'running') {
       this.emit('stop-resume-testing', {
-        contents: `STOP:${this.facilityId}`,
+        contents: `STOP:${this.facilityId()}`,
       });
       this.testStatus = 'stopped';
     }
@@ -83,19 +83,15 @@ export class TesterService implements OnDestroy {
   startSimulation() {
     if (this.testStatus === 'not-initiated') {
       this.emit('testing-system', {
-        contents: this.facilityId,
+        contents: this.facilityId(),
       });
     } else if (this.testStatus === 'stopped') {
       this.emit('stop-resume-testing', {
-        contents: `RESUME:${this.facilityId}`,
+        contents: `RESUME:${this.facilityId()}`,
       });
     } else {
       return;
     }
     this.testStatus = 'running';
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }

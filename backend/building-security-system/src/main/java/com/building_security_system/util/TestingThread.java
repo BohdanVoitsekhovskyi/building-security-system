@@ -1,5 +1,7 @@
 package com.building_security_system.util;
 
+import com.building_security_system.dto.DetectorReactionDto;
+import com.building_security_system.dto.SystemReactionDto;
 import com.building_security_system.models.Facility;
 import com.building_security_system.models.SystemReaction;
 import com.building_security_system.service.FacilityService;
@@ -62,10 +64,13 @@ public class TestingThread implements Runnable {
                     if (systemReaction == null) {
                         break;
                     }
-                    Thread.sleep(5000); // Adjust delay as needed
-                    client.sendEvent("floorsList", systemReaction);
+
+                    SystemReactionDto dto = new SystemReactionDto(systemReaction.getDetectorsReaction().stream().map(DetectorReactionDto::toDto).toList());
+
+                    client.sendEvent("floorsList", dto);
                     loggerService.log(systemReaction,facilityId);
 
+                    Thread.sleep(1000); // Adjust delay as needed
                 }
 
                 pauseFlag.set(false);
