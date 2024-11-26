@@ -47,46 +47,49 @@ public class TestingThread implements Runnable {
             return;
         }
 
-        executorService.submit(() -> {
-            commandManager.createCommands(facility.getFloors()
-                    .stream()
-                    .flatMap(floor -> floor.getDetectors().stream())
-                    .collect(Collectors.toList()),isRandom);
+        commandManager.createCommands(facility.getFloors()
+                .stream()
+                .flatMap(floor -> floor.getDetectors().stream())
+                .collect(Collectors.toList()),isRandom);
 
-            try {
-                while (!stopFlag.get()) {
-                    if (pauseFlag.get()) {
-                        if (Thread.currentThread().isInterrupted()) {
-                            break;
-                        }
-                        Thread.sleep(500); // Wait briefly while paused
-                        continue;
-                    }
-
-                    SystemReaction systemReaction = commandManager.invokeCommands();
-
-                    if (systemReaction == null) {
+        try {
+            while (!stopFlag.get()) {
+                if (pauseFlag.get()) {
+                    if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
-
-                    SystemReactionDto dto = new SystemReactionDto(systemReaction.getDetectorsReaction().stream().map(DetectorReactionDto::toDto).toList());
-
-                    client.sendEvent("floorsList", dto);
-                    loggerService.log(systemReaction,facilityId);
-
-                    int seconds = Randomizer.getRandomNumber(3,7) * 1000;
-                    Thread.sleep(seconds);
+                    Thread.sleep(500); // Wait briefly while paused
+                    continue;
                 }
 
-                pauseFlag.set(false);
-                stopFlag.set(false);
+                SystemReaction systemReaction = commandManager.invokeCommands();
 
-                System.out.println("Processing terminated for facility: " + facilityId);
-            } catch (InterruptedException e) {
-                System.out.println("Processing interrupted for facility: " + facilityId);
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
+                if (systemReaction == null) {
+                    break;
+                }
+
+                SystemReactionDto dto = new SystemReactionDto(systemReaction.getDetectorsReaction().stream().map(DetectorReactionDto::toDto).toList());
+
+                client.sendEvent("floorsList", dto);
+                loggerService.log(systemReaction,facilityId);
+
+                int seconds = Randomizer.getRandomNumber(3,7) * 1000;
+
+                try {
+                    Thread.sleep(seconds);
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
-        });
+
+            pauseFlag.set(false);
+            stopFlag.set(false);
+
+            System.out.println("Processing terminated for facility: " + facilityId);
+        } catch (InterruptedException e) {
+            System.out.println("Processing interrupted for facility: " + facilityId);
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
     }
 }
