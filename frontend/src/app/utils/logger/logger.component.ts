@@ -1,4 +1,11 @@
-import { Component, computed, effect, inject, OnDestroy, Signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnDestroy,
+  Signal,
+} from '@angular/core';
 import { SystemReactionComponent } from '../../pages/main/test/system-reaction/system-reaction.component';
 import { SystemReaction } from '../../models/system-reaction.model';
 import { FacilityService } from '../../services/facility.service';
@@ -24,6 +31,10 @@ export class LoggerComponent implements OnDestroy {
 
   onStop() {
     this.testerService.stopSimulation();
+  }
+
+  markAll() {
+    this.testerService.systemReactionSkipped.set(this.systemReactions());
   }
 
   ngOnDestroy(): void {

@@ -5,6 +5,7 @@
   height: 100%;
   background-color: #2864f6;
   width: 20rem;
+  min-width: 20rem;
   z-index: 900;
   transition: 0.8s;
   padding: 1.4rem;

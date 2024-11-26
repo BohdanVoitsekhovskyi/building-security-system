@@ -52,25 +52,36 @@ export class BuildingSchemaComponent {
 
   constructor() {
     this.subscription = effect(() => {
-      this.systemReactions()
-        .at(-1)
-        ?.detectorsReaction.forEach((dr) => {
+      this.systemReactions().forEach((dr) => {
+        dr.detectorsReaction.forEach((dr) => {
           d3.select(`image[id="${dr.detector.id}"]`).attr('class', 'alert');
         });
+      });
+      this.testerService.systemReactionSkipped().forEach((dr) => {
+        dr.detectorsReaction.forEach((dr) => {
+          d3.select(`image[id="${dr.detector.id}"]`).attr('class', '');
+        });
+      });
     });
   }
 
   ngOnInit(): void {
     this.renderMap(this.floor().placement);
-    if(this.mode !== 'view') {
+    if (this.mode !== 'view') {
       this.subscription.destroy();
-      return
+      return;
     }
 
     if (this.mode === 'view') {
       this.systemReactions().forEach((dr) => {
         dr.detectorsReaction.forEach((dr) => {
           d3.select(`image[id="${dr.detector.id}"]`).attr('class', 'alert');
+        });
+      });
+
+      this.testerService.systemReactionSkipped().forEach((dr) => {
+        dr.detectorsReaction.forEach((dr) => {
+          d3.select(`image[id="${dr.detector.id}"]`).attr('class', '');
         });
       });
     }

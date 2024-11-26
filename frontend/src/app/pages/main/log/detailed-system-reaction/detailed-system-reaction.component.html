@@ -2,8 +2,8 @@
     <div class="detector-reaction">
       <div class="flex-box">
         <div>
-          <div>
-            {{ getFloorNumber(item) }}
+          <div class="floor-number">
+            Floor №: {{ getFloorNumber(item) }}
           </div>
           <img
             src="icons/{{ item.detector.type.toLowerCase() }}.svg"
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="reaction-text">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo, repellendus est! Quasi eos repellat, libero cumque dolor quisquam iure nemo atque magni numquam aut a voluptate sed. A, dolor placeat?
+        {{ item.detectorAnswer }}
       </div>
     </div>
     }

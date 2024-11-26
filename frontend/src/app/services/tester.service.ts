@@ -19,6 +19,7 @@ export class TesterService implements OnDestroy {
 
   facilityId = this.facilityService.facilityId();
   systemReaction = signal<SystemReaction[]>([]);
+  systemReactionSkipped = signal<SystemReaction[]>([]);
   subscription!: Subscription;
   testStatus: 'stopped' | 'running' | 'not-initiated' = 'not-initiated';
 
@@ -60,6 +61,10 @@ export class TesterService implements OnDestroy {
       `${this.apiUrl}/logs/${this.facilityId}`
     );
     //TODO
+  }
+
+  exportLog() {
+    return this.httpClient.get(`${this.apiUrl}/logFile`,{ responseType: 'blob' });  
   }
 
   private onLog(): Observable<SystemReaction> {

@@ -6,6 +6,7 @@
     border-radius: 0.8rem;
     font-size: 1.1rem;
     font-weight: 500;
+    width: 100%;
   }
   
   .detector-reaction {
@@ -21,6 +22,7 @@
     justify-content: space-between;
     transition: 0.3s;
     cursor: pointer;
+    position:relative;
   }
   
   .detector-icon {
@@ -30,7 +32,7 @@
   }
 
   .reaction-time{
-    margin: 0.8rem;
+    margin: 0.4rem 0.8rem;
     width: max-content;
   }
   
@@ -44,5 +46,12 @@
   }
   .detector-type{
     align-items: center;
-    margin: 0.8rem;
+    margin: 0.4rem 0.8rem;
+  }
+
+  .floor-number{
+    font-size: 0.7rem;
+    position:absolute;
+    top: 0.2rem;
+    left:0.5rem;
   }
