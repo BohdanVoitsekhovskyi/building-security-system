@@ -12,4 +12,5 @@ public interface LoggerService {
     void saveLog(FacilityLog log);
     byte[] getLogAsByteArray( long logId);
 
+    void eraseLogs(long facilityId);
 }

@@ -1,5 +1,6 @@
 package com.building_security_system.service.impl;
 
+import com.building_security_system.db_access.entities.FacilityLogEntity;
 import com.building_security_system.db_access.repositories.LoggerRepository;
 import com.building_security_system.models.FacilityLog;
 import com.building_security_system.models.SystemReaction;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LoggerServiceImpl implements LoggerService {
@@ -52,4 +56,10 @@ public class LoggerServiceImpl implements LoggerService {
 
 
 
+    @Override
+    public void eraseLogs(long facilityId) {
+        FacilityLogEntity logEntity = loggerRepository.findOneById(facilityId);
+        logEntity.setLogMessages(new ArrayList<>());
+        loggerRepository.save(logEntity);
+    }
 }

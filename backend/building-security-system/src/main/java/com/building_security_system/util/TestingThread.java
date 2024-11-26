@@ -33,6 +33,7 @@ public class TestingThread implements Runnable {
 
     @Override
     public void run() {
+        loggerService.eraseLogs(facilityId);
         System.out.println("Requested floors list of facility with id: " + facilityId);
         Facility facility = facilityService.getFacilityById(facilityId);
 
@@ -59,10 +60,10 @@ public class TestingThread implements Runnable {
                     if (systemReaction == null) {
                         break;
                     }
-                    loggerService.log(systemReaction,facilityId);
-                    client.sendEvent("floorsList", systemReaction);
-
                     Thread.sleep(5000); // Adjust delay as needed
+                    client.sendEvent("floorsList", systemReaction);
+                    loggerService.log(systemReaction,facilityId);
+
                 }
 
                 pauseFlag.set(false);

@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 @CrossOrigin
 public class TestingController {
-    private final LoggerServiceImpl loggerServiceImpl;
     LoggerService loggerService;
 
     @Autowired
-    public TestingController(LoggerService loggerService, LoggerServiceImpl loggerServiceImpl) {
+    public TestingController(LoggerService loggerService) {
         this.loggerService = loggerService;
-        this.loggerServiceImpl = loggerServiceImpl;
     }
 
     @GetMapping("/test/reactions/{id}")
