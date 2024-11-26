@@ -65,9 +65,7 @@ export class TesterService implements OnDestroy {
   }
 
   exportLog() {
-    return this.httpClient.get(`${this.apiUrl}/logFile`, {
-      responseType: 'blob',
-    });
+    return this.httpClient.get(`${this.apiUrl}/test/reactions/as-file/${this.facilityId}`,{ responseType: 'blob' });  
   }
 
   private onLog(): Observable<SystemReaction> {

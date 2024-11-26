@@ -60,10 +60,11 @@ public class TestingThread implements Runnable {
                     if (systemReaction == null) {
                         break;
                     }
-                    Thread.sleep(5000); // Adjust delay as needed
-                    client.sendEvent("floorsList", systemReaction);
-                    loggerService.log(systemReaction,facilityId);
 
+                    loggerService.log(systemReaction,facilityId);
+                    
+                    client.sendEvent("floorsList", systemReaction);
+                    Thread.sleep(5000); // Adjust delay as needed
                 }
 
                 pauseFlag.set(false);
