@@ -3,6 +3,9 @@ package com.building_security_system.controllers;
 import com.building_security_system.dto.SocketCommandDto;
 import com.building_security_system.service.FacilityService;
 import com.building_security_system.service.LoggerService;
+import com.building_security_system.strategy.RandomSimulationStrategy;
+import com.building_security_system.strategy.SimulationStrategy;
+import com.building_security_system.strategy.SortedSimulationStrategy;
 import com.building_security_system.util.CommandManager;
 import com.building_security_system.util.TestingThread;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -84,20 +87,24 @@ public class SocketController {
         stopFlag.set(false);
         pauseFlag.set(false);
 
+        SimulationStrategy simulationStrategy = Boolean.parseBoolean(socketCommandDto.getIsRandom())
+                ?new RandomSimulationStrategy():new SortedSimulationStrategy();
+
         Thread thread = new Thread(TestingThread.builder()
                 .ackRequest(ackRequest)
-                .commandManager(new CommandManager())
+                .commandManager(new CommandManager(simulationStrategy))
                 .client(client)
                 .facilityService(facilityService)
                 .facilityId(fId)
                 .stopFlag(stopFlag)
                 .pauseFlag(pauseFlag)
                 .loggerService(loggerService)
-                .isRandom(Boolean.parseBoolean(socketCommandDto.getIsRandom()))
                 .build());
 
         clientThreads.put(client.getSessionId().toString(), thread);
         thread.start();
     };
+
+
 
 }

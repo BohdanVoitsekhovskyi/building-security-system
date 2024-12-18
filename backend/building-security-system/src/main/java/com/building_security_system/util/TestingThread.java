@@ -30,7 +30,6 @@ public class TestingThread implements Runnable {
     private AtomicBoolean pauseFlag;
     private LoggerService loggerService;
 
-    private boolean isRandom;
 
     @Override
     public void run() {
@@ -47,7 +46,7 @@ public class TestingThread implements Runnable {
         commandManager.createCommands(facility.getFloors()
                 .stream()
                 .flatMap(floor -> floor.getDetectors().stream())
-                .collect(Collectors.toList()),isRandom);
+                .collect(Collectors.toList()));
 
         try {
             while (!stopFlag.get()) {
